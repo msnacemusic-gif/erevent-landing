@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ru" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>СОБЫТИЯ РУМ — техническое оснащение и организация мероприятий</title>
+<meta name="description" content="Организация мероприятий полного цикла в Москве и по всей России. Аренда оборудования, застройка стендов, кейтеринг, шатры, мебель. Считаем смету в день обращения.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800;900&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#top">Перейти к содержимому</a>
+
+<header class="header" id="site-header">
+  <div class="header__inner">
+    <a href="#top" class="header__logo" aria-label="СОБЫТИЯ РУМ — на главную">
+      <img src="media/logo-canvas.png" alt="СОБЫТИЯ РУМ" width="1355" height="972">
+    </a>
+
+    <nav class="header__nav" aria-label="Основная навигация">
+      <a href="#services">Услуги</a>
+      <a href="#cases">Кейсы</a>
+      <a href="#process">Как работаем</a>
+      <a href="#production">Производство</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+
+    <div class="header__actions">
+      <a href="tel:+79636997295" class="header__phone">+7 963 699 72 95</a>
+      <a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener" title="Telegram" class="header__icon-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 3.5 2.8 10.8c-.8.3-.8 1.4.1 1.6l4.5 1.3 1.7 5.1c.2.7 1.1.9 1.6.3l2.4-2.8 4.5 3.3c.6.4 1.4.1 1.6-.6L22.8 4.6c.2-.8-.6-1.4-1.3-1.1Z"></path><path d="m7.4 13.7 9.9-6.4-6.6 7.3"></path></svg>
+      </a>
+      <a href="https://wa.me/79636997295" target="_blank" rel="noopener" title="WhatsApp" class="header__icon-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.6-4.3A8.5 8.5 0 1 1 20.5 11.6Z"></path><path d="M8.9 8.4c.5-.2.9 0 1.1.4l.6 1.2c.1.3 0 .6-.2.8l-.4.4c.5 1 1.2 1.7 2.2 2.2l.4-.4c.2-.2.5-.3.8-.2l1.2.6c.4.2.6.6.4 1.1-.3.7-1 1.2-1.8 1.1-2.5-.2-5-2.7-5.3-5.3-.1-.8.3-1.6 1-1.9Z"></path></svg>
+      </a>
+      <a href="tel:+79636997295" title="MAX" class="header__icon-link header__icon-link--max">
+        <span>MAX</span>
+      </a>
+      <button type="button" class="btn btn--primary btn--md js-go-form" data-header-cta>Рассчитать смету</button>
+    </div>
+
+    <div class="header__mobile-actions">
+      <a href="tel:+79636997295" class="header__phone">+7 963 699 72 95</a>
+      <button type="button" class="header__burger" id="menu-toggle" aria-label="Меню" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" hidden>
+  <div class="mobile-menu__top">
+    <img src="media/logo-lime.png" alt="СОБЫТИЯ РУМ" width="1355" height="972" class="mobile-menu__logo">
+    <button type="button" class="mobile-menu__close" id="menu-close" aria-label="Закрыть">×</button>
+  </div>
+  <nav class="mobile-menu__nav" aria-label="Мобильная навигация">
+    <a href="#services" class="js-menu-link">Услуги</a>
+    <a href="#cases" class="js-menu-link">Кейсы</a>
+    <a href="#process" class="js-menu-link">Как работаем</a>
+    <a href="#production" class="js-menu-link">Производство</a>
+    <a href="#contacts" class="js-menu-link">Контакты</a>
+  </nav>
+  <div class="mobile-menu__bottom">
+    <a href="tel:+79636997295" class="mobile-menu__phone">+7 963 699 72 95</a>
+    <button type="button" class="btn btn--primary btn--lg js-go-form" id="menu-cta">Рассчитать смету</button>
+  </div>
+</div>
+
+<main>
+<section id="top" class="hero" data-screen-label="Hero">
+  <div class="hero__bg" id="hero-bg">
+    <video class="hero__video" id="hero-video" muted defaultmuted loop playsinline preload="none" aria-hidden="true"></video>
+  </div>
+  <div class="hero__veil" aria-hidden="true"></div>
+
+  <div class="hero__content">
+    <p class="hero__eyebrow reveal-init" style="--reveal-delay:50ms">[СОБЫТИЯ РУМ - МЫ ОТКРЫВАЕМ ДВЕРИ В ПРАЗДНИК]</p>
+    <h1 class="hero__title reveal-init" style="--reveal-delay:120ms">Техническое оснащение<br>и организация мероприятий</h1>
+    <div class="hero__row">
+      <p class="hero__lead reveal-init" style="--reveal-delay:200ms">Организация мероприятий полного цикла в Москве и по всей России. Считаем смету в день обращения.</p>
+      <div class="hero__cta reveal-init" style="--reveal-delay:280ms">
+        <button type="button" class="btn btn--primary btn--lg js-go-form">Рассчитать смету</button>
+        <a href="#cases" class="btn btn--ghost-dark">Смотреть кейсы</a>
+      </div>
+    </div>
+    <div class="hero__foot reveal-init" style="--reveal-delay:360ms">
+      <span class="hero__foot-label">Работали на площадках</span>
+      <div class="marquee-mask">
+        <div class="marquee-track marquee-track--back" id="venues-track">
+          <span class="marquee-group">
+            <!-- venues injected by script.js -->
+          </span>
+          <span class="marquee-group" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="hero__scroll-hint">
+        <span>Скролл</span>
+        <svg width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 1v17"></path><path d="M1.5 12.5 7 18.5l5.5-6"></path></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="clients" data-screen-label="Заказчики">
+  <p class="section-eyebrow section-eyebrow--dark reveal">[заказчики] — Развивающаяся история прекрасных отношений</p>
+  <div class="marquee-mask">
+    <div class="marquee-track" id="clients-track">
+      <span class="marquee-group" id="clients-group-a"></span>
+      <span class="marquee-group" id="clients-group-b" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="services" data-screen-label="Услуги">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-head__main">
+        <p class="section-eyebrow">[направления]</p>
+        <h2 class="section-title">Что мы делаем</h2>
+      </div>
+      <p class="section-head__note">Один подрядчик - весь монтаж под ключ. Нажмите на направление, чтобы посчитать смету именно по нему.</p>
+    </div>
+
+    <div class="bento">
+      <button type="button" class="service-card service-card--build reveal" data-service="Арт-объекты, стенды, декорации">
+        <img class="service-card__photo" src="media/service-art.jpg" alt="" loading="lazy">
+        <span class="service-card__veil" aria-hidden="true"></span>
+        <span class="service-card__top">
+          <span class="service-card__num">01</span>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="service-card__icon"><path d="M3 21V8l9-5 9 5v13"></path><path d="M3 12h18M9 21V12M15 21V12"></path></svg>
+        </span>
+        <span class="service-card__bottom">
+          <span class="service-card__title service-card__title--display">Арт-объекты, стенды, декорации</span>
+          <span class="service-card__body">Конструктив, арт-объекты, брендирование, монтаж под ключ.</span>
+          <span class="service-card__tags">
+            <span class="tag">Конструктив</span>
+            <span class="tag">Брендирование</span>
+            <span class="tag">Монтаж под ключ</span>
+          </span>
+        </span>
+      </button>
+
+      <button type="button" class="service-card service-card--wide service-card--white reveal" data-service="Оформление, флористика, фотозоны">
+        <img class="service-card__photo" src="media/service-oformlenie.jpg" alt="" loading="lazy">
+        <span class="service-card__veil" aria-hidden="true"></span>
+        <span class="service-card__top">
+          <span class="service-card__num">02</span>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="service-card__icon"><path d="M12 21c0-5 3-8 3-12a3 3 0 0 0-6 0c0 4 3 7 3 12Z"></path><path d="M5 13c2 1 3.5 2.5 4 5M19 13c-2 1-3.5 2.5-4 5"></path></svg>
+        </span>
+        <span class="service-card__bottom">
+          <span class="service-card__title service-card__title--display service-card__title--md">Оформление, флористика, фотозоны</span>
+          <span class="service-card__body">Декор, оформление пространств, входные группы.</span>
+        </span>
+      </button>
+
+      <button type="button" class="service-card service-card--wide service-card--white reveal" data-service="Кейтеринг">
+        <img class="service-card__photo" src="media/service-catering-w.jpg" alt="" loading="lazy" style="object-position:50% 18%">
+        <span class="service-card__veil" aria-hidden="true"></span>
+        <span class="service-card__top">
+          <span class="service-card__num">03</span>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="service-card__icon"><path d="M4 4h13a3 3 0 0 1 0 6h-1"></path><path d="M4 4v7a6 6 0 0 0 12 0V4"></path><path d="M3 21h16"></path></svg>
+        </span>
+        <span class="service-card__bottom">
+          <span class="service-card__title service-card__title--display service-card__title--md">Кейтеринг</span>
+          <span class="service-card__body service-card__body--catering">Кофейные станции, коктейльный и паровой бар.</span>
+        </span>
+      </button>
+
+      <button type="button" class="service-card service-card--white reveal" data-service="Аренда мебели и оборудования">
+        <img class="service-card__photo" src="media/service-mebel-zal.jpg" alt="" loading="lazy">
+        <span class="service-card__veil" aria-hidden="true"></span>
+        <span class="service-card__top">
+          <span class="service-card__num">04</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="service-card__icon"><path d="M4 18v-6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v6"></path><path d="M6 9V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3"></path><path d="M4 18h16M6 18v2M18 18v2"></path></svg>
+        </span>
+        <span class="service-card__bottom">
+          <span class="service-card__title service-card__title--body">Аренда мебели и оборудования</span>
+          <span class="service-card__body">Комплектация зон, выездной гардероб.</span>
+        </span>
+      </button>
+
+      <button type="button" class="service-card service-card--white reveal" data-service="Аренда шатров">
+        <img class="service-card__photo" src="media/service-shatry.jpg" alt="" loading="lazy">
+        <span class="service-card__veil" aria-hidden="true"></span>
+        <span class="service-card__top">
+          <span class="service-card__num">05</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="service-card__icon"><path d="M12 3 2 19h20L12 3Z"></path><path d="M12 3v16M7 19l5-8 5 8"></path></svg>
+        </span>
+        <span class="service-card__bottom">
+          <span class="service-card__title service-card__title--body">Аренда шатров</span>
+          <span class="service-card__body">Шатры, палаточные городки.</span>
+        </span>
+      </button>
+
+      <button type="button" class="service-card service-card--wide service-card--lime reveal" data-service="Экраны, звук и свет">
+        <img class="service-card__photo" src="media/service-zvuk.jpg" alt="" loading="lazy">
+        <span class="service-card__veil" aria-hidden="true"></span>
+        <span class="service-card__top">
+          <span class="service-card__num">06</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="service-card__icon"><rect x="2" y="4" width="20" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>
+        </span>
+        <span class="service-card__bottom">
+          <span class="service-card__title service-card__title--body">Экраны, звук и свет</span>
+          <span class="service-card__body">LED-экраны, TV-панели, звуковое и световое оборудование, трансляции.</span>
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="why" data-screen-label="Почему мы">
+  <div class="wrap why__grid">
+    <div class="why__list">
+      <p class="section-eyebrow reveal">[почему мы]</p>
+      <div class="why__item reveal" style="--reveal-delay:60ms">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18v10H3zM7 9V5h10v4"></path><path d="M8 13h8"></path></svg>
+        <div><h3>Свой парк оборудования</h3><p>Сертифицированное и проверенное временем.</p></div>
+      </div>
+      <div class="why__item reveal" style="--reveal-delay:120ms">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+        <div><h3>Скорость</h3><p>Оперативный подбор оборудования, расчёт и оптимизация сметы.</p></div>
+      </div>
+      <div class="why__item reveal" style="--reveal-delay:180ms">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M12 4v16"></path><circle cx="12" cy="12" r="9"></circle></svg>
+        <div><h3>Гибкие условия</h3><p>Скидки за объём, постоплата, агентское вознаграждение.</p></div>
+      </div>
+      <div class="why__item reveal" style="--reveal-delay:240ms">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"></circle><path d="M3 20a6 6 0 0 1 12 0"></path><path d="M16 5.5a3 3 0 0 1 0 5M18 20a6.5 6.5 0 0 0-2-4.6"></path></svg>
+        <div><h3>Команда с опытом организатора</h3><p>Знаем рынок, клиента и его головные боли.</p></div>
+      </div>
+    </div>
+    <figure class="why__quote reveal" style="--reveal-delay:120ms">
+      <svg width="40" height="32" viewBox="0 0 40 32" fill="none"><path d="M0 32V18C0 8 5 2 15 0l2 6C11 7.5 8 11 8 16h7v16H0Zm23 0V18C23 8 28 2 38 0l2 6c-6 1.5-9 5-9 10h7v16H23Z" fill="var(--z-ink)" opacity=".12"></path></svg>
+      <blockquote>Мы решаем ваши задачи, а не просто предоставляем услуги. Мы говорим с вами на одном языке и предлагаем не «закрыть блок», а эффективные и экономически выгодные решения.</blockquote>
+      <figcaption>СОБЫТИЯ РУМ</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="stats" data-screen-label="Цифры">
+  <div class="wrap">
+    <p class="section-eyebrow reveal">[в цифрах]</p>
+    <div class="stats__grid" id="stats-grid">
+      <div class="stat reveal">
+        <div class="stat__row"><span class="stat__num" data-value="3" data-suffix="">0</span><span class="stat__unit">часа</span></div>
+        <span class="stat__label">средний срок расчёта сметы</span>
+      </div>
+      <div class="stat reveal">
+        <div class="stat__row"><span class="stat__num" data-value="7" data-suffix="">0</span><span class="stat__unit">лет</span></div>
+        <span class="stat__label">на рынке</span>
+      </div>
+      <div class="stat reveal">
+        <div class="stat__row"><span class="stat__num" data-value="300" data-suffix="">0</span><span class="stat__unit">м²</span></div>
+        <span class="stat__label">собственное производство</span>
+      </div>
+      <div class="stat reveal">
+        <div class="stat__row"><span class="stat__num" data-value="400" data-suffix="+">0</span><span class="stat__unit"></span></div>
+        <span class="stat__label">реализованных проектов</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cases" class="cases" data-screen-label="Кейсы">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-head__main">
+        <p class="section-eyebrow">[кейсы]</p>
+        <h2 class="section-title">Кейсы</h2>
+      </div>
+      <p class="section-head__note">Нажмите на строку — раскроются заказчик, задачи и площадка.</p>
+    </div>
+
+    <div class="cases__list" id="cases-list"></div>
+
+    <div class="cases__more" id="cases-more" hidden>
+      <button type="button" class="btn btn--tertiary btn--lg" id="cases-more-btn">Показать ещё</button>
+    </div>
+  </div>
+</section>
+
+<section id="process" class="process" data-screen-label="Как работаем">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="section-eyebrow">[этапы работы]</p>
+      <h2 class="section-title">Как мы работаем</h2>
+    </div>
+    <div class="timeline" id="timeline">
+      <div class="timeline__step" data-step="0">
+        <div class="timeline__head"><span class="timeline__dot"></span><span class="timeline__line"></span></div>
+        <p class="timeline__num">01</p>
+        <h3>Заявка и бриф</h3>
+        <p>Задача, площадка, тайминг.</p>
+      </div>
+      <div class="timeline__step" data-step="1">
+        <div class="timeline__head"><span class="timeline__dot"></span><span class="timeline__line"></span></div>
+        <p class="timeline__num">02</p>
+        <h3>Смета за день</h3>
+        <p>Расчёт с вариантами по бюджету, визуалы.</p>
+      </div>
+      <div class="timeline__step" data-step="2">
+        <div class="timeline__head"><span class="timeline__dot"></span><span class="timeline__line"></span></div>
+        <p class="timeline__num">03</p>
+        <h3>Производство</h3>
+        <p>Чертежи, изготовление, логистика.</p>
+      </div>
+      <div class="timeline__step" data-step="3">
+        <div class="timeline__head"><span class="timeline__dot"></span><span class="timeline__line"></span></div>
+        <p class="timeline__num">04</p>
+        <h3>Монтаж и сопровождение</h3>
+        <p>Установка, дежурство, демонтаж.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="production" class="production" data-screen-label="Производство">
+  <div class="wrap production__grid">
+    <div class="production__media reveal">
+      <div class="production__placeholder">
+        <span>Собственное производство — 300 м²</span>
+      </div>
+    </div>
+    <div class="production__text reveal" style="--reveal-delay:120ms">
+      <p class="section-eyebrow">[производство]</p>
+      <h2 class="section-title section-title--md">Собственное производство 300 м²</h2>
+      <p class="production__lead">Полный цикл от чертежа до монтажа. Изготавливаем декорации, фотозоны, арт-объекты и входные группы — без посредников и без «поедем узнаем у подрядчика».</p>
+      <div class="production__tags">
+        <span class="tag tag--pale">Декорации</span>
+        <span class="tag tag--pale">Фотозоны</span>
+        <span class="tag tag--pale">Арт-объекты</span>
+        <span class="tag tag--pale">Входные группы</span>
+      </div>
+      <button type="button" class="btn btn--tertiary btn--lg js-go-form">Обсудить изготовление</button>
+    </div>
+  </div>
+</section>
+
+<section class="faq" data-screen-label="FAQ">
+  <div class="wrap faq__grid">
+    <div class="faq__head reveal">
+      <p class="section-eyebrow">[вопросы]</p>
+      <h2 class="section-title section-title--md">Частые вопросы</h2>
+    </div>
+    <div class="faq__list" id="faq-list">
+      <div class="faq__item is-open reveal" data-faq="0">
+        <button type="button" class="faq__q" aria-expanded="true">
+          <h3>Как быстро сможете посчитать смету?</h3>
+          <span class="faq__toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </button>
+        <div class="faq__a"><p>Расчёт делаем в день обращения, обычно это занимает не более 3 часов.</p></div>
+      </div>
+      <div class="faq__item reveal" data-faq="1">
+        <button type="button" class="faq__q" aria-expanded="false">
+          <h3>Вы занимаетесь монтажом?</h3>
+          <span class="faq__toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </button>
+        <div class="faq__a"><p>Да, мы не только сдаём оборудование в аренду, но и занимаемся установкой и настройкой. Делаем всё под ключ.</p></div>
+      </div>
+      <div class="faq__item reveal" data-faq="2">
+        <button type="button" class="faq__q" aria-expanded="false">
+          <h3>Нужно срочно, успеете?</h3>
+          <span class="faq__toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </button>
+        <div class="faq__a"><p>Закроем задачу в кратчайшие сроки.</p></div>
+      </div>
+      <div class="faq__item reveal" data-faq="3">
+        <button type="button" class="faq__q" aria-expanded="false">
+          <h3>Как начать работу?</h3>
+          <span class="faq__toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </button>
+        <div class="faq__a"><p>Заполните заявку на сайте или позвоните: +7 963 699 72 95. Составим смету и уже завтра доставим оборудование и выполним монтаж.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contacts" class="contacts" data-screen-label="Заявка">
+  <div class="wrap">
+    <div class="section-head section-head--dark reveal">
+      <p class="section-eyebrow section-eyebrow--dark">[заявка]</p>
+      <h2 class="section-title section-title--contacts">Расскажите о задаче — вернёмся с решением в течение 3 часов</h2>
+    </div>
+
+    <div class="contacts__grid">
+      <div id="form" class="form-card reveal">
+
+        <div class="form-success" id="form-success" hidden>
+          <span class="form-success__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"></path></svg>
+          </span>
+          <h3>Заявка отправлена</h3>
+          <p>Вернёмся с решением в течение 3 часов в рабочее время. Если нужно срочно — напишите в Telegram, ответим быстрее.</p>
+          <div class="form-success__actions">
+            <a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener" class="btn btn--primary">Написать в Telegram</a>
+            <button type="button" class="btn btn--tertiary" id="form-reset">Отправить ещё одну</button>
+          </div>
+        </div>
+
+        <form id="lead-form" novalidate>
+          <div class="form-grid">
+            <label class="field">
+              <span class="field__label">Имя</span>
+              <input type="text" name="name" id="f-name" placeholder="Как к вам обращаться" autocomplete="name">
+            </label>
+            <label class="field">
+              <span class="field__label">Телефон</span>
+              <input type="tel" name="phone" id="f-phone" placeholder="+7 (___) ___-__-__" autocomplete="tel">
+              <span class="field__error" id="err-phone"></span>
+            </label>
+          </div>
+          <div class="form-grid">
+            <label class="field">
+              <span class="field__label">Email</span>
+              <input type="email" name="email" id="f-email" placeholder="info@company.ru" autocomplete="email">
+              <span class="field__error" id="err-email"></span>
+            </label>
+            <label class="field">
+              <span class="field__label">Дата и площадка мероприятия</span>
+              <input type="text" name="when" id="f-when" placeholder="12 сентября, ВДНХ, павильон 57">
+            </label>
+          </div>
+
+          <div class="channel-block">
+            <p class="channel-block__label">Мессенджер для ответа</p>
+            <div class="channel-block__options" id="channel-options">
+              <button type="button" class="chip is-active" data-channel="Telegram">Telegram</button>
+              <button type="button" class="chip" data-channel="WhatsApp">WhatsApp</button>
+              <button type="button" class="chip" data-channel="MAX">MAX</button>
+              <button type="button" class="chip" data-channel="Почта">Почта</button>
+            </div>
+            <input type="hidden" name="channel" id="f-channel" value="Telegram">
+          </div>
+
+          <label class="field">
+            <span class="field__label">Комментарий к задаче</span>
+            <textarea name="comment" id="f-comment" rows="4" placeholder="Что нужно, сколько зон, есть ли планировка"></textarea>
+          </label>
+
+          <label class="file-field" for="f-file">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17V7M8 11l4-4 4 4"></path><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path></svg>
+            <span id="file-label">Прикрепить файл — ТЗ, план площадки, референсы (до 20 МБ)</span>
+            <input type="file" id="f-file" name="file" hidden>
+          </label>
+
+          <label class="checkbox">
+            <input type="checkbox" id="f-agree" name="agree" class="checkbox__input">
+            <span class="checkbox__box"><span class="checkbox__mark">✓</span></span>
+            <span>Согласен на обработку персональных данных</span>
+          </label>
+          <p class="field__error" id="err-agree" hidden>Без согласия мы не сможем обработать заявку</p>
+
+          <div class="form-submit">
+            <button type="submit" class="btn btn--primary btn--lg" id="submit-btn">
+              <span class="btn__spinner" id="submit-spinner" hidden></span>
+              <span id="submit-label">Отправить заявку</span>
+            </button>
+            <p class="form-submit__note">Нажимая кнопку, вы соглашаетесь с <a href="#privacy">политикой конфиденциальности</a>.</p>
+          </div>
+
+          <div class="form-error" id="form-error" hidden>Не удалось отправить заявку. Напишите нам напрямую — <a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener">Telegram</a> или <a href="tel:+79636997295">+7 963 699 72 95</a>.</div>
+        </form>
+      </div>
+
+      <aside class="contacts__aside reveal" style="--reveal-delay:120ms">
+        <div class="contacts__badge">
+          <p>Смета в день обращения</p>
+          <p class="contacts__badge-big">24/7 на связи</p>
+        </div>
+        <div class="contacts__card">
+          <div>
+            <p class="contacts__label">Телефон</p>
+            <a href="tel:+79636997295" class="contacts__phone">+7 963 699 72 95 <span>Никита</span></a>
+            <a href="tel:+79692031599" class="contacts__phone">+7 969 203 15 99 <span>Максим</span></a>
+          </div>
+          <div>
+            <p class="contacts__label">E-mail</p>
+            <a href="mailto:info@erevent.ru" class="contacts__email">info@erevent.ru</a>
+          </div>
+          <div>
+            <p class="contacts__label">Офис</p>
+            <p class="contacts__office">115419, Москва, Орджоникидзе, д. 11, офис 420</p>
+          </div>
+          <div class="contacts__links">
+            <a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener">Telegram</a>
+            <a href="https://wa.me/79636997295" target="_blank" rel="noopener">WhatsApp</a>
+            <a href="tel:+79636997295">MAX</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer" data-screen-label="Футер">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__about">
+        <img src="media/logo-lime.png" alt="СОБЫТИЯ РУМ" width="1355" height="972">
+        <p>Техническое оснащение мероприятий, застройка стендов и декораций, организация мероприятий полного цикла.</p>
+      </div>
+      <nav class="footer__col" aria-label="Разделы">
+        <p>Разделы</p>
+        <a href="#services">Услуги</a>
+        <a href="#cases">Кейсы</a>
+        <a href="#process">Как работаем</a>
+        <a href="#production">Производство</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+      <div class="footer__col">
+        <p>Контакты</p>
+        <a href="tel:+79636997295">+7 963 699 72 95 — Никита</a>
+        <a href="tel:+79692031599">+7 969 203 15 99 — Максим</a>
+        <a href="mailto:info@erevent.ru">info@erevent.ru</a>
+        <span>115419, Москва, Орджоникидзе, д. 11, офис 420</span>
+      </div>
+      <div class="footer__col">
+        <p>Мессенджеры</p>
+        <a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://wa.me/79636997295" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="tel:+79636997295">MAX</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 СОБЫТИЯ РУМ</span>
+      <a href="#privacy">Политика конфиденциальности</a>
+    </div>
+  </div>
+</footer>
+
+<div class="mobile-bar" id="mobile-bar">
+  <a href="tel:+79636997295" class="mobile-bar__call">Позвонить</a>
+  <a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener" class="mobile-bar__tg">Написать в Telegram</a>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
