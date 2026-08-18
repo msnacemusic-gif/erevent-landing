@@ -1,0 +1,7 @@
+/* Wise Sans is proprietary — no source file provided. Substituted with Manrope (800/900)
+   for display type, matched with Inter for body/UI, per readme "Font substitution" note. */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;900&display=swap');
+:root{
+--font-display:'Manrope', 'Inter', system-ui, -apple-system, sans-serif;
+--font-body:'Inter', system-ui, -apple-system, sans-serif;
+}

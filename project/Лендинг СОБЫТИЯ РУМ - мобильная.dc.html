@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/design-system-d6b15791-d924-4e4a-810e-26abbb4862e7/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/design-system-d6b15791-d924-4e4a-810e-26abbb4862e7/tokens/colors.css">
+<link rel="stylesheet" href="_ds/design-system-d6b15791-d924-4e4a-810e-26abbb4862e7/tokens/typography.css">
+<link rel="stylesheet" href="_ds/design-system-d6b15791-d924-4e4a-810e-26abbb4862e7/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/design-system-d6b15791-d924-4e4a-810e-26abbb4862e7/styles.css">
+<script src="_ds/design-system-d6b15791-d924-4e4a-810e-26abbb4862e7/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#0e0f0c"></rect><rect x="150" y="52" width="100" height="196" rx="16" fill="none" stroke="#9fe870" stroke-width="6"></rect><text x="200" y="163" text-anchor="middle" font-family="Manrope, sans-serif" font-weight="900" font-size="30" fill="#9fe870">РУМ</text></svg>
+</template>
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--z-ink);font-family:var(--font-body);color:var(--text-body);-webkit-font-smoothing:antialiased;text-wrap:pretty}
+a{color:var(--z-ink-deep);text-decoration:none}
+a:hover{color:var(--text-heading)}
+input,textarea,button,select{font-family:var(--font-body)}
+::selection{background:var(--z-green);color:var(--z-ink)}
+@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes marqBack{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes hint{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(6px);opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){
+*{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+html{scroll-behavior:auto}
+}
+</style>
+</helmet>
+
+<div style="width:100%;max-width:390px;margin:0 auto;background:var(--surface-soft);overflow-x:hidden;position:relative">
+
+<header style="position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:390px;z-index:90;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:{{ navPad }};border-bottom:1px solid {{ navBorder }};background:{{ navBg }};backdrop-filter:{{ navBlur }};transition:background-color .25s ease,border-color .25s ease,padding .25s ease">
+<a href="#top" onClick="{{ closeMenu }}" aria-label="СОБЫТИЯ РУМ — на главную" style="flex:0 0 auto;display:block;line-height:0">
+<img src="media/logo-canvas.png" alt="СОБЫТИЯ РУМ" width="1355" height="972" style="display:block;width:auto;transition:height .3s cubic-bezier(0.16,1,0.3,1);height:{{ logoH }}">
+</a>
+<div style="display:flex;align-items:center;gap:8px;flex:0 0 auto">
+<a href="tel:+79636997295" aria-label="Позвонить" style="width:44px;height:44px;border-radius:var(--radius-pill);border:1px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;color:var(--z-canvas)">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3h3l1.5 4-2 1.5a11 11 0 0 0 5.5 5.5L16 12l4 1.5v3a2 2 0 0 1-2.2 2A15.5 15.5 0 0 1 4 5.2 2 2 0 0 1 6 3Z"></path></svg>
+</a>
+<button onClick="{{ toggleMenu }}" aria-label="Меню" style="width:44px;height:44px;border-radius:var(--radius-pill);border:1px solid rgba(255,255,255,.28);background:transparent;color:var(--z-canvas);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;padding:0">
+<span style="display:block;width:18px;height:1.8px;background:currentColor"></span>
+<span style="display:block;width:18px;height:1.8px;background:currentColor"></span>
+</button>
+</div>
+</header>
+
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:390px;z-index:95;background:var(--surface-dark);color:var(--text-on-dark);display:flex;flex-direction:column;padding:20px 20px 32px;animation:fadeUp .28s cubic-bezier(0.16,1,0.3,1) both">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<img src="media/logo-lime.png" alt="СОБЫТИЯ РУМ" width="1355" height="972" style="display:block;height:38px;width:auto">
+<button onClick="{{ toggleMenu }}" aria-label="Закрыть" style="width:44px;height:44px;border-radius:var(--radius-pill);border:1px solid rgba(255,255,255,.25);background:transparent;color:var(--text-on-dark);font-size:22px;line-height:1;cursor:pointer">×</button>
+</div>
+<nav style="display:flex;flex-direction:column;gap:4px;padding:32px 0;margin-top:auto">
+<a href="#services" onClick="{{ closeMenu }}" style="font-family:var(--font-display);font-weight:900;font-size:34px;line-height:1.15;letter-spacing:-0.02em;color:var(--text-on-dark);padding:6px 0">Услуги</a>
+<a href="#cases" onClick="{{ closeMenu }}" style="font-family:var(--font-display);font-weight:900;font-size:34px;line-height:1.15;letter-spacing:-0.02em;color:var(--text-on-dark);padding:6px 0">Кейсы</a>
+<a href="#process" onClick="{{ closeMenu }}" style="font-family:var(--font-display);font-weight:900;font-size:34px;line-height:1.15;letter-spacing:-0.02em;color:var(--text-on-dark);padding:6px 0">Как работаем</a>
+<a href="#production" onClick="{{ closeMenu }}" style="font-family:var(--font-display);font-weight:900;font-size:34px;line-height:1.15;letter-spacing:-0.02em;color:var(--text-on-dark);padding:6px 0">Производство</a>
+<a href="#contacts" onClick="{{ closeMenu }}" style="font-family:var(--font-display);font-weight:900;font-size:34px;line-height:1.15;letter-spacing:-0.02em;color:var(--text-on-dark);padding:6px 0">Контакты</a>
+</nav>
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:auto">
+<a href="tel:+79636997295" style="font-size:19px;font-weight:600;color:var(--z-green);min-height:44px;display:flex;align-items:center">+7 963 699 72 95</a>
+<x-import component-from-global-scope="DesignSystem_d6b157.Button" variant="primary" size="lg" on-click="{{ goFormFromMenu }}" hint-size="100%,56px">Рассчитать смету</x-import>
+</div>
+</div>
+</sc-if>
+
+<section id="top" data-screen-label="Hero" style="position:relative;background:var(--surface-dark);color:var(--text-on-dark);min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;isolation:isolate">
+<div style="position:absolute;inset:0;z-index:0;opacity:.5;transform:translateY({{ heroShift }})">
+<img src="media/service-art.jpg" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+<sc-if value="{{ heroVideoOn }}" hint-placeholder-val="{{ false }}">
+<video autoplay="" muted="" defaultmuted="" loop="" playsinline="" preload="none" src="{{ heroVideoSrc }}" ref="{{ heroVideoRef }}" onCanPlay="{{ heroVideoReady }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .7s ease;opacity:{{ heroVideoOpacity }}"></video>
+</sc-if>
+</div>
+<div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg, rgba(14,15,12,.82) 0%, rgba(14,15,12,.45) 34%, rgba(14,15,12,.96) 100%)"><div style="position:relative;z-index:2;padding:104px 20px 96px">
+<p style="margin:0 0 20px;font-size:10px;font-weight:600;letter-spacing:.04em;line-height:1.5;white-space:nowrap;text-transform:uppercase;color:var(--z-green);animation:fadeUp .6s cubic-bezier(0.16,1,0.3,1) .05s both">[СОБЫТИЯ РУМ - МЫ ОТКРЫВАЕМ ДВЕРИ В ПРАЗДНИК]</p>
+<h1 style="margin:0 0 20px;font-family:var(--font-display);font-weight:900;font-size:46px;line-height:.96;letter-spacing:-0.03em;color:var(--z-canvas);text-wrap:balance;animation:fadeUp .6s cubic-bezier(0.16,1,0.3,1) .12s both">Техническое оснащение и организация мероприятий</h1>
+<p style="margin:0 0 24px;font-size:16px;line-height:1.5;color:var(--text-on-dark);animation:fadeUp .6s cubic-bezier(0.16,1,0.3,1) .2s both">Организация мероприятий полного цикла в Москве и по всей России. Считаем смету в день обращения.</p>
+<div style="display:flex;flex-direction:column;gap:10px;animation:fadeUp .6s cubic-bezier(0.16,1,0.3,1) .28s both">
+<x-import component-from-global-scope="DesignSystem_d6b157.Button" variant="primary" size="lg" on-click="{{ goForm }}" hint-size="100%,56px">Рассчитать смету</x-import>
+<a href="#cases" style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:14px 24px;border-radius:var(--radius-xl);border:1px solid rgba(255,255,255,.35);font-size:17px;font-weight:600;color:var(--text-on-dark)">Смотреть кейсы</a>
+</div>
+<div style="margin-top:28px;padding-top:18px;border-top:1px solid rgba(255,255,255,.14);animation:fadeUp .6s cubic-bezier(0.16,1,0.3,1) .36s both">
+<span style="display:block;margin-bottom:12px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,235,230,.5)">Заказчики</span>
+<div style="overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)">
+<div style="display:flex;width:max-content;align-items:center;gap:16px;animation:marqBack 46s linear infinite">
+<sc-for list="{{ clientsLoop }}" as="c" hint-placeholder-count="9">
+<span style="display:flex;align-items:center;gap:16px;flex:0 0 auto">
+<span style="font-family:var(--font-display);font-weight:800;font-size:14px;white-space:nowrap;color:var(--text-on-dark)">{{ c }}</span>
+<span style="color:rgba(255,255,255,.25)">·</span>
+</span>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:5px;margin-top:20px;color:rgba(232,235,230,.5);animation:hint 2.2s ease-in-out infinite">
+<span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase">Скролл</span>
+<svg width="13" height="18" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 1v17"></path><path d="M1.5 12.5 7 18.5l5.5-6"></path></svg>
+</div>
+</div></div>
+
+
+</section>
+
+<section data-screen-label="Площадки" style="background:var(--surface-dark);padding:32px 0;border-top:1px solid rgba(255,255,255,.1)">
+<p style="margin:0 0 20px;padding:0 20px;font-size:11px;font-weight:600;letter-spacing:.12em;line-height:1.5;text-transform:uppercase;color:var(--z-green)">[площадки] — Работали на лучших площадках страны</p>
+<div style="overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)">
+<div style="display:flex;width:max-content;gap:32px;animation:marq 34s linear infinite">
+<sc-for list="{{ venuesLoop }}" as="v" hint-placeholder-count="13">
+<span style="font-family:var(--font-display);font-weight:800;font-size:22px;letter-spacing:-0.02em;white-space:nowrap;color:rgba(232,235,230,.42)">{{ v }}</span>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section id="services" data-screen-label="Услуги" style="padding:48px 20px;scroll-margin-top:76px">
+<p data-reveal="" style="margin:0 0 12px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mute)">[направления]</p>
+<h2 data-reveal="" style="margin:0 0 12px;font-family:var(--font-display);font-weight:900;font-size:34px;line-height:.98;letter-spacing:-0.025em;color:var(--text-heading)">Что мы делаем</h2>
+<p data-reveal="" style="margin:0 0 24px;font-size:15px;line-height:1.55;color:var(--text-body)">Один подрядчик - весь монтаж под ключ. Нажмите на направление, чтобы посчитать смету именно по нему.</p>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ services }}" as="sv" hint-placeholder-count="6">
+<div data-reveal="" role="button" tabindex="0" data-service-card="{{ sv.name }}" onClick="{{ pickServiceCard }}" style="position:relative;overflow:hidden;border-radius:var(--radius-xl);background:var(--surface-dark);min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;cursor:pointer">
+<img src="{{ sv.photo }}" alt="" aria-hidden="true" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sv.pos }};opacity:.62;pointer-events:none">
+<span style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(14,15,12,.35) 0%,rgba(14,15,12,.72) 52%,rgba(14,15,12,.94) 100%)"></span>
+<div style="position:relative;display:flex;flex-direction:column;gap:8px">
+<span style="font-family:var(--font-display);font-weight:900;font-size:12px;letter-spacing:.1em;color:var(--z-green)">{{ sv.n }}</span>
+<h3 style="margin:0;font-family:var(--font-display);font-weight:900;font-size:24px;line-height:1.05;letter-spacing:-0.02em;color:var(--z-canvas)">{{ sv.name }}</h3>
+<p style="margin:0;font-size:15px;line-height:1.45;color:var(--text-on-dark)">{{ sv.desc }}</p>
+<span style="display:inline-flex;align-items:center;gap:6px;margin-top:4px;font-size:13px;font-weight:600;color:var(--z-green)">Посчитать смету
+<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 7h8M7.5 3.5 11 7l-3.5 3.5"></path></svg>
+</span>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section data-screen-label="Почему мы" style="padding:0 20px 48px">
+<p data-reveal="" style="margin:0 0 16px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mute)">[почему мы]</p>
+<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
+<div data-reveal="" style="background:var(--surface-canvas);border-radius:var(--radius-xl);padding:20px;display:flex;gap:16px;align-items:flex-start">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-heading);flex:0 0 auto;margin-top:2px"><path d="M3 9h18v10H3zM7 9V5h10v4"></path><path d="M8 13h8"></path></svg>
+<div><h3 style="margin:0 0 6px;font-size:18px;font-weight:600;letter-spacing:-0.02em;color:var(--text-heading)">Свой парк оборудования</h3><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-body)">Сертифицированное и проверенное временем.</p></div>
+</div>
+<div data-reveal="" data-reveal-delay="60" style="background:var(--surface-canvas);border-radius:var(--radius-xl);padding:20px;display:flex;gap:16px;align-items:flex-start">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-heading);flex:0 0 auto;margin-top:2px"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+<div><h3 style="margin:0 0 6px;font-size:18px;font-weight:600;letter-spacing:-0.02em;color:var(--text-heading)">Скорость</h3><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-body)">Оперативный подбор оборудования, расчёт и оптимизация сметы.</p></div>
+</div>
+<div data-reveal="" data-reveal-delay="120" style="background:var(--surface-canvas);border-radius:var(--radius-xl);padding:20px;display:flex;gap:16px;align-items:flex-start">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-heading);flex:0 0 auto;margin-top:2px"><path d="M4 12h16M12 4v16"></path><circle cx="12" cy="12" r="9"></circle></svg>
+<div><h3 style="margin:0 0 6px;font-size:18px;font-weight:600;letter-spacing:-0.02em;color:var(--text-heading)">Гибкие условия</h3><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-body)">Скидки за объём, постоплата, агентское вознаграждение.</p></div>
+</div>
+<div data-reveal="" data-reveal-delay="180" style="background:var(--surface-canvas);border-radius:var(--radius-xl);padding:20px;display:flex;gap:16px;align-items:flex-start">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-heading);flex:0 0 auto;margin-top:2px"><circle cx="9" cy="8" r="3.2"></circle><path d="M3 20a6 6 0 0 1 12 0"></path><path d="M16 5.5a3 3 0 0 1 0 5M18 20a6.5 6.5 0 0 0-2-4.6"></path></svg>
+<div><h3 style="margin:0 0 6px;font-size:18px;font-weight:600;letter-spacing:-0.02em;color:var(--text-heading)">Команда с опытом организатора</h3><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-body)">Знаем рынок, клиента и его головные боли.</p></div>
+</div>
+</div>
+<figure data-reveal="" style="margin:0;background:var(--color-primary-pale);border-radius:var(--radius-xl);padding:24px;display:flex;flex-direction:column;gap:18px">
+<svg width="34" height="27" viewBox="0 0 40 32" fill="none" style="flex:0 0 auto"><path d="M0 32V18C0 8 5 2 15 0l2 6C11 7.5 8 11 8 16h7v16H0Zm23 0V18C23 8 28 2 38 0l2 6c-6 1.5-9 5-9 10h7v16H23Z" fill="var(--z-ink)" opacity=".12"></path></svg>
+<blockquote style="margin:0;font-family:var(--font-display);font-weight:900;font-size:21px;line-height:1.2;letter-spacing:-0.02em;color:var(--text-heading)">Мы решаем ваши задачи, а не просто предоставляем услуги. Мы говорим с вами на одном языке и предлагаем не «закрыть блок», а эффективные и экономически выгодные решения.</blockquote>
+<figcaption style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-body)">СОБЫТИЯ РУМ</figcaption>
+</figure>
+</section>
+
+<sc-if value="{{ showStats }}" hint-placeholder-val="{{ true }}">
+<section data-screen-label="Цифры" style="background:var(--surface-canvas);padding:40px 20px">
+<p data-reveal="" style="margin:0 0 20px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mute)">[в цифрах]</p>
+<div data-stats="" style="display:flex;flex-direction:column;gap:20px">
+<sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+<div data-reveal="" style="display:flex;align-items:baseline;gap:12px;padding-top:14px;border-top:1px solid var(--border-default)">
+<span style="font-family:var(--font-display);font-weight:900;font-size:44px;line-height:.9;letter-spacing:-0.03em;color:var(--text-heading);flex:0 0 auto">{{ s.shown }}</span>
+<span style="font-family:var(--font-display);font-weight:800;font-size:16px;color:var(--text-heading);flex:0 0 auto">{{ s.unit }}</span>
+<span style="font-size:14px;line-height:1.35;color:var(--text-body);text-align:right;margin-left:auto;max-width:11em">{{ s.label }}</span>
+</div>
+</sc-for>
+</div>
+</section>
+</sc-if>
+
+<section id="cases" data-screen-label="Кейсы" style="padding:48px 20px;scroll-margin-top:76px">
+<p data-reveal="" style="margin:0 0 12px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mute)">[кейсы]</p>
+<h2 data-reveal="" style="margin:0 0 12px;font-family:var(--font-display);font-weight:900;font-size:34px;line-height:.98;letter-spacing:-0.025em;color:var(--text-heading)">Кейсы</h2>
+<p data-reveal="" style="margin:0 0 20px;font-size:15px;line-height:1.55;color:var(--text-body)">Нажмите на строку — раскроются заказчик, задачи и площадка.</p>
+
+<div style="display:flex;flex-direction:column;border-top:1px solid var(--border-default)">
+<sc-for list="{{ visibleCases }}" as="cs" hint-placeholder-count="6">
+<div data-reveal="" style="border-bottom:1px solid rgba(14,15,12,.14)">
+<div role="button" tabindex="0" data-case="{{ cs.i }}" onClick="{{ toggleCase }}" style="display:flex;align-items:center;gap:12px;padding:16px 4px;cursor:pointer;transition:background-color .2s ease;background:{{ cs.rowBg }}">
+<span style="font-family:var(--font-display);font-weight:900;font-size:12px;letter-spacing:.06em;color:var(--text-mute);flex:0 0 auto;min-width:1.8em">{{ cs.n }}</span>
+<div style="flex:1 1 auto;min-width:0">
+<h3 style="margin:0;font-family:var(--font-display);font-weight:900;font-size:19px;line-height:1.1;letter-spacing:-0.025em;color:var(--text-heading)">{{ cs.title }}</h3>
+<span style="display:block;margin-top:4px;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--text-mute)">{{ cs.year }}</span>
+</div>
+<span style="flex:0 0 auto;width:36px;height:36px;border-radius:var(--radius-pill);border:1px solid var(--border-default);display:flex;align-items:center;justify-content:center;color:var(--text-heading);transition:transform .25s cubic-bezier(0.16,1,0.3,1),background-color .2s ease;transform:rotate({{ cs.rot }});background:{{ cs.dotBg }}">
+<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg>
+</span>
+</div>
+<sc-if value="{{ cs.open }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:18px;padding:4px 4px 24px;animation:fadeUp .4s cubic-bezier(0.16,1,0.3,1) both">
+<div style="aspect-ratio:3/2;border-radius:var(--radius-xl);overflow:hidden;background:var(--surface-canvas)">
+<image-slot id="erevent-m-case-{{ cs.i }}" shape="rect" fit="cover" src="{{ cs.src }}" placeholder="{{ cs.slot }}"></image-slot>
+</div>
+<div><p style="margin:0 0 4px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute)">Заказчик</p><p style="margin:0;font-size:16px;font-weight:600;line-height:1.35;color:var(--text-heading)">{{ cs.client }}</p></div>
+<div><p style="margin:0 0 4px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute)">Площадка</p><p style="margin:0;font-size:16px;font-weight:600;line-height:1.35;color:var(--text-heading)">{{ cs.place }}</p></div>
+<div><p style="margin:0 0 4px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute)">Задачи</p><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-body)">{{ cs.tasks }}</p></div>
+<x-import component-from-global-scope="DesignSystem_d6b157.Button" variant="tertiary" size="md" on-click="{{ goForm }}" hint-size="100%,48px">Хочу похожий проект</x-import>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+
+<sc-if value="{{ hasMore }}" hint-placeholder-val="{{ true }}">
+<div style="margin-top:24px">
+<x-import component-from-global-scope="DesignSystem_d6b157.Button" variant="tertiary" size="lg" on-click="{{ showAllCases }}" hint-size="100%,56px">{{ moreLabel }}</x-import>
+</div>
+</sc-if>
+</section>
+
+<section id="process" data-screen-label="Как работаем" style="background:var(--surface-canvas);padding:48px 20px;scroll-margin-top:76px">
+<p data-reveal="" style="margin:0 0 12px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mute)">[этапы работы]</p>
+<h2 data-reveal="" style="margin:0 0 28px;font-family:var(--font-display);font-weight:900;font-size:34px;line-height:.98;letter-spacing:-0.025em;color:var(--text-heading)">Как мы работаем</h2>
+<div data-timeline="" style="display:flex;flex-direction:column">
+<sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:14px 1fr;gap:16px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+<span style="width:14px;height:14px;border-radius:var(--radius-pill);flex:0 0 auto;margin-top:4px;transition:background-color .35s ease,box-shadow .35s ease;background:{{ st.dot }};box-shadow:{{ st.ring }}"></span>
+<span style="flex:1 1 auto;width:1px;min-height:12px;transition:background-color .35s ease;background:{{ st.line }}"></span>
+</div>
+<div style="padding-bottom:26px">
+<p style="margin:0 0 6px;font-family:var(--font-display);font-weight:900;font-size:12px;letter-spacing:.08em;transition:color .35s ease;color:{{ st.num }}">{{ st.n }}</p>
+<h3 style="margin:0 0 6px;font-size:18px;font-weight:600;line-height:1.25;letter-spacing:-0.02em;color:var(--text-heading)">{{ st.title }}</h3>
+<p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-body)">{{ st.desc }}</p>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<sc-if value="{{ showProduction }}" hint-placeholder-val="{{ true }}">
+<section id="production" data-screen-label="Производство" style="padding:48px 20px;scroll-margin-top:76px">
+<div data-reveal="" style="aspect-ratio:4/3;border-radius:var(--radius-xl);overflow:hidden;background:var(--surface-canvas);margin-bottom:24px">
+<image-slot id="erevent-m-production" shape="rect" fit="cover" placeholder="Фото или видео цеха — 300 м² собственного производства"></image-slot>
+</div>
+<p data-reveal="" style="margin:0 0 12px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mute)">[производство]</p>
+<h2 data-reveal="" style="margin:0 0 16px;font-family:var(--font-display);font-weight:900;font-size:32px;line-height:1;letter-spacing:-0.025em;color:var(--text-heading)">Собственное производство 300 м²</h2>
+<p data-reveal="" style="margin:0 0 20px;font-size:16px;line-height:1.55;color:var(--text-body)">Полный цикл от чертежа до монтажа. Изготавливаем декорации, фотозоны, арт-объекты и входные группы — без посредников и без «поедем узнаем у подрядчика».</p>
+<div data-reveal="" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
+<span style="padding:8px 16px;border-radius:var(--radius-pill);background:var(--color-primary-pale);font-size:14px;font-weight:600;color:var(--text-heading)">Декорации</span>
+<span style="padding:8px 16px;border-radius:var(--radius-pill);background:var(--color-primary-pale);font-size:14px;font-weight:600;color:var(--text-heading)">Фотозоны</span>
+<span style="padding:8px 16px;border-radius:var(--radius-pill);background:var(--color-primary-pale);font-size:14px;font-weight:600;color:var(--text-heading)">Арт-объекты</span>
+<span style="padding:8px 16px;border-radius:var(--radius-pill);background:var(--color-primary-pale);font-size:14px;font-weight:600;color:var(--text-heading)">Входные группы</span>
+</div>
+<x-import component-from-global-scope="DesignSystem_d6b157.Button" variant="tertiary" size="lg" on-click="{{ goForm }}" hint-size="100%,56px">Обсудить изготовление</x-import>
+</section>
+</sc-if>
+
+<section data-screen-label="FAQ" style="background:var(--surface-canvas);padding:48px 20px">
+<p data-reveal="" style="margin:0 0 12px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mute)">[вопросы]</p>
+<h2 data-reveal="" style="margin:0 0 24px;font-family:var(--font-display);font-weight:900;font-size:32px;line-height:1;letter-spacing:-0.025em;color:var(--text-heading)">Частые вопросы</h2>
+<div style="display:flex;flex-direction:column;border-top:1px solid rgba(14,15,12,.14)">
+<sc-for list="{{ faq }}" as="f" hint-placeholder-count="4">
+<div data-reveal="" style="border-bottom:1px solid rgba(14,15,12,.14)">
+<div role="button" tabindex="0" data-faq="{{ f.i }}" onClick="{{ toggleFaq }}" style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 0;cursor:pointer">
+<h3 style="margin:0;font-size:17px;font-weight:600;line-height:1.35;letter-spacing:-0.02em;color:var(--text-heading)">{{ f.q }}</h3>
+<span style="flex:0 0 auto;width:32px;height:32px;border-radius:var(--radius-pill);border:1px solid var(--border-default);display:flex;align-items:center;justify-content:center;color:var(--text-heading);transition:transform .25s cubic-bezier(0.16,1,0.3,1),background-color .2s ease;transform:rotate({{ f.rot }});background:{{ f.bg }}">
+<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg>
+</span>
+</div>
+<sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">
+<p style="margin:0;padding:0 44px 20px 0;font-size:15px;line-height:1.55;color:var(--text-body);animation:fadeUp .35s cubic-bezier(0.16,1,0.3,1) both">{{ f.a }}</p>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section id="contacts" data-screen-label="Заявка" style="background:var(--surface-dark);color:var(--text-on-dark);padding:48px 20px;scroll-margin-top:76px">
+<p data-reveal="" style="margin:0 0 12px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--z-green)">[заявка]</p>
+<h2 data-reveal="" style="margin:0 0 24px;font-family:var(--font-display);font-weight:900;font-size:32px;line-height:1;letter-spacing:-0.025em;color:var(--z-canvas)">Расскажите о задаче — вернёмся с решением в течение 3 часов</h2>
+
+<div id="form" data-reveal="" style="background:var(--surface-canvas);border-radius:var(--radius-xl);padding:20px;scroll-margin-top:76px;margin-bottom:12px">
+<sc-if value="{{ isSuccess }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px;align-items:flex-start;animation:fadeUp .45s cubic-bezier(0.16,1,0.3,1) both">
+<span style="width:56px;height:56px;border-radius:var(--radius-pill);background:var(--color-primary);display:flex;align-items:center;justify-content:center;color:var(--z-ink)">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"></path></svg>
+</span>
+<h3 style="margin:0;font-family:var(--font-display);font-weight:900;font-size:26px;line-height:1.05;letter-spacing:-0.02em;color:var(--text-heading)">Заявка отправлена</h3>
+<p style="margin:0;font-size:16px;line-height:1.55;color:var(--text-body)">Вернёмся с решением в течение 3 часов в рабочее время. Если нужно срочно — напишите в Telegram, ответим быстрее.</p>
+<a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px 24px;border-radius:var(--radius-xl);background:var(--color-primary);font-size:16px;font-weight:600;color:var(--z-ink);width:100%">Написать в Telegram</a>
+<x-import component-from-global-scope="DesignSystem_d6b157.Button" variant="tertiary" size="md" on-click="{{ resetForm }}" hint-size="100%,48px">Отправить ещё одну</x-import>
+</div>
+</sc-if>
+
+<sc-if value="{{ isFormVisible }}" hint-placeholder-val="{{ true }}">
+<form onSubmit="{{ submit }}" novalidate="" style="display:flex;flex-direction:column;gap:16px">
+<x-import component-from-global-scope="DesignSystem_d6b157.Input" label="Имя" placeholder="Как к вам обращаться" value="{{ fName }}" on-change="{{ onName }}" hint-size="100%,78px"></x-import>
+<x-import component-from-global-scope="DesignSystem_d6b157.Input" label="Телефон" type="tel" placeholder="+7 (___) ___-__-__" value="{{ fPhone }}" on-change="{{ onPhone }}" error="{{ errPhone }}" hint-size="100%,78px"></x-import>
+<x-import component-from-global-scope="DesignSystem_d6b157.Input" label="Email" type="email" placeholder="info@company.ru" value="{{ fEmail }}" on-change="{{ onEmail }}" error="{{ errEmail }}" hint-size="100%,78px"></x-import>
+<x-import component-from-global-scope="DesignSystem_d6b157.Input" label="Дата и площадка мероприятия" placeholder="12 сентября, ВДНХ, павильон 57" value="{{ fWhen }}" on-change="{{ onWhen }}" hint-size="100%,78px"></x-import>
+
+<div>
+<p style="margin:0 0 10px;font-size:14px;font-weight:600;color:var(--text-heading)">Мессенджер для ответа</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{ channels }}" as="ch" hint-placeholder-count="3">
+<button type="button" data-channel="{{ ch.name }}" onClick="{{ pickChannel }}" style="min-height:44px;padding:10px 18px;border-radius:var(--radius-pill);font-size:14px;font-weight:600;cursor:pointer;transition:background-color .15s ease,border-color .15s ease;background:{{ ch.bg }};border:1px solid {{ ch.border }};color:var(--text-heading)">{{ ch.name }}</button>
+</sc-for>
+</div>
+</div>
+
+<label style="display:flex;flex-direction:column;gap:6px">
+<span style="font-size:14px;font-weight:600;color:var(--text-heading)">Комментарий к задаче</span>
+<textarea rows="4" placeholder="Что нужно, сколько зон, есть ли планировка" value="{{ fComment }}" onChange="{{ onComment }}" style="font-size:16px;line-height:24px;color:var(--text-heading);padding:12px 16px;border-radius:var(--radius-md);background:var(--surface-canvas);border:1px solid var(--border-default);outline:none;resize:vertical" style-focus="border:2px solid var(--text-heading)"></textarea>
+</label>
+
+<label style="display:flex;align-items:center;gap:12px;padding:16px;border-radius:var(--radius-md);border:1px dashed var(--border-default);cursor:pointer">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-heading);flex:0 0 auto"><path d="M12 17V7M8 11l4-4 4 4"></path><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path></svg>
+<span style="flex:1 1 auto;font-size:14px;line-height:1.4;color:var(--text-body)">{{ fileLabel }}</span>
+<input type="file" onChange="{{ onFile }}" style="display:none">
+</label>
+
+<x-import component-from-global-scope="DesignSystem_d6b157.Checkbox" label="Согласен на обработку персональных данных" checked="{{ agree }}" on-change="{{ toggleAgree }}" hint-size="100%,24px"></x-import>
+<sc-if value="{{ errAgree }}" hint-placeholder-val="{{ false }}">
+<p style="margin:-8px 0 0;font-size:12px;color:var(--color-negative)">Без согласия мы не сможем обработать заявку</p>
+</sc-if>
+
+<button type="submit" disabled="{{ isSending }}" style="display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:16px 28px;border:none;border-radius:var(--radius-xl);font-size:17px;font-weight:600;cursor:pointer;background:var(--color-primary);color:var(--color-on-primary);transition:background-color .15s ease,transform .1s ease" style-active="transform:scale(0.97);background:var(--color-primary-neutral)">
+<sc-if value="{{ isSending }}" hint-placeholder-val="{{ false }}">
+<span style="width:16px;height:16px;border-radius:50%;border:2px solid rgba(14,15,12,.25);border-top-color:var(--z-ink);animation:spin .7s linear infinite;display:inline-block"></span>
+</sc-if>
+{{ submitLabel }}
+</button>
+<p style="margin:0;font-size:13px;line-height:1.45;color:var(--text-mute)">Нажимая кнопку, вы соглашаетесь с <a href="#privacy" style="text-decoration:underline">политикой конфиденциальности</a>.</p>
+
+<sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
+<div style="padding:16px;border-radius:var(--radius-md);background:var(--color-primary-pale);font-size:15px;line-height:1.5;color:var(--text-heading)">Не удалось отправить заявку. Напишите нам напрямую — <a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener" style="font-weight:600;text-decoration:underline">Telegram</a> или <a href="tel:+79636997295" style="font-weight:600;text-decoration:underline">+7 963 699 72 95</a>.</div>
+</sc-if>
+</form>
+</sc-if>
+</div>
+
+<div style="background:var(--color-primary);border-radius:var(--radius-xl);padding:22px;margin-bottom:12px">
+<p style="margin:0 0 6px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--z-ink);opacity:.6">Смета в день обращения</p>
+<p style="margin:0;font-family:var(--font-display);font-weight:900;font-size:36px;line-height:.95;letter-spacing:-0.03em;color:var(--z-ink)">24/7 на связи</p>
+</div>
+
+<div style="background:var(--surface-canvas);border-radius:var(--radius-xl);padding:22px;display:flex;flex-direction:column;gap:18px">
+<div>
+<p style="margin:0 0 8px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute)">Телефон</p>
+<a href="tel:+79636997295" style="display:block;font-size:18px;font-weight:600;color:var(--text-heading);margin-bottom:6px;min-height:28px">+7 963 699 72 95 <span style="font-weight:400;color:var(--text-mute)">Никита</span></a>
+<a href="tel:+79692031599" style="display:block;font-size:18px;font-weight:600;color:var(--text-heading);min-height:28px">+7 969 203 15 99 <span style="font-weight:400;color:var(--text-mute)">Максим</span></a>
+</div>
+<div>
+<p style="margin:0 0 8px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute)">E-mail</p>
+<a href="mailto:info@erevent.ru" style="font-size:18px;font-weight:600;color:var(--text-heading)">info@erevent.ru</a>
+</div>
+<div>
+<p style="margin:0 0 8px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute)">Офис</p>
+<p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-body)">115419, Москва, Орджоникидзе, д. 11, офис 420</p>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener" style="flex:1 1 100px;display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px 14px;border-radius:var(--radius-xl);border:1px solid var(--border-default);font-size:15px;font-weight:600;color:var(--text-heading)">Telegram</a>
+<a href="https://wa.me/79636997295" target="_blank" rel="noopener" style="flex:1 1 100px;display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px 14px;border-radius:var(--radius-xl);border:1px solid var(--border-default);font-size:15px;font-weight:600;color:var(--text-heading)">WhatsApp</a>
+<a href="tel:+79636997295" style="flex:1 1 100%;display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px 14px;border-radius:var(--radius-xl);border:1px solid var(--border-default);font-size:15px;font-weight:600;color:var(--text-heading)">MAX</a>
+</div>
+</div>
+</section>
+
+<footer data-screen-label="Футер" style="background:var(--surface-dark);color:var(--text-on-dark);padding:40px 20px 108px;border-top:1px solid rgba(255,255,255,.12)">
+<img src="media/logo-lime.png" alt="СОБЫТИЯ РУМ" width="1355" height="972" style="display:block;height:56px;width:auto;margin:0 0 16px">
+<p style="margin:0 0 28px;font-size:15px;line-height:1.55;color:rgba(232,235,230,.7)">Техническое оснащение мероприятий, застройка стендов и декораций, организация мероприятий полного цикла.</p>
+<nav style="display:flex;flex-direction:column;gap:2px;margin-bottom:28px">
+<p style="margin:0 0 8px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--z-green)">Разделы</p>
+<a href="#services" style="font-size:15px;color:var(--text-on-dark);min-height:40px;display:flex;align-items:center">Услуги</a>
+<a href="#cases" style="font-size:15px;color:var(--text-on-dark);min-height:40px;display:flex;align-items:center">Кейсы</a>
+<a href="#process" style="font-size:15px;color:var(--text-on-dark);min-height:40px;display:flex;align-items:center">Как работаем</a>
+<a href="#production" style="font-size:15px;color:var(--text-on-dark);min-height:40px;display:flex;align-items:center">Производство</a>
+<a href="#contacts" style="font-size:15px;color:var(--text-on-dark);min-height:40px;display:flex;align-items:center">Контакты</a>
+</nav>
+<div style="display:flex;flex-direction:column;gap:2px;margin-bottom:24px">
+<p style="margin:0 0 8px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--z-green)">Контакты</p>
+<a href="tel:+79636997295" style="font-size:15px;color:var(--text-on-dark);min-height:40px;display:flex;align-items:center">+7 963 699 72 95 — Никита</a>
+<a href="tel:+79692031599" style="font-size:15px;color:var(--text-on-dark);min-height:40px;display:flex;align-items:center">+7 969 203 15 99 — Максим</a>
+<a href="mailto:info@erevent.ru" style="font-size:15px;color:var(--text-on-dark);min-height:40px;display:flex;align-items:center">info@erevent.ru</a>
+<span style="font-size:15px;line-height:1.5;color:rgba(232,235,230,.7);padding-top:6px">115419, Москва, Орджоникидзе, д. 11, офис 420</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12)">
+<span style="font-size:13px;color:rgba(232,235,230,.5)">© 2026 СОБЫТИЯ РУМ</span>
+<a href="#privacy" style="font-size:13px;color:rgba(232,235,230,.5);text-decoration:underline">Политика конфиденциальности</a>
+<div style="display:flex;gap:14px;padding-top:6px">
+<a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener" style="font-size:13px;color:var(--z-green)">Telegram</a>
+<a href="https://wa.me/79636997295" target="_blank" rel="noopener" style="font-size:13px;color:var(--z-green)">WhatsApp</a>
+<a href="tel:+79636997295" style="font-size:13px;color:var(--z-green)">MAX</a>
+</div>
+</div>
+</footer>
+
+<div style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:390px;z-index:80;display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(14,15,12,.92);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,.14)">
+<a href="tel:+79636997295" style="flex:1 1 0;min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius-xl);border:1px solid rgba(255,255,255,.3);font-size:15px;font-weight:600;color:var(--text-on-dark)">Позвонить</a>
+<a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener" style="flex:1 1 0;min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius-xl);background:var(--color-primary);font-size:15px;font-weight:600;color:var(--z-ink)">Telegram</a>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;casesInitial&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:6,&quot;min&quot;:3,&quot;max&quot;:10,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Кейсы&quot;},&quot;heroVideo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;off&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto' | 'off'&quot;,&quot;section&quot;:&quot;Анимация&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;off&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full' | 'off'&quot;,&quot;section&quot;:&quot;Анимация&quot;},&quot;showStats&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Блоки&quot;},&quot;showProduction&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Блоки&quot;}}">
+const EASE = 'cubic-bezier(0.16,1,0.3,1)';
+
+const CASE_PHOTOS = {
+  0: 'https://img1.creatium.ru/disk2/89/af/98/a764c31753ccb11bab0c1fc2e60167a073/atm_75477_preview.jpg',
+  1: 'https://img1.creatium.ru/disk2/24/e8/83/fc7e1628f105a598d6b979d0713ca7bb95/297035106416694.png',
+  2: 'https://img1.creatium.ru/disk2/2a/3f/bd/350b95ad2315715896e07cd7ece2cd24c9/preview_1.jpg',
+  3: 'media/case-vnot-w1600.jpg',
+  4: 'media/case-tavrida.jpg',
+  5: 'https://img1.creatium.ru/disk2/48/72/94/10243054b9aa1f9dc385317f8409d39a0f/scale_1200.jpg',
+  6: 'https://img1.creatium.ru/disk2/63/e1/2d/75d28c13fe0e03cefade49b51fc69f567c/babolat_jour_12280_scaled.jpg',
+  7: 'https://img1.creatium.ru/disk2/b4/a5/8d/fbcbbde4d31cc278d99dde3c1b605755df/img_1210.jpg',
+  8: 'https://img1.creatium.ru/disk2/8d/e7/73/c6a80a23b6cda3bf414843da3ee7ee9103/img_9711.jpg',
+  9: 'https://img1.creatium.ru/disk2/07/d2/dc/e73ce706bca73cdfbbd080554c29ae632e/snimok_ekrana_2026_03_14_v_6_48_39_pm.png'
+};
+
+const CASES = [
+  {n:'01', title:'World Atomic Week', year:'2025', client:'ATOM EXPO', tasks:'Аренда оборудования, застройка тематической зоны', place:'ВДНХ'},
+  {n:'02', title:'Сбер Бизнес Фест', year:'2025', client:'ПАО Сбербанк, ген. подрядчик', tasks:'Застройка пространства фестиваля, фудкорт и кофестанции, аренда мебели', place:'Москва, Казань, Волгоград, Омск, Новосибирск'},
+  {n:'03', title:'МТФ «Путешествуй»', year:'2024, 2025, 2026', client:'Фонд Росконгресс', tasks:'Застройка стендов, шатры, мебель и оборудование на стенды, изготовление арт-объекта, застройка VIP-зоны', place:'ВДНХ'},
+  {n:'04', title:'Всероссийская неделя охраны труда', year:'2024, 2025', client:'Министерство труда, ген. подрядчик', tasks:'Мебельное обеспечение форумной программы, оборудование стендов, клининг, хэлперы', place:'Университет «Сириус»'},
+  {n:'05', title:'Фестиваль «Таврида»', year:'2024', client:'Росмолодёжь, ген. подрядчик', tasks:'Монтаж палаточного городка и коммуникаций', place:'Судак'},
+  {n:'06', title:'VK Fest', year:'2025', client:'VK Community', tasks:'Кальянный кейтеринг VIP-зон, мебель и оборудование лаунж-зон', place:'Москва, Лужники'},
+  {n:'07', title:'Турнир по падл-теннису', year:'2025', client:'Parimatch, ген. подрядчик', tasks:'Звук, TV-панели, мебель, техническое сопровождение', place:'Яхт-клуб «Адмирал»'},
+  {n:'08', title:'Запуск спорткомплекса Padel Ball', year:'', client:'Padel Ball', tasks:'Дизайн, строительные работы, брендирование, навигация, мебель и оборудование', place:'Химки, Gopark'},
+  {n:'09', title:'Оформление входной группы БЦ', year:'', client:'БЦ «Парк Победы»', tasks:'Дизайн, изготовление и монтаж декораций входной группы', place:'БЦ «Парк Победы»'},
+  {n:'10', title:'Yandex Data (exclusive event)', year:'', client:'Yandex Data', tasks:'Барное и кальянное обслуживание, лаунж-пространство', place:'Сочи, Красная Поляна'}
+];
+
+const STEPS = [
+  {n:'01', title:'Заявка и бриф', desc:'Задача, площадка, тайминг.'},
+  {n:'02', title:'Смета за день', desc:'Расчёт с вариантами по бюджету, визуалы.'},
+  {n:'03', title:'Производство', desc:'Чертежи, изготовление, логистика.'},
+  {n:'04', title:'Монтаж и сопровождение', desc:'Установка, дежурство, демонтаж.'}
+];
+
+const FAQ = [
+  {q:'Как быстро сможете посчитать смету?', a:'Расчёт делаем в день обращения, обычно это занимает не более 3 часов.'},
+  {q:'Вы занимаетесь монтажом?', a:'Да, мы не только сдаём оборудование в аренду, но и занимаемся установкой и настройкой. Делаем всё под ключ.'},
+  {q:'Нужно срочно, успеете?', a:'Закроем задачу в кратчайшие сроки.'},
+  {q:'Как начать работу?', a:'Заполните заявку на сайте или позвоните: +7 963 699 72 95. Составим смету и уже завтра доставим оборудование и выполним монтаж.'}
+];
+
+const SERVICE_CARDS = [
+  {n:'01', name:'Арт-объекты, стенды, декорации', desc:'Конструктив, арт-объекты, брендирование, монтаж под ключ.', photo:'media/service-art.jpg', pos:'50% 50%'},
+  {n:'02', name:'Оформление, флористика, фотозоны', desc:'Декор, оформление пространств, входные группы.', photo:'media/service-oformlenie.jpg', pos:'50% 50%'},
+  {n:'03', name:'Кейтеринг', desc:'Кофейные станции, коктейльный и паровой бар.', photo:'media/service-catering-w.jpg', pos:'50% 18%'},
+  {n:'04', name:'Аренда мебели и оборудования', desc:'Комплектация зон, выездной гардероб.', photo:'media/service-mebel-zal.jpg', pos:'50% 40%'},
+  {n:'05', name:'Аренда шатров', desc:'Шатры, палаточные городки.', photo:'media/service-shatry.jpg', pos:'50% 50%'},
+  {n:'06', name:'Экраны, звук и свет', desc:'LED-экраны, TV-панели, звуковое и световое оборудование, трансляции.', photo:'media/service-zvuk.jpg', pos:'50% 50%'}
+];
+
+const SERVICES = SERVICE_CARDS.map(s => s.name);
+const VENUES = ['ВДНХ','Парк науки и искусства «Сириус»','Лужники','КВЦ «Экспофорум»','Президентская библиотека им. Б. Н. Ельцина','ЦВЗ «Манеж»','Гостиный Двор','ЦМТ','ЦДП','МВЦ «Казань Экспо»','ИТ-парк им. Б. Рамеева','Казанская Ратуша','МВЦ «Екатеринбург-ЭКСПО»'];
+const CLIENTS = ['Росконгресс','Сбербанк','Parimatch','Haval','BingX','VK','Росатом','Минтруд','Росмолодёжь'];
+const STATS = [
+  {value:3, unit:'часа', label:'средний срок расчёта сметы', suffix:''},
+  {value:7, unit:'лет', label:'на рынке', suffix:''},
+  {value:300, unit:'м²', label:'собственное производство', suffix:''},
+  {value:400, unit:'', label:'реализованных проектов', suffix:'+'}
+];
+
+class Component extends DCLogic {
+  state = {
+    scrollY: 0,
+    menuOpen: false,
+    openCase: null,
+    allCases: false,
+    openFaq: 0,
+    activeStep: -1,
+    counts: STATS.map(s => s.value),
+    name: '', phone: '', email: '', when: '', comment: '',
+    channel: 'Telegram',
+    services: [],
+    fileName: '',
+    agree: false,
+    touched: false,
+    status: 'idle',
+    heroVideo: false,
+    heroVideoPlaying: false
+  };
+
+  // На телефоне видео стартует только если это не режим экономии трафика
+  // и не «уменьшить движение». Иначе остаётся статичный кадр.
+  wantsHeroVideo() {
+    if ((this.props.heroVideo ?? 'auto') === 'off') return false;
+    if (this.reduced()) return false;
+    const c = navigator.connection;
+    if (c && (c.saveData || /2g/.test(c.effectiveType || ''))) return false;
+    return true;
+  }
+
+  reduced() {
+    return typeof window !== 'undefined' && window.matchMedia
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+  motionOn() {
+    return (this.props.motion ?? 'full') !== 'off' && !this.reduced();
+  }
+
+  componentDidMount() {
+    this._raf = null;
+    this._onScroll = () => {
+      if (this._raf) return;
+      this._raf = requestAnimationFrame(() => {
+        this._raf = null;
+        this.setState({scrollY: window.scrollY || 0});
+        this.updateSteps();
+      });
+    };
+    window.addEventListener('scroll', this._onScroll, {passive: true});
+    this.setState({scrollY: window.scrollY || 0});
+    this.setupReveal();
+    this.setupCounters();
+    this.updateSteps();
+    if (this.wantsHeroVideo()) {
+      const start = () => this.setState({heroVideo: true});
+      if ('requestIdleCallback' in window) requestIdleCallback(start, {timeout: 800});
+      else setTimeout(start, 300);
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this._onScroll);
+    if (this._ro) this._ro.disconnect();
+    if (this._co) this._co.disconnect();
+  }
+
+  setupReveal() {
+    if (!this.motionOn() || !('IntersectionObserver' in window)) return;
+    const nodes = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+    const vh = window.innerHeight;
+    const pending = nodes.filter(el => el.getBoundingClientRect().top > vh * 0.92);
+    pending.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(18px)';
+      el.style.transition = 'opacity .5s ' + EASE + ', transform .5s ' + EASE;
+    });
+    this._ro = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const d = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
+        el.style.transitionDelay = d + 'ms';
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        obs.unobserve(el);
+      });
+    }, {threshold: 0.12, rootMargin: '0px 0px -6% 0px'});
+    pending.forEach(el => this._ro.observe(el));
+  }
+
+  setupCounters() {
+    if (!this.motionOn() || !('IntersectionObserver' in window)) return;
+    const host = document.querySelector('[data-stats]');
+    if (!host) return;
+    this._co = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        obs.unobserve(e.target);
+        this.runCounters();
+      });
+    }, {threshold: 0.25});
+    this._co.observe(host);
+    this.setState({counts: STATS.map(() => 0)});
+  }
+
+  runCounters() {
+    const dur = 1700, t0 = performance.now();
+    const tick = (now) => {
+      const p = Math.min(1, (now - t0) / dur);
+      const e = 1 - Math.pow(1 - p, 3);
+      this.setState({counts: STATS.map(s => Math.round(s.value * e))});
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  updateSteps() {
+    const host = document.querySelector('[data-timeline]');
+    if (!host) return;
+    const r = host.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const p = (vh * 0.7 - r.top) / Math.max(1, r.height);
+    const idx = Math.floor(Math.max(0, Math.min(1, p)) * STEPS.length) - 1;
+    const active = r.top > vh ? -1 : Math.min(STEPS.length - 1, idx);
+    if (active !== this.state.activeStep) this.setState({activeStep: active});
+  }
+
+  scrollTo(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 76;
+    window.scrollTo({top, behavior: this.reduced() ? 'auto' : 'smooth'});
+  }
+
+  formatPhone(raw) {
+    let d = String(raw).replace(/\D/g, '');
+    if (d[0] === '8') d = '7' + d.slice(1);
+    if (d[0] !== '7') d = '7' + d;
+    d = d.slice(0, 11);
+    let out = '+7';
+    if (d.length > 1) out += ' (' + d.slice(1, 4);
+    if (d.length >= 4) out += ')';
+    if (d.length > 4) out += ' ' + d.slice(4, 7);
+    if (d.length > 7) out += '-' + d.slice(7, 9);
+    if (d.length > 9) out += '-' + d.slice(9, 11);
+    return out;
+  }
+
+  digits() { return this.state.phone.replace(/\D/g, ''); }
+
+  // Чипов услуг в форме больше нет — выбранное направление уходит в комментарий.
+  pickService(name) {
+    const c = this.state.comment;
+    if (c.indexOf(name) === -1) this.setState({comment: c ? c + ', ' + name : name});
+    this.scrollTo('form');
+  }
+
+  renderVals() {
+    const s = this.state;
+    const scrolled = s.scrollY > 40;
+    const initial = Math.max(1, Math.min(10, this.props.casesInitial ?? 6));
+    const cases = CASES.map((c, i) => {
+      const open = s.openCase === i;
+      return Object.assign({}, c, {
+        i: i,
+        open: open,
+        rot: open ? '180deg' : '0deg',
+        rowBg: open ? 'var(--surface-canvas)' : 'transparent',
+        dotBg: open ? 'var(--color-primary)' : 'transparent',
+        src: CASE_PHOTOS[i] || '',
+        slot: 'Фото проекта «' + c.title + '»'
+      });
+    });
+    const visibleCases = s.allCases ? cases : cases.slice(0, initial);
+    // Обязательны только контакт (телефон ИЛИ email) и согласие.
+    const hasPhone = this.digits().length >= 11;
+    const hasEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.email.trim());
+    const needContact = s.touched && !hasPhone && !hasEmail;
+    const errPhone = needContact ? 'Оставьте телефон или email' : '';
+    const errEmail = needContact ? ' ' : '';
+
+    return {
+      menuOpen: s.menuOpen,
+      navBg: scrolled ? 'rgba(14,15,12,.9)' : 'transparent',
+      navBorder: scrolled ? 'rgba(255,255,255,.12)' : 'transparent',
+      navBlur: scrolled ? 'blur(14px)' : 'none',
+      navPad: scrolled ? '8px 16px' : '14px 16px',
+      logoH: scrolled ? '34px' : '76px',
+      heroShift: this.motionOn() ? Math.min(80, s.scrollY * 0.14) + 'px' : '0px',
+      heroVideoOn: s.heroVideo,
+      heroVideoSrc: s.heroVideo ? 'media/hero-showreel.mp4' : '',
+      heroVideoOpacity: s.heroVideoPlaying ? '1' : '0',
+      heroVideoReady: () => this.setState({heroVideoPlaying: true}),
+      // React не всегда переносит muted в DOM — глушим напрямую, иначе iOS не запустит autoplay.
+      heroVideoRef: (el) => {
+        const v = el && el.currentTarget ? el.currentTarget : el;
+        if (!v || !v.tagName) return;
+        v.muted = true;
+        v.defaultMuted = true;
+        v.volume = 0;
+        v.loop = true;
+        if (!v.dataset.loopBound) {
+          v.dataset.loopBound = '1';
+          v.addEventListener('ended', () => { v.currentTime = 0; v.play().catch(() => {}); });
+        }
+        v.play().catch(() => {});
+      },
+
+      clientsLoop: CLIENTS.concat(CLIENTS),
+      venuesLoop: VENUES.concat(VENUES),
+
+      services: SERVICE_CARDS,
+      pickServiceCard: (e) => this.pickService(e.currentTarget.getAttribute('data-service-card')),
+
+      showStats: this.props.showStats ?? true,
+      showProduction: this.props.showProduction ?? true,
+      stats: STATS.map((st, i) => Object.assign({}, st, {shown: s.counts[i] + st.suffix})),
+
+      visibleCases: visibleCases,
+      hasMore: !s.allCases && cases.length > initial,
+      moreLabel: 'Показать ещё ' + (cases.length - initial),
+      showAllCases: () => this.setState({allCases: true}),
+      toggleCase: (e) => {
+        const i = parseInt(e.currentTarget.getAttribute('data-case'), 10);
+        this.setState({openCase: s.openCase === i ? null : i});
+      },
+
+      steps: STEPS.map((st, i) => {
+        const on = i <= s.activeStep;
+        return Object.assign({}, st, {
+          dot: on ? 'var(--color-primary)' : 'var(--surface-soft)',
+          ring: on ? '0 0 0 4px rgba(159,232,112,.35)' : '0 0 0 1px rgba(14,15,12,.2)',
+          line: on ? 'var(--color-primary)' : 'rgba(14,15,12,.14)',
+          num: on ? 'var(--text-heading)' : 'var(--text-mute)'
+        });
+      }),
+
+      faq: FAQ.map((f, i) => ({
+        i: i, q: f.q, a: f.a,
+        open: s.openFaq === i,
+        rot: s.openFaq === i ? '180deg' : '0deg',
+        bg: s.openFaq === i ? 'var(--color-primary)' : 'transparent'
+      })),
+      toggleFaq: (e) => {
+        const i = parseInt(e.currentTarget.getAttribute('data-faq'), 10);
+        this.setState({openFaq: s.openFaq === i ? null : i});
+      },
+
+      toggleMenu: () => this.setState({menuOpen: !s.menuOpen}),
+      closeMenu: () => this.setState({menuOpen: false}),
+      goForm: () => this.scrollTo('form'),
+      goFormFromMenu: () => { this.setState({menuOpen: false}); setTimeout(() => this.scrollTo('form'), 80); },
+
+      channels: ['Telegram', 'WhatsApp', 'MAX', 'Почта'].map(n => ({
+        name: n,
+        bg: s.channel === n ? 'var(--color-primary)' : 'var(--surface-canvas)',
+        border: s.channel === n ? 'var(--color-primary)' : 'var(--border-default)'
+      })),
+      pickChannel: (e) => this.setState({channel: e.currentTarget.getAttribute('data-channel')}),
+
+      serviceChips: SERVICES.map(n => {
+        const on = s.services.indexOf(n) > -1;
+        return {name: n, bg: on ? 'var(--color-primary)' : 'var(--surface-canvas)', border: on ? 'var(--color-primary)' : 'var(--border-default)'};
+      }),
+      toggleService: (e) => {
+        const n = e.currentTarget.getAttribute('data-service');
+        const has = s.services.indexOf(n) > -1;
+        this.setState({services: has ? s.services.filter(x => x !== n) : s.services.concat([n])});
+      },
+
+      fName: s.name, fPhone: s.phone, fEmail: s.email, fWhen: s.when, fComment: s.comment,
+      onName: (e) => this.setState({name: e.target.value}),
+      onPhone: (e) => this.setState({phone: this.formatPhone(e.target.value)}),
+      onEmail: (e) => this.setState({email: e.target.value}),
+      onWhen: (e) => this.setState({when: e.target.value}),
+      onComment: (e) => this.setState({comment: e.target.value}),
+      onFile: (e) => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        if (f.size > 20 * 1024 * 1024) { this.setState({fileName: 'Файл больше 20 МБ — пришлите ссылкой'}); return; }
+        this.setState({fileName: f.name});
+      },
+      fileLabel: s.fileName || 'Прикрепить файл — ТЗ, план, референсы (до 20 МБ)',
+
+      agree: s.agree,
+      toggleAgree: (v) => this.setState({agree: typeof v === 'boolean' ? v : !s.agree}),
+      errPhone: errPhone,
+      errEmail: errEmail,
+      errAgree: s.touched && !s.agree,
+
+      isSending: s.status === 'sending',
+      isSuccess: s.status === 'success',
+      isError: s.status === 'error',
+      isFormVisible: s.status !== 'success',
+      submitLabel: s.status === 'sending' ? 'Отправляем' : 'Отправить заявку',
+      resetForm: () => this.setState({status: 'idle', touched: false, name: '', phone: '', email: '', when: '', comment: '', services: [], fileName: '', agree: false}),
+      submit: (e) => {
+        e.preventDefault();
+        this.setState({touched: true});
+        if ((!hasPhone && !hasEmail) || !s.agree) return;
+        this.setState({status: 'sending'});
+        setTimeout(() => this.setState({status: 'success'}), 1300);
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
