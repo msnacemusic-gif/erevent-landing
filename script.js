@@ -15,12 +15,12 @@
 
   var CLIENTS = ['Росконгресс', 'Сбербанк', 'Parimatch', 'Haval', 'BingX', 'VK', 'Росатом', 'Минтруд', 'Росмолодёжь'];
 
-  // Фото 4-го и 5-го кейса — свои, лежат в media/. Остальные пока без реального
-  // фото (источники на img1.creatium.ru блокируют хотлинк) — плашка с названием.
-  var CASE_PHOTOS = {
-    3: 'media/case-vnot-w1600.jpg',
-    4: 'media/case-tavrida.jpg'
-  };
+  // Каждый кейс ищет фото по номеру: media/case-01.jpg … media/case-10.jpg.
+  // Файла нет — карточка сама показывает плашку с названием кейса.
+  // Чтобы добавить фото, достаточно положить его в media/ под нужным именем.
+  function casePhoto(i) {
+    return 'media/case-' + (i < 9 ? '0' : '') + (i + 1) + '.jpg';
+  }
 
   var CASES = [
     { n: '01', title: 'World Atomic Week', year: '2025', client: 'ATOM EXPO', tasks: 'Аренда оборудования, застройка тематической зоны', place: 'ВДНХ' },
@@ -214,10 +214,12 @@
   var casesMoreBtn = document.getElementById('cases-more-btn');
   var casesAllShown = false;
 
-  function caseMediaHtml(c, i) {
-    var src = CASE_PHOTOS[i];
-    if (src) return '<img src="' + src + '" alt="Фото проекта «' + c.title + '»" loading="lazy">';
+  function casePlaceholderHtml(c) {
     return '<div class="case__placeholder"><span>' + c.title + '<br>Фото добавим по готовности</span></div>';
+  }
+
+  function caseMediaHtml(c, i) {
+    return '<img src="' + casePhoto(i) + '" alt="Фото проекта «' + c.title + '»" loading="lazy" data-case-photo="' + i + '">';
   }
 
   function renderCases() {
@@ -277,6 +279,14 @@
     });
     Array.prototype.forEach.call(casesList.querySelectorAll('.js-case-cta'), function (btn) {
       btn.addEventListener('click', function () { scrollToEl('form'); });
+    });
+    // Фото ещё не загружено в media/ — карточка возвращается к плашке.
+    Array.prototype.forEach.call(casesList.querySelectorAll('[data-case-photo]'), function (img) {
+      img.addEventListener('error', function () {
+        var i = parseInt(img.getAttribute('data-case-photo'), 10);
+        var holder = img.parentElement;
+        if (holder) holder.innerHTML = casePlaceholderHtml(CASES[i]);
+      });
     });
   }
 
