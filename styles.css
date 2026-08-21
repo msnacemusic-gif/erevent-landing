@@ -615,3 +615,28 @@ form#lead-form{display:flex;flex-direction:column;gap:clamp(16px,1.6vw,22px)}
 /* Длинной подписи отдаём столько места, сколько нужно, — короткая ужимается. */
 .mobile-bar__call{flex:0 1 auto;border:1px solid rgba(255,255,255,.3);color:var(--text-on-dark)}
 .mobile-bar__tg{flex:1 1 auto;background:var(--color-primary);color:var(--z-ink)}
+
+/* ==========================================================================
+   Cookie notice
+   ========================================================================== */
+/* Скрыт по умолчанию; скрипт показывает его, если согласия ещё не было.
+   На мобильных поднимаем над закреплённой панелью «Позвонить / Telegram». */
+.cookie{display:none}
+.cookie.is-visible{
+  display:flex;flex-wrap:wrap;align-items:center;gap:clamp(12px,1.6vw,20px);
+  position:fixed;z-index:90;left:clamp(12px,3vw,24px);right:clamp(12px,3vw,24px);
+  bottom:calc(clamp(12px,3vw,24px) + env(safe-area-inset-bottom));
+  max-width:720px;margin:0 auto;padding:clamp(16px,1.8vw,22px) clamp(18px,2vw,26px);
+  background:var(--surface-dark);border:1px solid rgba(255,255,255,.22);border-radius:var(--radius-xl);
+  animation:fadeUp .35s var(--ease) both;
+}
+@media (max-width:1199px){
+  .cookie.is-visible{bottom:calc(80px + env(safe-area-inset-bottom))}
+}
+@media (prefers-reduced-motion: reduce){
+  .cookie.is-visible{animation:none}
+}
+.cookie__text{flex:1 1 320px;margin:0;font-size:14px;line-height:1.5;color:rgba(232,235,230,.78)}
+.cookie__text a{color:var(--text-on-dark);text-decoration:underline;transition:color .15s ease}
+.cookie__text a:hover{color:var(--z-green)}
+.cookie__ok{flex:0 0 auto}

@@ -506,4 +506,36 @@
     }, 1300);
   });
 
+  /* ------------------------------------------------------------------ */
+  /* Cookie notice                                                        */
+  /* ------------------------------------------------------------------ */
+
+  (function setupCookieNotice() {
+    var banner = document.getElementById('cookie-banner');
+    var accept = document.getElementById('cookie-accept');
+    if (!banner || !accept) return;
+
+    var KEY = 'erevent-cookie-consent';
+
+    // В приватном режиме и при запрете хранения обращение к localStorage
+    // бросает исключение — тогда просто показываем баннер на эту сессию.
+    function stored() {
+      try { return window.localStorage.getItem(KEY); } catch (e) { return null; }
+    }
+    function remember() {
+      try { window.localStorage.setItem(KEY, '1'); } catch (e) {}
+    }
+
+    if (stored()) return;
+
+    banner.hidden = false;
+    banner.classList.add('is-visible');
+
+    accept.addEventListener('click', function () {
+      remember();
+      banner.classList.remove('is-visible');
+      banner.hidden = true;
+    });
+  })();
+
 })();
