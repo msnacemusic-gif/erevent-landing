@@ -60,14 +60,18 @@
   var heroBg = document.getElementById('hero-bg');
   var rafId = null;
 
+  // За сколько пикселей прокрутки логотип доходит от крупного до обычного.
+  var LOGO_SHRINK = 240;
+
   function onScroll() {
     if (rafId) return;
     rafId = requestAnimationFrame(function () {
       rafId = null;
       var y = window.scrollY || 0;
       header.classList.toggle('is-scrolled', y > 40);
-      if (heroBg && !reduced()) {
-        heroBg.style.transform = 'translateY(' + Math.min(120, y * 0.18) + 'px)';
+      if (!reduced()) {
+        document.documentElement.style.setProperty('--logo-t', Math.min(1, y / LOGO_SHRINK).toFixed(3));
+        if (heroBg) heroBg.style.transform = 'translateY(' + Math.min(120, y * 0.18) + 'px)';
       }
       updateTimeline();
     });
@@ -358,32 +362,25 @@
   /* Hero video — conditional, lazy load                                  */
   /* ------------------------------------------------------------------ */
 
-  function wantsHeroVideo() {
-    if (reduced()) return false;
-    if (window.innerWidth < 900) return false;
-    var c = navigator.connection;
-    if (c && (c.saveData || /2g/.test(c.effectiveType || ''))) return false;
-    return true;
-  }
-
-  function startHeroVideo() {
+  // Загрузку видео запускает встроенный скрипт в разметке — здесь только
+  // звук, зацикливание и проявление первого кадра, как только он готов.
+  (function setupHeroVideo() {
     var video = document.getElementById('hero-video');
-    if (!video) return;
+    if (!video || !video.getAttribute('src')) return;
+
     video.muted = true;
     video.defaultMuted = true;
     video.volume = 0;
     video.loop = true;
-    video.src = 'media/hero-showreel.mp4';
-    video.addEventListener('canplay', function () { video.classList.add('is-ready'); }, { once: true });
+
+    function show() { video.classList.add('is-ready'); }
+    if (video.readyState >= 2) show();
+    else video.addEventListener('loadeddata', show, { once: true });
+
     video.addEventListener('volumechange', function () { video.muted = true; video.volume = 0; });
     video.addEventListener('ended', function () { video.currentTime = 0; video.play().catch(function () {}); });
     video.play().catch(function () {});
-  }
-
-  if (wantsHeroVideo()) {
-    if ('requestIdleCallback' in window) requestIdleCallback(startHeroVideo, { timeout: 600 });
-    else setTimeout(startHeroVideo, 200);
-  }
+  })();
 
   /* ------------------------------------------------------------------ */
   /* Form                                                                 */

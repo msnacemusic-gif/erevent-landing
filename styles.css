@@ -35,6 +35,12 @@
   --font-body:'Inter',system-ui,-apple-system,sans-serif;
 
   --ease:cubic-bezier(0.16,1,0.3,1);
+
+  /* Логотип: крупный на загрузке, к концу прокрутки шапки — обычный.
+     --logo-t ведёт скрипт: 0 — крупный, 1 — обычный. */
+  --logo-min:clamp(34px,3.4vw,46px);
+  --logo-max:clamp(84px,9.6vw,140px);
+  --logo-t:0;
 }
 
 /* ==========================================================================
@@ -57,11 +63,13 @@ input,textarea,button,select{font-family:var(--font-body)}
 ::selection{background:var(--z-green);color:var(--z-ink)}
 h1,h2,h3,p,blockquote,figure{margin:0}
 
+/* Уводим вверх, а не влево: сдвиг за левый край растягивал страницу
+   по горизонтали и давал лишнюю прокрутку на телефоне. */
 .skip-link{
-  position:absolute;left:-9999px;top:0;z-index:200;
+  position:absolute;left:0;top:0;z-index:200;transform:translateY(-200%);
   background:var(--z-green);color:var(--z-ink);padding:12px 20px;border-radius:0 0 12px 0;font-weight:600;
 }
-.skip-link:focus{left:0}
+.skip-link:focus{transform:none}
 
 .wrap{width:100%;max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
 
@@ -144,11 +152,19 @@ h1,h2,h3,p,blockquote,figure{margin:0}
   display:flex;align-items:center;justify-content:space-between;gap:24px;
 }
 .header__logo{flex:0 0 auto;display:block;line-height:0}
-.header__logo img{display:block;height:clamp(34px,3.4vw,46px);width:auto}
-.header__nav{display:flex;align-items:center;gap:clamp(16px,2vw,32px)}
-.header__nav a{font-size:14px;font-weight:600;color:var(--z-canvas);opacity:.75;transition:opacity .15s ease}
+.header__logo img{
+  display:block;width:auto;
+  height:calc(var(--logo-max) + (var(--logo-min) - var(--logo-max)) * var(--logo-t));
+}
+/* Без скрипта логотип сразу обычного размера — крупный вид ожил бы навсегда. */
+.no-js .header__logo img{height:var(--logo-min)}
+@media (prefers-reduced-motion: reduce){
+  .header__logo img{height:var(--logo-min)}
+}
+.header__nav{display:flex;align-items:center;gap:clamp(14px,1.4vw,22px)}
+.header__nav a{font-size:14px;font-weight:600;color:var(--z-canvas);opacity:.75;transition:opacity .15s ease;white-space:nowrap}
 .header__nav a:hover{opacity:1}
-.header__actions{display:flex;align-items:center;gap:12px;flex:0 0 auto}
+.header__actions{display:flex;align-items:center;gap:10px;flex:0 0 auto}
 .header__phone{font-size:15px;font-weight:600;color:var(--z-canvas);white-space:nowrap}
 .header__icon-link{
   width:40px;height:40px;border-radius:var(--radius-pill);border:1px solid rgba(255,255,255,.28);
@@ -165,9 +181,21 @@ h1,h2,h3,p,blockquote,figure{margin:0}
 }
 .header__burger span{display:block;width:18px;height:1.8px;background:currentColor}
 
-@media (max-width:1023px){
+/* Крупный логотип съедает ширину шапки, поэтому полное меню показываем только
+   там, где всё помещается в строку: иконки мессенджеров — от 1400px (они
+   продублированы в контактах и футере), само меню — от 1200px. */
+@media (max-width:1399px){
+  .header__icon-link{display:none}
+}
+@media (max-width:1199px){
   .header__nav,.header__actions{display:none}
   .header__mobile-actions{display:flex}
+}
+/* На узких телефонах крупный логотип и номер телефона в строку не помещаются —
+   бургер уезжал за правый край. Номер убираем: звонок остаётся в закреплённой
+   нижней панели, в контактах и в футере. */
+@media (max-width:419px){
+  .header__mobile-actions .header__phone{display:none}
 }
 
 /* ==========================================================================
@@ -375,6 +403,13 @@ h1,h2,h3,p,blockquote,figure{margin:0}
   transition:transform .25s var(--ease),background-color .2s ease;
 }
 .case.is-open .case__chevron{transform:rotate(180deg);background:var(--color-primary)}
+/* На телефонах длинное название и год «2024, 2025, 2026» распирали строку
+   шире экрана и давали горизонтальную прокрутку страницы. */
+@media (max-width:600px){
+  .case__row{gap:10px}
+  .case__title{min-width:0;overflow-wrap:anywhere}
+  .case__year{white-space:normal;text-align:right}
+}
 .case__panel{display:none;flex-wrap:wrap;gap:clamp(20px,2.4vw,40px);padding:0 clamp(8px,1.5vw,20px) clamp(24px,2.6vw,40px);animation:fadeUp .4s var(--ease) both}
 .case.is-open .case__panel{display:flex}
 .case__info{flex:1 1 380px;min-width:280px;display:flex;flex-direction:column;gap:clamp(16px,1.6vw,24px)}
@@ -568,12 +603,14 @@ form#lead-form{display:flex;flex-direction:column;gap:clamp(16px,1.6vw,22px)}
   background:rgba(14,15,12,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border-top:1px solid rgba(255,255,255,.14);
 }
-@media (max-width:1023px){.mobile-bar{display:flex}}
-.mobile-bar__call{
-  flex:1 1 0;min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  border-radius:var(--radius-xl);border:1px solid rgba(255,255,255,.3);font-size:16px;font-weight:600;color:var(--text-on-dark);
+@media (max-width:1199px){.mobile-bar{display:flex}}
+.mobile-bar__call,.mobile-bar__tg{
+  min-width:0;min-height:48px;padding:0 12px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border-radius:var(--radius-xl);font-weight:600;
+  /* Подпись держим в одну строку — «Написать в Telegram» раньше рвалось надвое. */
+  font-size:clamp(14px,3.9vw,16px);white-space:nowrap;
 }
-.mobile-bar__tg{
-  flex:1 1 0;min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  border-radius:var(--radius-xl);background:var(--color-primary);font-size:16px;font-weight:600;color:var(--z-ink);
-}
+/* Длинной подписи отдаём столько места, сколько нужно, — короткая ужимается. */
+.mobile-bar__call{flex:0 1 auto;border:1px solid rgba(255,255,255,.3);color:var(--text-on-dark)}
+.mobile-bar__tg{flex:1 1 auto;background:var(--color-primary);color:var(--z-ink)}

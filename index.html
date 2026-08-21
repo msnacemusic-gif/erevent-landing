@@ -72,15 +72,30 @@
 <main>
 <section id="top" class="hero" data-screen-label="Hero">
   <div class="hero__bg" id="hero-bg">
-    <video class="hero__video" id="hero-video" muted defaultmuted loop playsinline preload="none" aria-hidden="true"></video>
+    <video class="hero__video" id="hero-video" src="media/hero-showreel.mp4" autoplay muted defaultmuted loop playsinline preload="auto" aria-hidden="true"></video>
   </div>
+  <script>
+    /* Выполняется сразу после разбора тега: снимает загрузку у тех, кто просил
+       экономить трафик или уменьшить движение. Остальные начинают качать видео
+       уже на этапе парсинга страницы — до загрузки стилей и скриптов. */
+    (function () {
+      var v = document.getElementById('hero-video');
+      var c = navigator.connection;
+      var save = c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''));
+      var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (save || still) { v.removeAttribute('src'); v.removeAttribute('autoplay'); v.load(); }
+      else { v.muted = true; v.volume = 0; }
+    })();
+  </script>
   <div class="hero__veil" aria-hidden="true"></div>
 
   <div class="hero__content">
     <p class="hero__eyebrow reveal-init" style="--reveal-delay:50ms">[СОБЫТИЯ РУМ - МЫ ОТКРЫВАЕМ ДВЕРИ В ПРАЗДНИК]</p>
     <h1 class="hero__title reveal-init" style="--reveal-delay:120ms">Техническое оснащение<br>и организация мероприятий</h1>
     <div class="hero__row">
-      <p class="hero__lead reveal-init" style="--reveal-delay:200ms">Организация мероприятий полного цикла в Москве и по всей России. Считаем смету в день обращения.</p>
+      <!-- Неразрывные пробелы держат «и по всей» одним куском, чтобы «и по»
+           не повисало в конце строки. -->
+      <p class="hero__lead reveal-init" style="--reveal-delay:200ms">Организация мероприятий полного цикла в Москве и&nbsp;по&nbsp;всей России. Считаем смету в день обращения.</p>
       <div class="hero__cta reveal-init" style="--reveal-delay:280ms">
         <button type="button" class="btn btn--primary btn--lg js-go-form">Рассчитать смету</button>
         <a href="#cases" class="btn btn--ghost-dark">Смотреть кейсы</a>
