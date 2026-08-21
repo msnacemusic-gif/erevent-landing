@@ -410,7 +410,8 @@ h1,h2,h3,p,blockquote,figure{margin:0}
   .case__title{min-width:0;overflow-wrap:anywhere}
   .case__year{white-space:normal;text-align:right}
 }
-.case__panel{display:none;flex-wrap:wrap;gap:clamp(20px,2.4vw,40px);padding:0 clamp(8px,1.5vw,20px) clamp(24px,2.6vw,40px);animation:fadeUp .4s var(--ease) both}
+/* Отступ сверху такой же, как снизу: раскрытая карточка дышит одинаково. */
+.case__panel{display:none;flex-wrap:wrap;gap:clamp(20px,2.4vw,40px);padding:clamp(24px,2.6vw,40px) clamp(8px,1.5vw,20px);animation:fadeUp .4s var(--ease) both}
 .case.is-open .case__panel{display:flex}
 .case__info{flex:1 1 380px;min-width:280px;display:flex;flex-direction:column;gap:clamp(16px,1.6vw,24px)}
 .case__fields{display:flex;flex-wrap:wrap;gap:clamp(16px,2vw,32px)}
@@ -482,7 +483,7 @@ h1,h2,h3,p,blockquote,figure{margin:0}
   transition:transform .25s var(--ease),background-color .2s ease;
 }
 .faq__item.is-open .faq__toggle{transform:rotate(180deg);background:var(--color-primary)}
-.faq__a{display:none;padding:0 52px clamp(20px,2vw,28px) 0;animation:fadeUp .35s var(--ease) both}
+.faq__a{display:none;padding:clamp(20px,2vw,28px) 52px clamp(20px,2vw,28px) 0;animation:fadeUp .35s var(--ease) both}
 .faq__a p{margin:0;font-size:clamp(15px,1.15vw,18px);line-height:1.55;color:var(--text-body)}
 .faq__item.is-open .faq__a{display:block}
 
