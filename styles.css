@@ -616,6 +616,9 @@ form#lead-form{display:flex;flex-direction:column;gap:clamp(16px,1.6vw,22px)}
 .mobile-bar__call{flex:0 1 auto;border:1px solid rgba(255,255,255,.3);color:var(--text-on-dark)}
 .mobile-bar__tg{flex:1 1 auto;background:var(--color-primary);color:var(--z-ink)}
 
+/* Поле-ловушка для ботов: убрано с глаз, но остаётся в разметке. */
+.form-hp{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
 /* ==========================================================================
    Cookie notice
    ========================================================================== */

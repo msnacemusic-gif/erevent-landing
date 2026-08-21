@@ -5,6 +5,12 @@
 
   var EASE = 'cubic-bezier(0.16,1,0.3,1)';
 
+  /* Адрес приёмника заявок (Cloudflare Worker из serverless/telegram-relay.js).
+     Он держит токен бота у себя и пересылает заявку в @Ereventbot_bot.
+     Пока строка пустая, форма только имитирует отправку и заявки никуда
+     не уходят — вписать сюда адрес воркера, и заявки пойдут в бота. */
+  var LEAD_ENDPOINT = '';
+
   /* ------------------------------------------------------------------ */
   /* Data                                                                 */
   /* ------------------------------------------------------------------ */
@@ -484,6 +490,23 @@
 
   formReset.addEventListener('click', resetForm);
 
+  function sendingState(on) {
+    submitBtn.disabled = on;
+    submitSpinner.hidden = !on;
+    submitLabel.textContent = on ? 'Отправляем' : 'Отправить заявку';
+  }
+
+  function showSent() {
+    sendingState(false);
+    form.hidden = true;
+    formSuccess.hidden = false;
+  }
+
+  function showFailed() {
+    sendingState(false);
+    formError.hidden = false;
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     touched = true;
@@ -493,17 +516,22 @@
     if (!contactOk || !agreeInput.checked) return;
 
     formError.hidden = true;
-    submitBtn.disabled = true;
-    submitSpinner.hidden = false;
-    submitLabel.textContent = 'Отправляем';
+    sendingState(true);
 
-    setTimeout(function () {
-      submitBtn.disabled = false;
-      submitSpinner.hidden = true;
-      submitLabel.textContent = 'Отправить заявку';
-      form.hidden = true;
-      formSuccess.hidden = false;
-    }, 1300);
+    // Адрес приёмника не задан — оставляем прежнее поведение-заглушку,
+    // чтобы форма не показывала ошибку до подключения бота.
+    if (!LEAD_ENDPOINT) {
+      setTimeout(showSent, 1300);
+      return;
+    }
+
+    var payload = new FormData(form);
+    payload.set('page', document.title + ' — ' + window.location.href);
+
+    fetch(LEAD_ENDPOINT, { method: 'POST', body: payload })
+      .then(function (res) { return res.ok ? res.json() : { ok: false }; })
+      .then(function (data) { if (data && data.ok) showSent(); else showFailed(); })
+      .catch(showFailed);
   });
 
   /* ------------------------------------------------------------------ */

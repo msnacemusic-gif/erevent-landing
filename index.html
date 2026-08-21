@@ -416,6 +416,11 @@
         </div>
 
         <form id="lead-form" novalidate>
+          <!-- Ловушка для спам-ботов: человек этого поля не видит и не заполняет,
+               робот заполняет всё подряд. Заполнено — заявка тихо отбрасывается. -->
+          <div class="form-hp" aria-hidden="true">
+            <label>Компания<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+          </div>
           <div class="form-grid">
             <label class="field">
               <span class="field__label">Имя</span>
