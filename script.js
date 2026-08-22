@@ -379,9 +379,12 @@
     video.volume = 0;
     video.loop = true;
 
+    // Проявляем только когда видео реально пошло. Если оно не заиграло —
+    // блокировка автозапуска, энергосбережение, нет кодека — остаётся
+    // видна подложка, а не чёрный экран.
     function show() { video.classList.add('is-ready'); }
-    if (video.readyState >= 2) show();
-    else video.addEventListener('loadeddata', show, { once: true });
+    video.addEventListener('playing', show, { once: true });
+    if (!video.paused && video.readyState >= 3) show();
 
     video.addEventListener('volumechange', function () { video.muted = true; video.volume = 0; });
     video.addEventListener('ended', function () { video.currentTime = 0; video.play().catch(function () {}); });
