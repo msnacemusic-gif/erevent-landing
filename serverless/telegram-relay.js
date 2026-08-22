@@ -48,8 +48,10 @@ export default {
       return json({ ok: false, error: 'bad_request' }, 400, origin);
     }
 
-    // Скрытое поле, которого не видит человек. Заполнено — значит бот.
-    if (str(form.get('company'))) return json({ ok: true }, 200, origin);
+    // Скрытое поле, которого не видит человек. Заполнено — почти наверняка
+    // бот. Не выбрасываем: помечаем и всё равно доставляем — потерять живую
+    // заявку хуже, чем получить помеченный спам.
+    const suspect = !!str(form.get('x_ref'));
 
     const lead = {
       name: str(form.get('name')),
@@ -63,7 +65,7 @@ export default {
 
     if (!lead.phone && !lead.email) return json({ ok: false, error: 'no_contact' }, 400, origin);
 
-    const text = buildMessage(lead);
+    const text = buildMessage(lead, suspect);
     const file = form.get('file');
     const hasFile = file && typeof file === 'object' && file.size > 0;
 
@@ -87,7 +89,7 @@ export default {
   },
 };
 
-function buildMessage(lead) {
+function buildMessage(lead, suspect) {
   const rows = [
     ['Имя', lead.name],
     ['Телефон', lead.phone],
@@ -101,7 +103,8 @@ function buildMessage(lead) {
     .map(([k, v]) => `<b>${esc(k)}:</b> ${esc(v)}`)
     .join('\n');
   const from = lead.page ? `\n\n<i>${esc(lead.page)}</i>` : '';
-  return `🔔 <b>Новая заявка с сайта</b>\n\n${body}${from}`;
+  const head = suspect ? '⚠️ <b>Похоже на спам</b>' : '🔔 <b>Новая заявка с сайта</b>';
+  return `${head}\n\n${body}${from}`;
 }
 
 function esc(v) {
