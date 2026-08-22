@@ -72,21 +72,15 @@
 <main>
 <section id="top" class="hero" data-screen-label="Hero">
   <div class="hero__bg" id="hero-bg">
-    <video class="hero__video" id="hero-video" src="media/hero-showreel.mp4" autoplay muted defaultmuted loop playsinline preload="auto" aria-hidden="true"></video>
+    <!-- Два формата: H.264 играет везде, VP9 подхватывают сборки без H.264.
+         Адреса стоят прямо в разметке — браузер начинает качать на разборе
+         страницы, до стилей и скриптов. poster — первый кадр самого ролика. -->
+    <video class="hero__video" id="hero-video" autoplay muted defaultmuted loop playsinline
+           preload="auto" poster="media/hero-still.jpg" aria-hidden="true">
+      <source src="media/hero-showreel.mp4" type="video/mp4">
+      <source src="media/hero-showreel.webm" type="video/webm">
+    </video>
   </div>
-  <script>
-    /* Выполняется сразу после разбора тега: снимает загрузку у тех, кто просил
-       экономить трафик или уменьшить движение. Остальные начинают качать видео
-       уже на этапе парсинга страницы — до загрузки стилей и скриптов. */
-    (function () {
-      var v = document.getElementById('hero-video');
-      var c = navigator.connection;
-      var save = c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''));
-      var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (save || still) { v.removeAttribute('src'); v.removeAttribute('autoplay'); v.load(); }
-      else { v.muted = true; v.volume = 0; }
-    })();
-  </script>
   <div class="hero__veil" aria-hidden="true"></div>
 
   <div class="hero__content">

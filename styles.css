@@ -226,9 +226,9 @@ h1,h2,h3,p,blockquote,figure{margin:0}
   min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
   overflow:hidden;isolation:isolate;
 }
-/* Под видео всегда лежит кадр-подложка. Видео может не заиграть — режим
-   энергосбережения, «уменьшить движение», экономия трафика, отсутствие
-   кодека — и без подложки шапка становилась чёрным прямоугольником. */
+/* Под видео лежит его же первый кадр. Пока ролик открывается — и в редком
+   случае, когда браузер наотрез отказался его играть, — шапка выглядит так
+   же, только без движения. Чёрной она не бывает никогда. */
 .hero__bg{
   position:absolute;inset:0;z-index:0;opacity:.42;will-change:transform;
   background:var(--surface-dark) url('media/hero-still.jpg') center/cover no-repeat;

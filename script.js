@@ -365,30 +365,65 @@
   });
 
   /* ------------------------------------------------------------------ */
-  /* Hero video — conditional, lazy load                                  */
+  /* Hero video — грузится и запускается всегда                          */
   /* ------------------------------------------------------------------ */
 
-  // Загрузку видео запускает встроенный скрипт в разметке — здесь только
-  // звук, зацикливание и проявление первого кадра, как только он готов.
   (function setupHeroVideo() {
     var video = document.getElementById('hero-video');
-    if (!video || !video.getAttribute('src')) return;
+    if (!video) return;
 
-    video.muted = true;
-    video.defaultMuted = true;
-    video.volume = 0;
+    // Автозапуск разрешают только беззвучному видео — держим звук выключенным
+    // жёстко, даже если браузер или расширение попробуют его вернуть.
+    function silence() { video.muted = true; video.defaultMuted = true; video.volume = 0; }
+    silence();
     video.loop = true;
+    video.playsInline = true;
+    video.addEventListener('volumechange', silence);
 
-    // Проявляем только когда видео реально пошло. Если оно не заиграло —
-    // блокировка автозапуска, энергосбережение, нет кодека — остаётся
-    // видна подложка, а не чёрный экран.
-    function show() { video.classList.add('is-ready'); }
-    video.addEventListener('playing', show, { once: true });
-    if (!video.paused && video.readyState >= 3) show();
+    function attempt() {
+      if (!video.paused) return;
+      silence();
+      var p = video.play();
+      if (p && p.catch) p.catch(function () {});
+    }
 
-    video.addEventListener('volumechange', function () { video.muted = true; video.volume = 0; });
-    video.addEventListener('ended', function () { video.currentTime = 0; video.play().catch(function () {}); });
-    video.play().catch(function () {});
+    video.addEventListener('playing', function () { video.classList.add('is-ready'); });
+
+    // Ролик поставили на паузу извне — энергосбережение, уход в фон,
+    // расширение браузера. Поднимаем сразу же.
+    video.addEventListener('pause', function () { setTimeout(attempt, 150); });
+
+    // Пробуем на каждом рубеже загрузки: чем раньше готов первый кадр,
+    // тем раньше уйдёт первая попытка.
+    ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach(function (e) {
+      video.addEventListener(e, attempt);
+    });
+    attempt();
+
+    // Автозапуск заблокирован — энергосбережение, настройки браузера,
+    // политика вкладки. Стартуем при первом же действии человека.
+    // Слушатели не снимаем: блокировка может включиться и посреди просмотра,
+    // а attempt при играющем ролике выходит сразу.
+    ['pointerdown', 'touchstart', 'keydown', 'wheel', 'scroll'].forEach(function (e) {
+      window.addEventListener(e, attempt, { passive: true });
+    });
+
+    // Вернулись на вкладку — пробуем снова.
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) attempt();
+    });
+
+    // Постоянная подстраховка на случай, если ролик встал молча, без события.
+    setInterval(attempt, 2000);
+
+    // Зацикливание через loop иногда срывается — возвращаем в начало руками.
+    video.addEventListener('ended', function () { video.currentTime = 0; attempt(); });
+
+    // Источник не открылся вовсе — под видео остаётся его же первый кадр,
+    // так что шапка выглядит так же, только без движения.
+    video.addEventListener('error', function () {
+      if (video.readyState < 2) video.classList.remove('is-ready');
+    });
   })();
 
   /* ------------------------------------------------------------------ */
