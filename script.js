@@ -489,15 +489,20 @@
     });
   });
 
+  // Предел вложения. 50 МБ — столько бот может выложить в Telegram напрямую.
+  // Когда в воркере включено хранилище R2, можно поднять до 90: файл ляжет
+  // в хранилище, а в заявку попадёт ссылка на скачивание.
+  var MAX_UPLOAD_MB = 50;
+
   fileInput.addEventListener('change', function () {
     var f = fileInput.files && fileInput.files[0];
     if (!f) return;
-    if (f.size > 20 * 1024 * 1024) {
-      fileLabel.textContent = 'Файл больше 20 МБ — пришлите ссылкой';
+    if (f.size > MAX_UPLOAD_MB * 1024 * 1024) {
+      fileLabel.textContent = 'Файл больше ' + MAX_UPLOAD_MB + ' МБ — пришлите ссылкой';
       fileInput.value = '';
       return;
     }
-    fileLabel.textContent = f.name;
+    fileLabel.textContent = f.name + ' — ' + (f.size / 1024 / 1024).toFixed(1) + ' МБ';
   });
 
   agreeInput.addEventListener('change', onAgreeChange);
@@ -512,7 +517,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.chip'), function (c) {
       c.classList.toggle('is-active', c.getAttribute('data-channel') === 'Telegram');
     });
-    fileLabel.textContent = 'Прикрепить файл — ТЗ, план площадки, референсы (до 20 МБ)';
+    fileLabel.textContent = 'Прикрепить файл — ТЗ, план площадки, референсы (до ' + MAX_UPLOAD_MB + ' МБ)';
     touched = false;
     errPhone.textContent = '';
     errEmail.textContent = '';
