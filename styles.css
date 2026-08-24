@@ -542,6 +542,10 @@ form#lead-form{display:flex;flex-direction:column;gap:clamp(16px,1.6vw,22px)}
   display:flex;align-items:center;justify-content:center;transition:background-color .15s ease;flex:0 0 auto;
 }
 .checkbox__mark{font-size:14px;color:var(--color-on-primary);display:none}
+/* Ссылка на политику внутри подписи — подчёркиваем, иначе её не отличить
+   от обычного текста и никто по ней не нажмёт. */
+.checkbox a{color:inherit;text-decoration:underline;text-underline-offset:2px;transition:color .15s ease}
+.checkbox a:hover{color:var(--text-body)}
 .checkbox__input:focus-visible + .checkbox__box{outline:2px solid var(--text-heading);outline-offset:2px}
 .checkbox.is-checked .checkbox__box,.checkbox:has(input:checked) .checkbox__box{background:var(--color-primary)}
 .checkbox.is-checked .checkbox__mark,.checkbox:has(input:checked) .checkbox__mark{display:inline}

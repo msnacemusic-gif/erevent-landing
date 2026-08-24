@@ -82,7 +82,6 @@ export default {
       name: str(form.get('name')),
       phone: str(form.get('phone')),
       email: str(form.get('email')),
-      when: str(form.get('when')),
       channel: str(form.get('channel')),
       comment: str(form.get('comment')),
       page: str(form.get('page')),
@@ -155,7 +154,6 @@ function buildMessage(lead, suspect, attach) {
     ['Имя', lead.name],
     ['Телефон', lead.phone],
     ['Email', lead.email],
-    ['Дата и площадка', lead.when],
     ['Ответить в', lead.channel],
     ['Комментарий', lead.comment],
   ];
