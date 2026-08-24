@@ -472,20 +472,34 @@
   function hasPhone() { return digits().length >= 11; }
   function hasEmail() { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailInput.value.trim()); }
 
+  // Единственное обязательное поле — способ связи: телефон или почта, любой
+  // на выбор. Имя, комментарий, файл и мессенджеры заполнять не обязательно.
   function validateContact() {
     var needContact = touched && !hasPhone() && !hasEmail();
-    errPhone.textContent = needContact ? 'Оставьте телефон или email' : '';
+    errPhone.textContent = needContact ? 'Оставьте телефон или email — этого достаточно' : '';
     phoneInput.parentElement.classList.toggle('has-error', needContact);
     emailInput.parentElement.classList.toggle('has-error', needContact);
     errEmail.textContent = '';
     return !needContact;
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll('.chip'), function (chip) {
+  // Способов связи может быть несколько — чипы работают как переключатели,
+  // а не как выбор одного из. В заявку уходят через запятую.
+  var chips = Array.prototype.slice.call(document.querySelectorAll('#channel-options .chip'));
+
+  function syncChannels() {
+    var picked = chips
+      .filter(function (c) { return c.classList.contains('is-active'); })
+      .map(function (c) { return c.getAttribute('data-channel'); });
+    channelInput.value = picked.join(', ');
+  }
+
+  chips.forEach(function (chip) {
     chip.addEventListener('click', function () {
-      Array.prototype.forEach.call(document.querySelectorAll('.chip'), function (c) { c.classList.remove('is-active'); });
-      chip.classList.add('is-active');
-      channelInput.value = chip.getAttribute('data-channel');
+      var on = !chip.classList.contains('is-active');
+      chip.classList.toggle('is-active', on);
+      chip.setAttribute('aria-pressed', String(on));
+      syncChannels();
     });
   });
 
@@ -513,10 +527,12 @@
 
   function resetForm() {
     form.reset();
-    channelInput.value = 'Telegram';
-    Array.prototype.forEach.call(document.querySelectorAll('.chip'), function (c) {
-      c.classList.toggle('is-active', c.getAttribute('data-channel') === 'Telegram');
+    chips.forEach(function (c) {
+      var on = c.getAttribute('data-channel') === 'Telegram';
+      c.classList.toggle('is-active', on);
+      c.setAttribute('aria-pressed', String(on));
     });
+    syncChannels();
     fileLabel.textContent = 'Прикрепить файл — ТЗ, план площадки, референсы (до ' + MAX_UPLOAD_MB + ' МБ)';
     touched = false;
     errPhone.textContent = '';
