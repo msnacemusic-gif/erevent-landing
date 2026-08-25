@@ -149,6 +149,7 @@
 
   function fillVenues() {
     var track = document.getElementById('venues-track');
+    if (!track) return;
     var groups = track.querySelectorAll('.marquee-group');
     var html = VENUES.map(function (v) {
       return '<span class="venue-item"><span>' + v + '</span><span>·</span></span>';
@@ -160,6 +161,7 @@
   function fillClients() {
     var a = document.getElementById('clients-group-a');
     var b = document.getElementById('clients-group-b');
+    if (!a || !b) return;
     var html = CLIENTS.map(function (c) {
       return '<span class="client-item">' + c + '</span>';
     }).join('');
@@ -243,6 +245,7 @@
   var casesMoreWrap = document.getElementById('cases-more');
   var casesMoreBtn = document.getElementById('cases-more-btn');
   var casesAllShown = false;
+  var hasCases = !!(casesList && casesMoreWrap && casesMoreBtn);
 
   function casePlaceholderHtml(c) {
     return '<div class="case__placeholder"><span>' + c.title + '<br>Фото добавим по готовности</span></div>';
@@ -320,12 +323,15 @@
     });
   }
 
-  casesMoreBtn.addEventListener('click', function () {
-    casesAllShown = true;
-    applyCasesVisibility();
-  });
+  // Страница без блока кейсов — пропускаем, скрипт общий для всего сайта.
+  if (hasCases) {
+    casesMoreBtn.addEventListener('click', function () {
+      casesAllShown = true;
+      applyCasesVisibility();
+    });
 
-  renderCases();
+    renderCases();
+  }
 
   /* ------------------------------------------------------------------ */
   /* Reviews carousel                                                     */
