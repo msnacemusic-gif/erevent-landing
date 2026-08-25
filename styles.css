@@ -436,6 +436,68 @@ h1,h2,h3,p,blockquote,figure{margin:0}
 .cases__more{display:flex;justify-content:center;margin-top:clamp(28px,3vw,44px)}
 
 /* ==========================================================================
+   Reviews
+   ========================================================================== */
+.reviews{background:var(--surface-dark);padding:clamp(56px,8vw,112px) 0;overflow:hidden}
+.reviews__nav{display:flex;gap:10px;flex:0 0 auto}
+.reviews__arrow{
+  width:52px;height:52px;border-radius:var(--radius-pill);background:transparent;cursor:pointer;
+  border:1px solid rgba(255,255,255,.28);color:var(--text-on-dark);
+  display:flex;align-items:center;justify-content:center;
+  transition:background-color .15s ease,color .15s ease,border-color .15s ease,opacity .15s ease;
+}
+.reviews__arrow:hover:not(:disabled){background:var(--color-primary);color:var(--z-ink);border-color:var(--color-primary)}
+.reviews__arrow:disabled{opacity:.3;cursor:default}
+
+/* Лента прокручивается пальцем и колесом; стрелки и точки — для мыши. */
+/* Сколько карточек видно разом. Ширина карточки считается от этого числа,
+   поэтому лента всегда делится на целые экраны и не застревает на полкарточке. */
+.reviews__viewport{
+  --per:1;--gap:clamp(16px,2vw,28px);
+  display:flex;gap:var(--gap);overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;scroll-padding-left:0;
+  padding-bottom:4px;scrollbar-width:none;-ms-overflow-style:none;
+}
+@media (min-width:768px){.reviews__viewport{--per:2}}
+@media (min-width:1180px){.reviews__viewport{--per:3}}
+.reviews__viewport::-webkit-scrollbar{display:none}
+.reviews__viewport:focus-visible{outline:2px solid var(--color-primary);outline-offset:6px}
+
+.review{
+  flex:0 0 calc((100% - (var(--per) - 1) * var(--gap)) / var(--per));scroll-snap-align:start;
+  display:flex;flex-direction:column;gap:clamp(20px,2.4vw,32px);
+  padding:clamp(24px,2.6vw,40px);border-radius:var(--radius-xl);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+}
+.review__mark{flex:0 0 auto;color:var(--color-primary)}
+.review__quote{
+  margin:0;flex:1 1 auto;font-family:var(--font-display);font-weight:800;
+  font-size:clamp(17px,1.5vw,22px);line-height:1.35;letter-spacing:-.02em;color:var(--z-canvas);
+}
+.review__author{display:flex;flex-direction:column;gap:4px}
+.review__name{font-size:16px;font-weight:600;color:var(--text-on-dark)}
+.review__role{font-size:13px;line-height:1.45;color:rgba(232,235,230,.6)}
+
+/* Пока отзыв не заполнен — видно, что это рыба, а не чей-то настоящий отзыв. */
+.review--placeholder{background:transparent;border-style:dashed;border-color:rgba(255,255,255,.24)}
+.review--placeholder .review__quote{color:rgba(232,235,230,.55);font-weight:600}
+.review--placeholder .review__mark{color:rgba(159,232,112,.45)}
+
+.reviews__dots{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(20px,2.4vw,32px)}
+.reviews__dot{
+  width:28px;height:4px;border-radius:var(--radius-pill);border:none;padding:0;cursor:pointer;
+  background:rgba(255,255,255,.22);transition:background-color .2s ease,width .2s ease;
+}
+.reviews__dot.is-active{background:var(--color-primary);width:44px}
+.reviews__dot:focus-visible{outline:2px solid var(--color-primary);outline-offset:4px}
+
+@media (max-width:767px){
+  .reviews__nav{display:none}
+}
+/* Все карточки на виду — прятать нечего, органы управления лишние. */
+.reviews--static .reviews__nav,.reviews--static .reviews__dots{display:none}
+
+/* ==========================================================================
    Process / timeline
    ========================================================================== */
 .process{background:var(--surface-canvas);padding:clamp(56px,8vw,112px) 0}

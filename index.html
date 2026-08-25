@@ -291,6 +291,29 @@
   </div>
 </section>
 
+<section id="reviews" class="reviews" data-screen-label="Отзывы">
+  <div class="wrap">
+    <div class="section-head section-head--dark reveal">
+      <div class="section-head__main">
+        <p class="section-eyebrow section-eyebrow--dark">[отзывы]</p>
+        <h2 class="section-title section-title--contacts">Что говорят заказчики</h2>
+      </div>
+      <div class="reviews__nav">
+        <button type="button" class="reviews__arrow" id="reviews-prev" aria-label="Предыдущий отзыв" aria-controls="reviews-track">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"></path></svg>
+        </button>
+        <button type="button" class="reviews__arrow" id="reviews-next" aria-label="Следующий отзыв" aria-controls="reviews-track">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="reviews__viewport reveal" id="reviews-track" tabindex="0" role="group" aria-label="Отзывы заказчиков, прокручивается вбок"></div>
+
+    <div class="reviews__dots" id="reviews-dots" role="tablist" aria-label="Переключение отзывов"></div>
+  </div>
+</section>
+
 <section id="process" class="process" data-screen-label="Как работаем">
   <div class="wrap">
     <div class="section-head reveal">

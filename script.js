@@ -17,7 +17,20 @@
 
   var VENUES = ['ВДНХ', 'Парк науки и искусства «Сириус»', 'Лужники', 'КВЦ «Экспофорум»',
     'Президентская библиотека им. Б. Н. Ельцина', 'ЦВЗ «Манеж»', 'Гостиный Двор', 'ЦМТ', 'ЦДП',
-    'МВЦ «Казань Экспо»', 'ИТ-парк им. Б. Рамеева', 'Казанская Ратуша', 'МВЦ «Екатеринбург-ЭКСПО»'];
+    'МВЦ «Казань Экспо»', 'ИТ-парк им. Б. Рамеева', 'Казанская Ратуша', 'МВЦ «Екатеринбург-ЭКСПО»',
+    'Парк Горького', 'Зарядье', 'ТРЦ «Метрополис»', 'Музей Москвы', 'Loft Hall',
+    'Технопарк Сколково', 'Городские парки', 'ТРЦ «Меридиан»'];
+
+  // Отзывы. Пока рыба: карточки помечены placeholder и выглядят как заготовки,
+  // чтобы никто не принял их за настоящие отзывы. Чтобы добавить реальный —
+  // впишите quote, name, role и company и уберите placeholder.
+  var REVIEWS = [
+    { placeholder: true, quote: 'Здесь будет отзыв заказчика: что делали, в какие сроки и как всё прошло.', name: 'Имя Фамилия', role: 'Должность', company: 'Компания' },
+    { placeholder: true, quote: 'Хорошо работают короткие живые цитаты в два-три предложения.', name: 'Имя Фамилия', role: 'Должность', company: 'Компания' },
+    { placeholder: true, quote: 'Ценно, когда в отзыве названы площадка, объём работ и сроки.', name: 'Имя Фамилия', role: 'Должность', company: 'Компания' },
+    { placeholder: true, quote: 'Отзывы от разных заказчиков убеждают сильнее, чем один длинный.', name: 'Имя Фамилия', role: 'Должность', company: 'Компания' },
+    { placeholder: true, quote: 'Лишние карточки просто удалите — блок подстроится сам.', name: 'Имя Фамилия', role: 'Должность', company: 'Компания' }
+  ];
 
   var CLIENTS = ['Росконгресс', 'Сбербанк', 'Parimatch', 'Haval', 'BingX', 'VK', 'Росатом', 'Минтруд', 'Росмолодёжь'];
 
@@ -49,6 +62,13 @@
 
   function reduced() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  // Тексты берутся из массивов в этом файле, но кавычки и угловые скобки
+  // в живом отзыве не должны ломать разметку.
+  function esc(v) {
+    return String(v == null ? '' : v)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
   function scrollToEl(id) {
@@ -306,6 +326,114 @@
   });
 
   renderCases();
+
+  /* ------------------------------------------------------------------ */
+  /* Reviews carousel                                                     */
+  /* ------------------------------------------------------------------ */
+
+  (function setupReviews() {
+    var viewport = document.getElementById('reviews-track');
+    var dotsBox = document.getElementById('reviews-dots');
+    var prev = document.getElementById('reviews-prev');
+    var next = document.getElementById('reviews-next');
+    var section = document.getElementById('reviews');
+    if (!viewport || !section) return;
+
+    // Отзывов нет вовсе — блок не показываем, чем пустая полоса.
+    if (!REVIEWS.length) { section.hidden = true; return; }
+
+    viewport.innerHTML = REVIEWS.map(function (r) {
+      var role = [r.role, r.company].filter(Boolean).join(', ');
+      return '<figure class="review' + (r.placeholder ? ' review--placeholder' : '') + '">' +
+        '<svg class="review__mark" width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+        '<path d="M9.7 5.5c-3.4 1.4-5.7 4.6-5.7 8.4 0 2.8 1.8 4.6 4.2 4.6 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.9.1-1 .1.4-1.7 2-3.6 3.7-4.5l-1.7-1.4Zm9 0c-3.4 1.4-5.7 4.6-5.7 8.4 0 2.8 1.8 4.6 4.2 4.6 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.9.1-1 .1.4-1.7 2-3.6 3.7-4.5l-1.7-1.4Z"></path></svg>' +
+        '<blockquote class="review__quote">' + esc(r.quote) + '</blockquote>' +
+        '<figcaption class="review__author">' +
+          '<span class="review__name">' + esc(r.name) + '</span>' +
+          (role ? '<span class="review__role">' + esc(role) + '</span>' : '') +
+        '</figcaption>' +
+      '</figure>';
+    }).join('');
+
+    var cards = Array.prototype.slice.call(viewport.querySelectorAll('.review'));
+    var dots = [];
+
+    // Шаг прокрутки — ширина карточки с отступом.
+    function step() {
+      return cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : viewport.clientWidth;
+    }
+
+    // Сколько карточек помещается разом (задаётся в CSS через --per).
+    function perView() {
+      var st = step();
+      return st > 0 ? Math.max(1, Math.round(viewport.clientWidth / st)) : 1;
+    }
+
+    // Столько положений у ленты. Влезли все карточки — положение одно,
+    // листать нечего, и органы управления прячем.
+    function stops() {
+      return Math.max(1, cards.length - perView() + 1);
+    }
+
+    function current() {
+      var st = step();
+      return st > 0 ? Math.min(stops() - 1, Math.round(viewport.scrollLeft / st)) : 0;
+    }
+
+    function goTo(i) {
+      var target = Math.max(0, Math.min(stops() - 1, i));
+      viewport.scrollTo({ left: target * step(), behavior: reduced() ? 'auto' : 'smooth' });
+    }
+
+    function buildDots() {
+      var n = stops();
+      dotsBox.innerHTML = n > 1
+        ? Array.apply(null, { length: n }).map(function (_, i) {
+            return '<button type="button" class="reviews__dot" role="tab" aria-label="Отзыв ' + (i + 1) + '"></button>';
+          }).join('')
+        : '';
+      dots = Array.prototype.slice.call(dotsBox.querySelectorAll('.reviews__dot'));
+      dots.forEach(function (d, i) { d.addEventListener('click', function () { goTo(i); }); });
+      section.classList.toggle('reviews--static', n <= 1);
+    }
+
+    function sync() {
+      var i = current();
+      dots.forEach(function (d, n) {
+        d.classList.toggle('is-active', n === i);
+        d.setAttribute('aria-selected', String(n === i));
+      });
+      if (prev) prev.disabled = i <= 0;
+      if (next) next.disabled = i >= stops() - 1;
+    }
+
+    if (prev) prev.addEventListener('click', function () { goTo(current() - 1); });
+    if (next) next.addEventListener('click', function () { goTo(current() + 1); });
+
+    // Стрелками с клавиатуры, когда лента в фокусе.
+    viewport.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current() + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current() - 1); }
+    });
+
+    var tick = null;
+    viewport.addEventListener('scroll', function () {
+      if (tick) return;
+      tick = requestAnimationFrame(function () { tick = null; sync(); });
+    }, { passive: true });
+
+    // Ширина карточки зависит от экрана — при изменении пересобираем точки.
+    var was = 0;
+    window.addEventListener('resize', function () {
+      var n = stops();
+      if (n !== was) { was = n; buildDots(); }
+      sync();
+    });
+
+    was = stops();
+    buildDots();
+    sync();
+  })();
 
   /* ------------------------------------------------------------------ */
   /* FAQ                                                                  */
