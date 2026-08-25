@@ -488,9 +488,21 @@
 
   Array.prototype.forEach.call(document.querySelectorAll('.service-card'), function (card) {
     card.addEventListener('click', function () {
-      // У направления есть своя страница — уводим туда, а не к форме.
+      // У направления есть своя страница — открываем её в новой вкладке,
+      // чтобы человек не терял место на главной. Через временную ссылку,
+      // а не window.open: с noopener тот возвращает null даже при успехе,
+      // и по этому null текущая вкладка уходила туда же.
       var href = card.getAttribute('data-href');
-      if (href) { window.location.href = href; return; }
+      if (href) {
+        var a = document.createElement('a');
+        a.href = href;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        return;
+      }
 
       var name = card.getAttribute('data-service');
       var textarea = document.getElementById('f-comment');
