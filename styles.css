@@ -295,17 +295,19 @@ h1,h2,h3,p,blockquote,figure{margin:0}
   transition:transform .22s var(--ease),background-color .2s ease;font-family:inherit;
 }
 .service-card:hover,.service-card:focus-visible{transform:translateY(-4px);outline:none}
+/* Фото видно всегда. При наведении оно чуть ярче: затемнение слабее,
+   яркость выше, лёгкое приближение. */
 .service-card__photo{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;
-  opacity:0;transform:scale(1);
-  transition:opacity .45s var(--ease),transform .8s var(--ease);
+  opacity:1;transform:scale(1);filter:brightness(1);
+  transition:transform .8s var(--ease),filter .45s ease;
 }
-.service-card:hover .service-card__photo,.service-card:focus-visible .service-card__photo{opacity:1;transform:scale(1.06)}
+.service-card:hover .service-card__photo,.service-card:focus-visible .service-card__photo{transform:scale(1.06);filter:brightness(1.08)}
 .service-card__veil{
-  position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .45s ease;
+  position:absolute;inset:0;pointer-events:none;opacity:1;transition:opacity .45s ease;
   background:linear-gradient(180deg,rgba(14,15,12,.5) 0%,rgba(14,15,12,.76) 52%,rgba(14,15,12,.93) 100%);
 }
-.service-card:hover .service-card__veil,.service-card:focus-visible .service-card__veil{opacity:1}
+.service-card:hover .service-card__veil,.service-card:focus-visible .service-card__veil{opacity:.82}
 .service-card__top{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;z-index:1}
 .service-card__num{font-family:var(--font-display);font-weight:900;font-size:13px;letter-spacing:.1em;transition:color .35s ease}
 .service-card__icon{flex:0 0 auto;transition:color .35s ease}
@@ -331,29 +333,20 @@ h1,h2,h3,p,blockquote,figure{margin:0}
 .service-card--build .service-card__title{color:var(--z-canvas)}
 .service-card--build .service-card__body{color:var(--text-on-dark)}
 
-.service-card--white{background:var(--surface-canvas)}
-.service-card--white:hover,.service-card--white:focus-visible{background:var(--color-primary-pale)}
-.service-card--white .service-card__num{color:var(--text-mute)}
-.service-card--white .service-card__icon{color:var(--text-heading)}
-.service-card--white .service-card__title{color:var(--text-heading)}
-.service-card--white .service-card__body{color:var(--text-body)}
-.service-card--white:hover .service-card__num,.service-card--white:focus-visible .service-card__num{color:var(--z-green)}
-.service-card--white:hover .service-card__icon,.service-card--white:focus-visible .service-card__icon{color:var(--z-canvas)}
-.service-card--white:hover .service-card__title,.service-card--white:focus-visible .service-card__title{color:var(--z-canvas)}
-.service-card--white:hover .service-card__body,.service-card--white:focus-visible .service-card__body{color:var(--text-on-dark)}
-.service-card__body--catering{color:inherit;opacity:.86}
-.service-card--white:hover .service-card__body--catering,.service-card--white:focus-visible .service-card__body--catering{opacity:.92}
+/* Фон виден только пока грузится фото — держим его тёмным, чтобы светлый
+   текст был читаем с первой отрисовки. */
+.service-card--white{background:var(--surface-dark)}
+.service-card--white .service-card__num{color:var(--z-green)}
+.service-card--white .service-card__icon{color:var(--z-canvas)}
+.service-card--white .service-card__title{color:var(--z-canvas)}
+.service-card--white .service-card__body{color:var(--text-on-dark)}
+.service-card__body--catering{color:inherit;opacity:.92}
 
-.service-card--lime{background:var(--color-primary);min-height:220px}
-.service-card--lime:hover,.service-card--lime:focus-visible{background:var(--color-primary-pale)}
-.service-card--lime .service-card__num{color:var(--z-ink)}
-.service-card--lime .service-card__icon{color:var(--z-ink)}
-.service-card--lime .service-card__title{color:var(--z-ink)}
-.service-card--lime .service-card__body{color:var(--z-ink)}
-.service-card--lime:hover .service-card__num,.service-card--lime:focus-visible .service-card__num{color:var(--z-green)}
-.service-card--lime:hover .service-card__icon,.service-card--lime:focus-visible .service-card__icon{color:var(--z-canvas)}
-.service-card--lime:hover .service-card__title,.service-card--lime:focus-visible .service-card__title{color:var(--z-canvas)}
-.service-card--lime:hover .service-card__body,.service-card--lime:focus-visible .service-card__body{color:var(--text-on-dark)}
+.service-card--lime{background:var(--surface-dark);min-height:220px}
+.service-card--lime .service-card__num{color:var(--z-green)}
+.service-card--lime .service-card__icon{color:var(--z-canvas)}
+.service-card--lime .service-card__title{color:var(--z-canvas)}
+.service-card--lime .service-card__body{color:var(--text-on-dark)}
 
 .service-card--wide:not(.service-card--build){min-height:220px}
 
