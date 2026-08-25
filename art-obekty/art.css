@@ -8,9 +8,13 @@
    Первый экран
    -------------------------------------------------------------------------- */
 .art-hero{
+  position:relative;overflow:hidden;isolation:isolate;
   background:var(--surface-dark);color:var(--text-on-dark);
   padding:calc(clamp(84px,9.6vw,140px) + clamp(48px,6vw,96px)) 0 clamp(48px,6vw,88px);
 }
+/* Подложка и затемнение приходят из общего styles.css (.hero__bg, .hero__veil,
+   .hero__video) — здесь только поднимаем содержимое над ними. */
+.art-hero__content{position:relative;z-index:2}
 .art-hero__badge{
   display:inline-flex;align-items:center;gap:8px;margin-bottom:clamp(20px,3vw,32px);
   padding:8px 18px;border-radius:var(--radius-pill);border:1px solid rgba(159,232,112,.4);

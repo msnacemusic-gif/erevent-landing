@@ -488,6 +488,10 @@
 
   Array.prototype.forEach.call(document.querySelectorAll('.service-card'), function (card) {
     card.addEventListener('click', function () {
+      // У направления есть своя страница — уводим туда, а не к форме.
+      var href = card.getAttribute('data-href');
+      if (href) { window.location.href = href; return; }
+
       var name = card.getAttribute('data-service');
       var textarea = document.getElementById('f-comment');
       if (textarea && name) {

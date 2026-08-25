@@ -73,7 +73,19 @@
 <main>
 
 <section id="top" class="art-hero" data-screen-label="Первый экран">
-  <div class="wrap">
+  <div class="hero__bg" id="hero-bg">
+    <!-- Тот же ролик, что на главной. Классы общие, поэтому им управляет
+         общий script.js: два формата, живучий запуск, под видео — его же
+         первый кадр. -->
+    <video class="hero__video" id="hero-video" autoplay muted defaultmuted loop playsinline
+           preload="auto" poster="../media/hero-still.jpg" aria-hidden="true">
+      <source src="../media/hero-showreel.mp4" type="video/mp4">
+      <source src="../media/hero-showreel.webm" type="video/webm">
+    </video>
+  </div>
+  <div class="hero__veil" aria-hidden="true"></div>
+
+  <div class="wrap art-hero__content">
     <a href="#works" class="art-hero__badge reveal-init" style="--reveal-delay:40ms">Новые кейсы 2026 →</a>
     <h1 class="art-hero__title reveal-init" style="--reveal-delay:110ms">Декорации и арт-объекты, которые невозможно не заметить</h1>
     <p class="art-hero__lead reveal-init" style="--reveal-delay:190ms">Полный цикл: концепция, 3D-визуализация, производство в собственном цехе, доставка и монтаж на площадке.</p>
