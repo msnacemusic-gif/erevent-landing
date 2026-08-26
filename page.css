@@ -52,6 +52,15 @@
 }
 .art-card p{margin:0;font-size:clamp(14px,1.1vw,16px);line-height:1.55;color:var(--text-body)}
 
+/* Дополнительные зоны — продолжение блока «Что мы делаем», а не новый блок:
+   тот же холст, чипы те же, что у материалов на странице декора. */
+.art-zones{margin-top:clamp(24px,3vw,40px);padding-top:clamp(24px,3vw,40px);border-top:1px solid var(--border-default)}
+.art-zones__title{
+  margin:0 0 clamp(16px,2vw,22px);font-family:var(--font-display);font-weight:800;
+  font-size:clamp(18px,1.6vw,23px);line-height:1.15;letter-spacing:-.02em;color:var(--text-heading);
+}
+.art-zones__note{margin:clamp(16px,2vw,22px) 0 0;max-width:44em;font-size:clamp(15px,1.15vw,17px);line-height:1.55;color:var(--text-body)}
+
 /* --------------------------------------------------------------------------
    Портфолио: фильтры, сетка, карточка
    -------------------------------------------------------------------------- */
