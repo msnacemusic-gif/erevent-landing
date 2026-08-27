@@ -64,7 +64,9 @@
   margin:0 0 clamp(16px,2vw,22px);font-family:var(--font-display);font-weight:800;
   font-size:clamp(18px,1.6vw,23px);line-height:1.15;letter-spacing:-.02em;color:var(--text-heading);
 }
-.art-zones__note{margin:clamp(16px,2vw,22px) 0 0;max-width:44em;font-size:clamp(15px,1.15vw,17px);line-height:1.55;color:var(--text-body)}
+/* Подпись под блоком — та же, что была у зон; имя сделано общим,
+   потому что теперь она нужна и на странице техники. */
+.art-note{margin:clamp(20px,2.4vw,28px) 0 0;max-width:52em;font-size:clamp(15px,1.15vw,17px);line-height:1.55;color:var(--text-body)}
 
 /* --------------------------------------------------------------------------
    Портфолио: фильтры, сетка, карточка
