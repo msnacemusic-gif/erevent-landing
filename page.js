@@ -171,3 +171,24 @@
     if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
   });
 })();
+
+/* --------------------------------------------------------------------------
+   Плитка «что мы делаем»: фото ещё загружены не для всех услуг.
+   Пока картинки нет — убираем битый <img> и включаем градиентную подложку,
+   чтобы карточка выглядела законченной, а не чёрным прямоугольником.
+   -------------------------------------------------------------------------- */
+(function () {
+  var photos = document.querySelectorAll('.bento .service-card__photo');
+  if (!photos.length) return;
+
+  Array.prototype.forEach.call(photos, function (img) {
+    function fallback() {
+      var card = img.closest('.service-card');
+      if (card) card.classList.add('service-card--nophoto');
+      img.remove();
+    }
+    img.addEventListener('error', fallback);
+    // Картинка могла не загрузиться ещё до навешивания обработчика.
+    if (img.complete && !img.naturalWidth) fallback();
+  });
+})();

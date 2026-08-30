@@ -40,22 +40,59 @@
 /* --------------------------------------------------------------------------
    Что мы делаем
    -------------------------------------------------------------------------- */
+/* Плитка «что мы делаем» — та же, что на главной: фото под тёмной вуалью,
+   светлый текст, номер и иконка. Классы .service-card общие, из styles.css,
+   здесь только раскладка на шесть карточек и состояние «фото ещё нет». */
 .art-what{padding:clamp(40px,5vw,80px) 0}
-.art-what__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,1.8vw,24px)}
-.art-card{
-  display:flex;flex-direction:column;gap:12px;padding:clamp(24px,2.6vw,36px);
-  background:var(--surface-canvas);border-radius:var(--radius-xl);
+.page-dir .bento{grid-auto-rows:minmax(170px,auto)}
+/* Карточки здесь не кнопки, а описание услуги — курсор обычный. */
+.page-dir .bento .service-card{cursor:default;min-height:190px}
+.page-dir .bento .service-card:hover{transform:none}
+
+/* Планшет: две колонки, первая и последняя карточки во всю ширину —
+   шесть карточек ложатся без пустых мест. */
+@media (min-width:700px) and (max-width:1023.98px){
+  .page-dir .service-card--fill{grid-column:span 2}
 }
-/* Карточка на две колонки — только там, где колонок больше одной:
-   на телефоне span 2 создал бы пустую фантомную колонку. */
-@media (min-width:700px){
-  .art-card--wide{grid-column:span 2}
+/* Десктоп: шесть колонок. Первая карточка 3x2, вторая и третья по 3,
+   нижний ряд — три карточки по 2. */
+@media (min-width:1024px){
+  .page-dir .bento{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .page-dir .bento .service-card{grid-column:span 2}
+  .page-dir .bento .service-card--build{grid-column:span 3;grid-row:span 2;min-height:340px}
+  .page-dir .bento .service-card--half{grid-column:span 3}
 }
-.art-card h3{
-  margin:0;font-family:var(--font-display);font-weight:800;
-  font-size:clamp(18px,1.6vw,23px);line-height:1.15;letter-spacing:-.02em;color:var(--text-heading);
+
+/* Фото ещё не загружено. Чтобы шесть карточек не читались одним чёрным
+   пятном, даём каждой мягкий градиент с лаймовым свечением в углу и
+   слегка разводим их по светлоте. Когда фото появятся, состояние снимается
+   само (см. page.js) и плитка становится такой же, как на главной. */
+.page-dir .service-card--nophoto{
+  background:
+    radial-gradient(120% 90% at 88% 6%,rgba(159,232,112,.16) 0%,rgba(159,232,112,0) 58%),
+    linear-gradient(152deg,#2a3126 0%,#1a1e16 52%,#101208 100%);
+  box-shadow:inset 0 0 0 1px rgba(232,235,230,.07);
 }
-.art-card p{margin:0;font-size:clamp(14px,1.1vw,16px);line-height:1.55;color:var(--text-body)}
+.page-dir .service-card--nophoto .service-card__veil,
+.page-dir .service-card--nophoto:hover .service-card__veil{opacity:0}
+.page-dir .service-card--nophoto:nth-child(3n+2){
+  background:
+    radial-gradient(110% 90% at 10% 4%,rgba(159,232,112,.13) 0%,rgba(159,232,112,0) 56%),
+    linear-gradient(200deg,#242a20 0%,#171a13 56%,#0e0f0c 100%);
+  box-shadow:inset 0 0 0 1px rgba(232,235,230,.07);
+}
+.page-dir .service-card--nophoto:nth-child(3n){
+  background:
+    radial-gradient(120% 100% at 92% 96%,rgba(159,232,112,.12) 0%,rgba(159,232,112,0) 60%),
+    linear-gradient(140deg,#20261c 0%,#141710 60%,#0e0f0c 100%);
+  box-shadow:inset 0 0 0 1px rgba(232,235,230,.07);
+}
+/* Крупная карточка без фото — иконка становится водяным знаком,
+   чтобы верх не пустовал. */
+.page-dir .service-card--build.service-card--nophoto .service-card__icon{
+  width:clamp(64px,7vw,104px);height:clamp(64px,7vw,104px);
+  color:rgba(159,232,112,.22);stroke-width:1.1;
+}
 
 /* Дополнительные зоны — продолжение блока «Что мы делаем», а не новый блок:
    тот же холст, чипы те же, что у материалов на странице декора. */
