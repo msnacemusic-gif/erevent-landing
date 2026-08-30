@@ -298,9 +298,11 @@
   function renderCases() {
     casesShown = currentCases();
     casesList.innerHTML = casesShown.map(function (c, i) {
+      // Один кейс на странице всегда раскрыт — первый в списке.
+      var open = i === 0;
       return (
-        '<div class="case" data-case="' + i + '">' +
-          '<button type="button" class="case__row" data-case-toggle="' + i + '" aria-expanded="false">' +
+        '<div class="case' + (open ? ' is-open' : '') + '" data-case="' + i + '">' +
+          '<button type="button" class="case__row" data-case-toggle="' + i + '" aria-expanded="' + (open ? 'true' : 'false') + '">' +
             '<span class="case__n">' + c.n + '</span>' +
             '<h3 class="case__title">' + c.title + '</h3>' +
             '<span class="case__year">' + c.year + '</span>' +
@@ -347,12 +349,13 @@
     Array.prototype.forEach.call(casesList.querySelectorAll('[data-case-toggle]'), function (btn) {
       btn.addEventListener('click', function () {
         var card = btn.closest('.case');
-        var isOpen = card.classList.contains('is-open');
+        if (card.classList.contains('is-open')) return;
         Array.prototype.forEach.call(casesList.querySelectorAll('.case.is-open'), function (open) {
-          if (open !== card) { open.classList.remove('is-open'); open.querySelector('.case__row').setAttribute('aria-expanded', 'false'); }
+          open.classList.remove('is-open');
+          open.querySelector('.case__row').setAttribute('aria-expanded', 'false');
         });
-        card.classList.toggle('is-open', !isOpen);
-        btn.setAttribute('aria-expanded', String(!isOpen));
+        card.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
       });
     });
     Array.prototype.forEach.call(casesList.querySelectorAll('.js-case-cta'), function (btn) {
