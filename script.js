@@ -32,13 +32,24 @@
     { placeholder: true, quote: 'Лишние карточки просто удалите — блок подстроится сам.', name: 'Имя Фамилия', role: 'Должность', company: 'Компания' }
   ];
 
+  /* Страницы направлений отдают свои данные блоком
+     <script type="application/json" id="page-data">: список клиентов,
+     кейсы направления и, если нужны, фильтры. На главной блока нет —
+     тогда работают массивы из этого файла. */
+  var PAGE = (function () {
+    var el = document.getElementById('page-data');
+    if (!el) return {};
+    try { return JSON.parse(el.textContent) || {}; } catch (e) { return {}; }
+  })();
+
   var CLIENTS = ['Росконгресс', 'Сбербанк', 'Parimatch', 'Haval', 'BingX', 'VK', 'Росатом', 'Минтруд', 'Росмолодёжь'];
 
   // Каждый кейс ищет фото по номеру: media/case-01.jpg … media/case-10.jpg.
   // Файла нет — карточка сама показывает плашку с названием кейса.
   // Чтобы добавить фото, достаточно положить его в media/ под нужным именем.
-  function casePhoto(i) {
-    return 'media/case-' + (i < 9 ? '0' : '') + (i + 1) + '.jpg';
+  function casePhoto(c, i) {
+    var n = c.n || ((i < 9 ? '0' : '') + (i + 1));
+    return (PAGE.base || '') + 'media/case-' + n + '.jpg';
   }
 
   var CASES = [
@@ -55,6 +66,9 @@
   ];
 
   var CASES_INITIAL = 6;
+
+  if (PAGE.clients && PAGE.clients.length) CLIENTS = PAGE.clients;
+  if (PAGE.works && PAGE.works.length) CASES = PAGE.works;
 
   /* ------------------------------------------------------------------ */
   /* Helpers                                                              */
@@ -244,7 +258,10 @@
   var casesList = document.getElementById('cases-list');
   var casesMoreWrap = document.getElementById('cases-more');
   var casesMoreBtn = document.getElementById('cases-more-btn');
+  var casesFiltersWrap = document.getElementById('cases-filters');
   var casesAllShown = false;
+  var casesFilter = 'all';
+  var casesShown = [];
   var hasCases = !!(casesList && casesMoreWrap && casesMoreBtn);
 
   function casePlaceholderHtml(c) {
@@ -252,11 +269,35 @@
   }
 
   function caseMediaHtml(c, i) {
-    return '<img src="' + casePhoto(i) + '" alt="Фото проекта «' + c.title + '»" loading="lazy" data-case-photo="' + i + '">';
+    return '<img src="' + casePhoto(c, i) + '" alt="Фото проекта «' + c.title + '»" loading="lazy" data-case-photo="' + i + '">';
+  }
+
+  // Фильтры есть только там, где страница их отдала в page-data.
+  function currentCases() {
+    if (casesFilter === 'all') return CASES;
+    return CASES.filter(function (c) { return c.cat === casesFilter; });
+  }
+
+  function renderFilters() {
+    if (!casesFiltersWrap || !PAGE.filters || !PAGE.filters.length) return;
+    casesFiltersWrap.innerHTML = PAGE.filters.map(function (f) {
+      var on = f.id === casesFilter;
+      return '<button type="button" class="chip' + (on ? ' is-active' : '') + '" data-filter="' +
+        esc(f.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + esc(f.label) + '</button>';
+    }).join('');
+    Array.prototype.forEach.call(casesFiltersWrap.querySelectorAll('[data-filter]'), function (btn) {
+      btn.addEventListener('click', function () {
+        casesFilter = btn.getAttribute('data-filter');
+        casesAllShown = false;
+        renderFilters();
+        renderCases();
+      });
+    });
   }
 
   function renderCases() {
-    casesList.innerHTML = CASES.map(function (c, i) {
+    casesShown = currentCases();
+    casesList.innerHTML = casesShown.map(function (c, i) {
       return (
         '<div class="case" data-case="' + i + '">' +
           '<button type="button" class="case__row" data-case-toggle="' + i + '" aria-expanded="false">' +
@@ -280,6 +321,10 @@
       );
     }).join('');
 
+    if (!casesShown.length) {
+      casesList.innerHTML = '<p class="cases__empty">В этом разделе кейсы ещё не выложены.</p>';
+    }
+
     applyCasesVisibility();
     bindCaseEvents();
   }
@@ -289,7 +334,7 @@
     items.forEach(function (el, i) {
       el.style.display = (casesAllShown || i < CASES_INITIAL) ? '' : 'none';
     });
-    var remaining = CASES.length - CASES_INITIAL;
+    var remaining = casesShown.length - CASES_INITIAL;
     if (!casesAllShown && remaining > 0) {
       casesMoreWrap.hidden = false;
       casesMoreBtn.textContent = 'Показать ещё ' + remaining;
@@ -318,7 +363,7 @@
       img.addEventListener('error', function () {
         var i = parseInt(img.getAttribute('data-case-photo'), 10);
         var holder = img.parentElement;
-        if (holder) holder.innerHTML = casePlaceholderHtml(CASES[i]);
+        if (holder) holder.innerHTML = casePlaceholderHtml(casesShown[i]);
       });
     });
   }
@@ -330,6 +375,7 @@
       applyCasesVisibility();
     });
 
+    renderFilters();
     renderCases();
   }
 
@@ -772,6 +818,27 @@
       remember();
       banner.classList.remove('is-visible');
       banner.hidden = true;
+    });
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* Плитка услуг: фото загружены не для всех карточек                    */
+  /* ------------------------------------------------------------------ */
+
+  // Пока картинки нет, убираем битый <img> и включаем градиентную подложку,
+  // чтобы карточка выглядела законченной, а не чёрным прямоугольником.
+  (function () {
+    var photos = document.querySelectorAll('.bento .service-card__photo');
+    if (!photos.length) return;
+
+    Array.prototype.forEach.call(photos, function (img) {
+      function fallback() {
+        var card = img.closest('.service-card');
+        if (card) card.classList.add('service-card--nophoto');
+        img.remove();
+      }
+      img.addEventListener('error', fallback);
+      if (img.complete && !img.naturalWidth) fallback();
     });
   })();
 

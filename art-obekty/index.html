@@ -71,8 +71,7 @@
 </div>
 
 <main>
-
-<section id="top" class="art-hero" data-screen-label="Первый экран">
+<section id="top" class="hero" data-screen-label="Первый экран">
   <div class="hero__bg" id="hero-bg">
     <!-- Тот же ролик, что на главной. Классы общие, поэтому им управляет
          общий script.js: два формата, живучий запуск, под видео — его же
@@ -85,29 +84,37 @@
   </div>
   <div class="hero__veil" aria-hidden="true"></div>
 
-  <div class="wrap art-hero__content">
-    <a href="#works" class="art-hero__badge reveal-init" style="--reveal-delay:40ms">Новые кейсы 2026 →</a>
-    <h1 class="art-hero__title reveal-init" style="--reveal-delay:110ms">Декорации и арт-объекты, которые невозможно не заметить</h1>
-    <p class="art-hero__lead reveal-init" style="--reveal-delay:190ms">Полный цикл: концепция, 3D-визуализация, производство в собственном цехе, доставка и монтаж на площадке.</p>
-    <div class="art-hero__cta reveal-init" style="--reveal-delay:260ms">
-      <button type="button" class="btn btn--primary btn--lg js-go-form">Рассчитать проект</button>
-      <a href="#works" class="btn btn--tertiary btn--lg">Смотреть портфолио</a>
+  <div class="hero__content">
+    <p class="hero__eyebrow reveal-init" style="--reveal-delay:50ms">[СОБЫТИЯ РУМ — ДЕКОРАЦИИ И АРТ-ОБЪЕКТЫ]</p>
+    <h1 class="hero__title reveal-init" style="--reveal-delay:120ms">Декорации и арт-объекты, которые невозможно не заметить</h1>
+    <div class="hero__row">
+      <p class="hero__lead reveal-init" style="--reveal-delay:200ms">Полный цикл: концепция, 3D-визуализация, производство в собственном цехе, доставка и монтаж на площадке.</p>
+      <div class="hero__cta reveal-init" style="--reveal-delay:280ms">
+    <button type="button" class="btn btn--primary btn--lg js-go-form">Рассчитать проект</button>
+    <a href="#cases" class="btn btn--ghost-dark">Смотреть портфолио</a>
+      </div>
     </div>
-    <p class="art-hero__meta reveal-init" style="--reveal-delay:330ms">100+ реализованных проектов · собственное производство 300 м² в Москве · монтаж по всей России</p>
+    <div class="hero__foot reveal-init" style="--reveal-delay:360ms">
+      <span class="hero__foot-label">100+ реализованных проектов · собственное производство 300 м² в Москве · монтаж по всей России</span>
+      <div class="hero__scroll-hint">
+        <span>Скролл</span>
+        <svg width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 1v17"></path><path d="M1.5 12.5 7 18.5l5.5-6"></path></svg>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="clients" data-screen-label="Клиенты">
   <p class="section-eyebrow section-eyebrow--dark reveal">[нам доверяют]</p>
   <div class="marquee-mask">
-    <div class="marquee-track marquee-track--clients">
-      <span class="marquee-group" id="page-clients-a"></span>
-      <span class="marquee-group" id="page-clients-b" aria-hidden="true"></span>
+    <div class="marquee-track" id="clients-track">
+      <span class="marquee-group" id="clients-group-a"></span>
+      <span class="marquee-group" id="clients-group-b" aria-hidden="true"></span>
     </div>
   </div>
 </section>
 
-<section id="what" class="art-what" data-screen-label="Что мы делаем">
+<section id="services" class="services" data-screen-label="Что мы делаем">
   <div class="wrap">
     <div class="section-head reveal">
       <div class="section-head__main">
@@ -193,69 +200,64 @@
   </div>
 </section>
 
-<section id="works" class="art-works" data-screen-label="Портфолио">
+<section class="stats" data-screen-label="Цифры">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="section-head__main">
-        <p class="section-eyebrow">[портфолио]</p>
-        <h2 class="section-title section-title--md">Портфолио</h2>
+    <p class="section-eyebrow reveal">[в цифрах]</p>
+    <div class="stats__grid" id="stats-grid">
+      <div class="stat reveal">
+        <div class="stat__row"><span class="stat__num" data-value="100" data-suffix="+">0</span></div>
+        <span class="stat__label">реализованных проектов</span>
       </div>
-      <p class="section-head__note">Каждый проект — свой чертёж, смета и график монтажа. Откройте карточку, чтобы увидеть подробности.</p>
+      <div class="stat reveal" style="--reveal-delay:80ms">
+        <div class="stat__row"><span class="stat__num" data-value="300" data-suffix="">0</span><span class="stat__unit">м²</span></div>
+        <span class="stat__label">собственного производства</span>
+      </div>
+      <div class="stat reveal" style="--reveal-delay:160ms">
+        <div class="stat__row"><span class="stat__num" data-value="7" data-suffix="">0</span></div>
+        <span class="stat__label">лет на рынке</span>
+      </div>
     </div>
-
-    <div class="art-filters" id="page-filters" role="group" aria-label="Фильтр портфолио"></div>
-    <div class="art-grid" id="page-grid"></div>
   </div>
 </section>
 
-<section id="production" class="art-production" data-screen-label="Производство">
+<section id="cases" class="cases" data-screen-label="Кейсы">
   <div class="wrap">
-    <div class="art-block reveal">
-      <div class="art-block__main">
-        <p class="section-eyebrow">[собственный цех]</p>
-        <h2 class="section-title section-title--md">Производим сами — не перепродаём подряд</h2>
-        <p class="art-block__lead">Собственное производство 300 м² в Москве: сварочный и столярный участки, ЧПУ-станок, покрасочная камера.</p>
+    <div class="section-head reveal">
+      <div class="section-head__main">
+        <p class="section-eyebrow">[кейсы]</p>
+        <h2 class="section-title">Кейсы</h2>
       </div>
-      <ul class="art-list">
-        <li>Сроки контролируем сами, без субподряда</li>
-        <li>Правки вносим на ходу, пока объект в цехе</li>
-        <li>Нет наценки посредника в смете</li>
-        <li>Фотоотчёт по каждому этапу производства</li>
-      </ul>
+      <p class="section-head__note">Каждый проект — свой чертёж, смета и график монтажа. Нажмите на строку — раскроются заказчик, задачи и площадка.</p>
     </div>
 
-    <div class="art-block reveal">
-      <div class="art-block__main">
-        <p class="section-eyebrow">[материалы и технологии]</p>
-        <h2 class="section-title section-title--md">С чем работаем</h2>
-        <p class="art-block__lead">Подбираем материал под задачу: срок жизни объекта, площадку, погоду и бюджет.</p>
-      </div>
-      <ul class="art-tags">
-        <li class="tag--pale">Металлокаркас и сварка</li>
-        <li class="tag--pale">Фанера и ЛДСП</li>
-        <li class="tag--pale">ЧПУ-фрезеровка</li>
-        <li class="tag--pale">Пенопласт с твёрдым покрытием</li>
-        <li class="tag--pale">Стеклопластик</li>
-        <li class="tag--pale">Аквапанель</li>
-        <li class="tag--pale">Полимербетон</li>
-        <li class="tag--pale">Роспись и патинирование</li>
-        <li class="tag--pale">LED и световое оснащение</li>
-      </ul>
-    </div>
+    <div class="cases__filters" id="cases-filters" role="group" aria-label="Фильтр кейсов"></div>
 
-    <div class="art-block reveal">
-      <div class="art-block__main">
-        <p class="section-eyebrow">[инженерия и безопасность]</p>
-        <h2 class="section-title section-title--md">Объект, который примет любая площадка</h2>
-        <p class="art-block__lead">Считаем конструкции и готовим документы до начала производства — на площадке не бывает сюрпризов.</p>
-      </div>
-      <ul class="art-list">
-        <li>Расчёт несущих конструкций и узлов крепления</li>
-        <li>Ветровая нагрузка для уличных объектов</li>
-        <li>Сертификаты материалов и пожарная безопасность</li>
-        <li>Комплект документации и согласования с площадкой</li>
-      </ul>
+    <div class="cases__list" id="cases-list"></div>
+
+    <div class="cases__more" id="cases-more" hidden>
+      <button type="button" class="btn btn--tertiary btn--lg" id="cases-more-btn">Показать ещё</button>
     </div>
+  </div>
+</section>
+
+<section id="reviews" class="reviews" data-screen-label="Отзывы">
+  <div class="wrap">
+    <div class="section-head section-head--dark reveal">
+      <div class="section-head__main">
+        <p class="section-eyebrow section-eyebrow--dark">[отзывы]</p>
+        <h2 class="section-title section-title--contacts">Отзывы</h2>
+      </div>
+      <div class="reviews__nav">
+        <button type="button" class="reviews__arrow" id="reviews-prev" aria-label="Предыдущий отзыв" aria-controls="reviews-track">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"></path></svg>
+        </button>
+        <button type="button" class="reviews__arrow" id="reviews-next" aria-label="Следующий отзыв" aria-controls="reviews-track">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"></path></svg>
+        </button>
+      </div>
+    </div>
+    <div class="reviews__viewport reveal" id="reviews-track" tabindex="0" role="group" aria-label="Отзывы заказчиков, прокручивается вбок"></div>
+    <div class="reviews__dots" id="reviews-dots" role="tablist" aria-label="Переключение отзывов"></div>
   </div>
 </section>
 
@@ -294,43 +296,56 @@
   </div>
 </section>
 
-<section class="stats" data-screen-label="Цифры">
-  <div class="wrap">
-    <div class="stats__grid" id="stats-grid">
-      <div class="stat reveal">
-        <div class="stat__row"><span class="stat__num" data-value="100" data-suffix="+">0</span></div>
-        <p class="stat__label">реализованных проектов</p>
+<section id="production" class="production" data-screen-label="Производство">
+  <div class="wrap production__grid">
+    <div class="production__media reveal">
+      <div class="production__placeholder">
+        <span>Собственное производство — 300 м²</span>
       </div>
-      <div class="stat reveal" style="--reveal-delay:80ms">
-        <div class="stat__row"><span class="stat__num" data-value="300" data-suffix="">0</span><span class="stat__unit">м²</span></div>
-        <p class="stat__label">собственного производства</p>
-      </div>
-      <div class="stat reveal" style="--reveal-delay:160ms">
-        <div class="stat__row"><span class="stat__num" data-value="7" data-suffix="">0</span></div>
-        <p class="stat__label">лет на рынке</p>
-      </div>
+    </div>
+    <div class="production__text reveal" style="--reveal-delay:120ms">
+      <p class="section-eyebrow">[собственный цех]</p>
+      <h2 class="section-title section-title--md">Производим сами — не перепродаём подряд</h2>
+      <p class="production__lead">Собственное производство 300 м² в Москве: сварочный и столярный участки, ЧПУ-станок, покрасочная камера.</p>
+      <ul class="points">
+        <li>Сроки контролируем сами, без субподряда</li>
+        <li>Правки вносим на ходу, пока объект в цехе</li>
+        <li>Нет наценки посредника в смете</li>
+        <li>Фотоотчёт по каждому этапу производства</li>
+      </ul>
+      <button type="button" class="btn btn--tertiary btn--lg js-go-form">Обсудить изготовление</button>
     </div>
   </div>
-</section>
 
-<section id="reviews" class="reviews" data-screen-label="Отзывы">
   <div class="wrap">
-    <div class="section-head section-head--dark reveal">
-      <div class="section-head__main">
-        <p class="section-eyebrow section-eyebrow--dark">[отзывы]</p>
-        <h2 class="section-title section-title--contacts">Отзывы</h2>
-      </div>
-      <div class="reviews__nav">
-        <button type="button" class="reviews__arrow" id="reviews-prev" aria-label="Предыдущий отзыв" aria-controls="reviews-track">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"></path></svg>
-        </button>
-        <button type="button" class="reviews__arrow" id="reviews-next" aria-label="Следующий отзыв" aria-controls="reviews-track">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"></path></svg>
-        </button>
+    <div class="production__extra reveal">
+      <p class="section-eyebrow">[материалы и технологии]</p>
+      <h3 class="section-title section-title--sm">С чем работаем</h3>
+      <p class="production__lead">Подбираем материал под задачу: срок жизни объекта, площадку, погоду и бюджет.</p>
+      <div class="production__tags">
+        <span class="tag tag--pale">Металлокаркас и сварка</span>
+        <span class="tag tag--pale">Фанера и ЛДСП</span>
+        <span class="tag tag--pale">ЧПУ-фрезеровка</span>
+        <span class="tag tag--pale">Пенопласт с твёрдым покрытием</span>
+        <span class="tag tag--pale">Стеклопластик</span>
+        <span class="tag tag--pale">Аквапанель</span>
+        <span class="tag tag--pale">Полимербетон</span>
+        <span class="tag tag--pale">Роспись и патинирование</span>
+        <span class="tag tag--pale">LED и световое оснащение</span>
       </div>
     </div>
-    <div class="reviews__viewport reveal" id="reviews-track" tabindex="0" role="group" aria-label="Отзывы заказчиков, прокручивается вбок"></div>
-    <div class="reviews__dots" id="reviews-dots" role="tablist" aria-label="Переключение отзывов"></div>
+
+    <div class="production__extra reveal">
+      <p class="section-eyebrow">[инженерия и безопасность]</p>
+      <h3 class="section-title section-title--sm">Объект, который примет любая площадка</h3>
+      <p class="production__lead">Считаем конструкции и готовим документы до начала производства — на площадке не бывает сюрпризов.</p>
+      <ul class="points">
+        <li>Расчёт несущих конструкций и узлов крепления</li>
+        <li>Ветровая нагрузка для уличных объектов</li>
+        <li>Сертификаты материалов и пожарная безопасность</li>
+        <li>Комплект документации и согласования с площадкой</li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -345,42 +360,42 @@
         <div class="faq__item is-open" data-faq="0">
           <button type="button" class="faq__q" aria-expanded="true">
             <h3>Сколько стоит изготовление арт-объекта?</h3>
-            <span class="faq__toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+            <span class="faq__toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg></span>
           </button>
           <div class="faq__a"><p>Зависит от габаритов, материалов и срока. Точную смету даём после брифа — в день обращения, обычно в течение трёх часов.</p></div>
         </div>
         <div class="faq__item" data-faq="1">
           <button type="button" class="faq__q" aria-expanded="false">
             <h3>Работаете ли вы за пределами Москвы?</h3>
-            <span class="faq__toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+            <span class="faq__toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg></span>
           </button>
           <div class="faq__a"><p>Да, монтаж выполняем по всей России. Логистику и работу бригады считаем отдельной строкой в смете — без скрытых доплат.</p></div>
         </div>
         <div class="faq__item" data-faq="2">
           <button type="button" class="faq__q" aria-expanded="false">
             <h3>Можно изготовить объект по нашему эскизу или 3D-модели?</h3>
-            <span class="faq__toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+            <span class="faq__toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg></span>
           </button>
           <div class="faq__a"><p>Да. Принимаем эскизы, чертежи и 3D-модели, проверяем на технологичность и предлагаем решения по конструкции, если объект неустойчив или неоправданно дорог в производстве.</p></div>
         </div>
         <div class="faq__item" data-faq="3">
           <button type="button" class="faq__q" aria-expanded="false">
             <h3>Что с документами на площадку?</h3>
-            <span class="faq__toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+            <span class="faq__toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg></span>
           </button>
           <div class="faq__a"><p>Готовим комплект: расчёт конструкций, сертификаты материалов, документы по пожарной безопасности, схему монтажа. Согласование с площадкой берём на себя.</p></div>
         </div>
         <div class="faq__item" data-faq="4">
           <button type="button" class="faq__q" aria-expanded="false">
             <h3>Как происходит оплата и что входит в договор?</h3>
-            <span class="faq__toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+            <span class="faq__toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg></span>
           </button>
           <div class="faq__a"><p>60% аванс, 40% после сдачи объекта. В договоре — смета, сроки, состав работ, ответственность за монтаж и демонтаж.</p></div>
         </div>
         <div class="faq__item" data-faq="5">
           <button type="button" class="faq__q" aria-expanded="false">
             <h3>Возможно хранение и повторный монтаж?</h3>
-            <span class="faq__toggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+            <span class="faq__toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg></span>
           </button>
           <div class="faq__a"><p>Да. Храним объекты на своём складе, обслуживаем между событиями и монтируем повторно — конструкции проектируем разборными заранее.</p></div>
         </div>
@@ -389,25 +404,12 @@
   </div>
 </section>
 
-<section class="art-cta" data-screen-label="Финальный CTA">
-  <div class="wrap">
-    <div class="art-cta__card reveal">
-      <h2>Расскажите про проект — пришлём смету в день обращения</h2>
-      <p>Пришлём эскиз, смету и график производства. Звонок — по вашему запросу.</p>
-      <div class="art-cta__actions">
-        <button type="button" class="btn btn--primary btn--lg js-go-form">Обсудить проект</button>
-        <a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener" class="btn btn--ghost-dark">Написать в Telegram</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-
 <section id="contacts" class="contacts" data-screen-label="Заявка">
   <div class="wrap">
     <div class="section-head section-head--dark reveal">
       <p class="section-eyebrow section-eyebrow--dark">[заявка]</p>
       <h2 class="section-title section-title--contacts">Заявка на просчёт — вернёмся со сметой в тот же день</h2>
+      <p class="section-head__note section-head__note--dark">Пришлём эскиз, смету и график производства. Звонок — по вашему запросу.</p>
     </div>
 
     <div class="contacts__grid">
@@ -580,5 +582,4 @@
 
 <script type="application/json" id="page-data">{"base": "../", "clients": ["Сбербанк", "Haval", "Parimatch", "BingX", "ВДНХ", "Парк Горького", "Зарядье", "ТРЦ «Метрополис»", "Музей Москвы", "Loft Hall", "Технопарк Сколково", "ЦВЗ «Манеж»", "Городские парки", "ТРЦ «Меридиан»", "Таврида", "БЦ Парк Победы"], "filters": [{"id": "all", "label": "Все"}, {"id": "art", "label": "Арт-объекты"}, {"id": "events", "label": "Мероприятия"}, {"id": "photo", "label": "Фотозоны"}, {"id": "ny", "label": "Новый год"}, {"id": "city", "label": "Городские проекты"}], "works": [{"n": "01", "cat": "events", "title": "World Atomic Week", "year": "2025", "client": "ATOM EXPO", "tasks": "Аренда оборудования, застройка тематической зоны", "place": "ВДНХ"}, {"n": "02", "cat": "events", "title": "Сбер Бизнес Фест", "year": "2025", "client": "ПАО Сбербанк, ген. подрядчик", "tasks": "Застройка пространства фестиваля, фудкорт и кофестанции, аренда мебели", "place": "Москва, Казань, Волгоград, Омск, Новосибирск"}, {"n": "03", "cat": "art", "title": "МТФ «Путешествуй»", "year": "2024, 2025, 2026", "client": "Фонд Росконгресс", "tasks": "Застройка стендов, шатры, мебель и оборудование на стенды, изготовление арт-объекта, застройка VIP-зоны", "place": "ВДНХ"}, {"n": "04", "cat": "events", "title": "Всероссийская неделя охраны труда", "year": "2024, 2025", "client": "Министерство труда, ген. подрядчик", "tasks": "Мебельное обеспечение форумной программы, оборудование стендов, клининг, хэлперы", "place": "Университет «Сириус»"}, {"n": "05", "cat": "events", "title": "Фестиваль «Таврида»", "year": "2024", "client": "Росмолодёжь, ген. подрядчик", "tasks": "Монтаж палаточного городка и коммуникаций", "place": "Судак"}, {"n": "06", "cat": "events", "title": "VK Fest", "year": "2025", "client": "VK Community", "tasks": "Кальянный кейтеринг VIP-зон, мебель и оборудование лаунж-зон", "place": "Москва, Лужники"}, {"n": "07", "cat": "events", "title": "Турнир по падл-теннису", "year": "2025", "client": "Parimatch, ген. подрядчик", "tasks": "Звук, TV-панели, мебель, техническое сопровождение", "place": "Яхт-клуб «Адмирал»"}, {"n": "08", "cat": "art", "title": "Запуск спорткомплекса Padel Ball", "year": "", "client": "Padel Ball", "tasks": "Дизайн, строительные работы, брендирование, навигация, мебель и оборудование", "place": "Химки, Gopark"}, {"n": "09", "cat": "art", "title": "Оформление входной группы БЦ", "year": "", "client": "БЦ «Парк Победы»", "tasks": "Дизайн, изготовление и монтаж декораций входной группы", "place": "БЦ «Парк Победы»"}, {"n": "10", "cat": "events", "title": "Yandex Data (exclusive event)", "year": "", "client": "Yandex Data", "tasks": "Барное и кальянное обслуживание, лаунж-пространство", "place": "Сочи, Красная Поляна"}]}</script>
 <script src="../script.js"></script>
-<script src="../page.js"></script>
 </body>

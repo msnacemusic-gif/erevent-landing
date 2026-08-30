@@ -1,51 +1,12 @@
 /* ==========================================================================
-   Страница «Декорации и арт-объекты».
-   Токены, кнопки, шапка, форма, футер, лента, таймлайн, FAQ и отзывы берутся
-   из общего styles.css — здесь только блоки, которых нет на главной.
+   Страницы направлений (декорации, мебель, кейтеринг, техника).
+   Стиль полностью общий с главной: блоки, шрифты, отступы и кнопки берутся
+   из styles.css. Здесь остаётся только то, чего на главной нет, — раскладка
+   плитки услуг на шесть карточек и её вид, пока фото не загружены.
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Первый экран
-   -------------------------------------------------------------------------- */
-.art-hero{
-  position:relative;overflow:hidden;isolation:isolate;
-  background:var(--surface-dark);color:var(--text-on-dark);
-  padding:calc(clamp(84px,9.6vw,140px) + clamp(36px,4vw,64px)) 0 clamp(20px,2.4vw,28px);
-}
-/* Подложка и затемнение приходят из общего styles.css (.hero__bg, .hero__veil,
-   .hero__video) — здесь только поднимаем содержимое над ними. */
-.art-hero__content{position:relative;z-index:2}
-.art-hero__badge{
-  display:inline-flex;align-items:center;gap:8px;margin-bottom:clamp(20px,3vw,32px);
-  padding:8px 18px;border-radius:var(--radius-pill);border:1px solid rgba(159,232,112,.4);
-  font-size:13px;font-weight:600;color:var(--z-green);
-  transition:background-color .15s ease,color .15s ease;
-}
-.art-hero__badge:hover{background:var(--color-primary);color:var(--z-ink)}
-.art-hero__title{
-  margin:0;max-width:16em;font-family:var(--font-display);font-weight:900;
-  font-size:clamp(34px,6.2vw,88px);line-height:.98;letter-spacing:-.03em;color:var(--z-canvas);text-wrap:balance;
-}
-.art-hero__lead{
-  margin:clamp(24px,3vw,36px) 0 0;max-width:44em;
-  font-size:clamp(16px,1.35vw,20px);line-height:1.5;color:var(--text-on-dark);
-}
-.art-hero__cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(28px,3.4vw,44px)}
-.art-hero__meta{
-  margin:clamp(28px,3.2vw,44px) 0 0;padding-top:clamp(20px,2.4vw,28px);
-  border-top:1px solid rgba(255,255,255,.14);
-  font-size:clamp(13px,1.05vw,15px);line-height:1.6;color:rgba(232,235,230,.66);
-}
-
-/* --------------------------------------------------------------------------
-   Что мы делаем
-   -------------------------------------------------------------------------- */
-/* Плитка «что мы делаем» — та же, что на главной: фото под тёмной вуалью,
-   светлый текст, номер и иконка. Классы .service-card общие, из styles.css,
-   здесь только раскладка на шесть карточек и состояние «фото ещё нет». */
-.art-what{padding:clamp(40px,5vw,80px) 0}
+/* Карточки здесь описывают услугу, а не ведут на другую страницу. */
 .page-dir .bento{grid-auto-rows:minmax(170px,auto)}
-/* Карточки здесь не кнопки, а описание услуги — курсор обычный. */
 .page-dir .bento .service-card{cursor:default;min-height:190px}
 .page-dir .bento .service-card:hover{transform:none}
 
@@ -66,7 +27,7 @@
 /* Фото ещё не загружено. Чтобы шесть карточек не читались одним чёрным
    пятном, даём каждой мягкий градиент с лаймовым свечением в углу и
    слегка разводим их по светлоте. Когда фото появятся, состояние снимается
-   само (см. page.js) и плитка становится такой же, как на главной. */
+   само (см. script.js) и плитка становится такой же, как на главной. */
 .page-dir .service-card--nophoto{
   background:
     radial-gradient(120% 90% at 88% 6%,rgba(159,232,112,.16) 0%,rgba(159,232,112,0) 58%),
@@ -93,140 +54,3 @@
   width:clamp(64px,7vw,104px);height:clamp(64px,7vw,104px);
   color:rgba(159,232,112,.22);stroke-width:1.1;
 }
-
-/* Дополнительные зоны — продолжение блока «Что мы делаем», а не новый блок:
-   тот же холст, чипы те же, что у материалов на странице декора. */
-.art-zones{margin-top:clamp(24px,3vw,40px);padding-top:clamp(24px,3vw,40px);border-top:1px solid var(--border-default)}
-.art-zones__title{
-  margin:0 0 clamp(16px,2vw,22px);font-family:var(--font-display);font-weight:800;
-  font-size:clamp(18px,1.6vw,23px);line-height:1.15;letter-spacing:-.02em;color:var(--text-heading);
-}
-/* Подпись под блоком — та же, что была у зон; имя сделано общим,
-   потому что теперь она нужна и на странице техники. */
-.art-note{margin:clamp(20px,2.4vw,28px) 0 0;max-width:52em;font-size:clamp(15px,1.15vw,17px);line-height:1.55;color:var(--text-body)}
-
-/* --------------------------------------------------------------------------
-   Портфолио: фильтры, сетка, карточка
-   -------------------------------------------------------------------------- */
-.art-works{background:var(--surface-canvas);padding:clamp(40px,5vw,80px) 0}
-.art-filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:clamp(24px,3vw,40px)}
-.art-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:clamp(16px,1.8vw,24px)}
-
-.art-work{
-  display:flex;flex-direction:column;text-align:left;gap:0;padding:0;cursor:pointer;
-  background:var(--surface-soft);border:none;border-radius:var(--radius-xl);overflow:hidden;
-  font-family:inherit;transition:background-color .2s ease;
-}
-.art-work:hover{background:var(--color-primary-pale)}
-.art-work__media{position:relative;aspect-ratio:3/2;background:var(--z-ink);overflow:hidden}
-.art-work__media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
-.art-work:hover .art-work__media img{transform:scale(1.04)}
-/* Фото ещё нет — плашка с названием, как в кейсах на главной. */
-.art-work__holder{
-  position:absolute;inset:0;display:flex;align-items:flex-end;padding:20px;
-  background:linear-gradient(140deg,#1b1d18,#0e0f0c);
-}
-.art-work__holder span{font-family:var(--font-display);font-weight:800;font-size:15px;line-height:1.25;color:rgba(232,235,230,.72)}
-.art-work__body{display:flex;flex-direction:column;gap:8px;padding:clamp(18px,1.8vw,24px)}
-.art-work__title{
-  margin:0;font-family:var(--font-display);font-weight:800;
-  font-size:clamp(17px,1.4vw,21px);line-height:1.15;letter-spacing:-.02em;color:var(--text-heading);
-}
-.art-work__meta{margin:0;font-size:13px;line-height:1.5;color:var(--text-mute)}
-.art-grid__empty{grid-column:1/-1;margin:0;padding:32px 0;font-size:16px;color:var(--text-mute)}
-
-/* Карточка проекта поверх страницы */
-.art-modal{
-  position:fixed;inset:0;z-index:120;display:none;padding:clamp(12px,3vw,40px);
-  align-items:center;justify-content:center;background:rgba(14,15,12,.82);
-}
-.art-modal.is-open{display:flex}
-.art-modal__box{
-  position:relative;width:100%;max-width:760px;max-height:100%;overflow-y:auto;
-  background:var(--surface-canvas);border-radius:var(--radius-xl);padding:clamp(24px,3vw,44px);
-  animation:fadeUp .3s var(--ease) both;
-}
-@media (prefers-reduced-motion: reduce){.art-modal__box{animation:none}}
-.art-modal__close{
-  position:absolute;top:clamp(12px,1.6vw,20px);right:clamp(12px,1.6vw,20px);
-  width:40px;height:40px;border-radius:var(--radius-pill);border:1px solid var(--border-default);
-  background:transparent;color:var(--text-heading);font-size:20px;line-height:1;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:background-color .15s ease;
-}
-.art-modal__close:hover{background:var(--surface-soft)}
-.art-modal__num{margin:0 0 8px;font-family:var(--font-display);font-weight:900;font-size:13px;letter-spacing:.06em;color:var(--text-mute)}
-.art-modal__title{
-  margin:0 0 clamp(16px,2vw,24px);padding-right:48px;font-family:var(--font-display);font-weight:900;
-  font-size:clamp(22px,2.6vw,36px);line-height:1.05;letter-spacing:-.025em;color:var(--text-heading);
-}
-.art-modal__media{border-radius:var(--radius-lg);overflow:hidden;margin-bottom:clamp(16px,2vw,24px);background:var(--z-ink)}
-.art-modal__media img{display:block;width:100%;height:auto}
-.art-modal__facts{display:flex;flex-wrap:wrap;gap:clamp(16px,2vw,28px);margin-bottom:clamp(20px,2.4vw,32px)}
-.art-modal__fact{flex:1 1 220px}
-.art-modal__fact dt{margin-bottom:6px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute)}
-.art-modal__fact dd{margin:0;font-size:clamp(15px,1.15vw,17px);line-height:1.5;color:var(--text-heading)}
-
-/* --------------------------------------------------------------------------
-   Производство, материалы, инженерия
-   -------------------------------------------------------------------------- */
-.art-production{padding:clamp(40px,5vw,80px) 0;display:flex;flex-direction:column}
-.art-block{
-  display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,64px);
-  padding:clamp(28px,4vw,56px) 0;border-top:1px solid var(--border-default);
-}
-.art-block:first-child{border-top:none;padding-top:0}
-.art-block__main{flex:1 1 420px;min-width:280px}
-.art-block__lead{margin:clamp(16px,2vw,24px) 0 0;max-width:34em;font-size:clamp(15px,1.2vw,18px);line-height:1.55;color:var(--text-body)}
-.art-list{flex:1 1 340px;min-width:260px;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:14px}
-.art-list li{padding-left:26px;position:relative;font-size:clamp(15px,1.15vw,17px);line-height:1.5;color:var(--text-body)}
-.art-list li::before{
-  content:'';position:absolute;left:0;top:.62em;width:14px;height:2px;border-radius:2px;background:var(--color-primary);
-}
-.art-tags{flex:1 1 340px;min-width:260px;margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start}
-.art-tags li{padding:8px 16px;border-radius:var(--radius-pill);background:var(--color-primary-pale);font-size:14px;font-weight:600;color:var(--text-heading)}
-
-/* --------------------------------------------------------------------------
-   Финальный призыв
-   -------------------------------------------------------------------------- */
-.art-cta{padding:clamp(40px,5vw,80px) 0}
-.art-cta__card{
-  background:var(--surface-dark);border-radius:var(--radius-xl);color:var(--text-on-dark);
-  padding:clamp(32px,5vw,72px);display:flex;flex-direction:column;gap:clamp(16px,2vw,24px);align-items:flex-start;
-}
-.art-cta__card h2{
-  margin:0;max-width:18em;font-family:var(--font-display);font-weight:900;
-  font-size:clamp(26px,4vw,56px);line-height:1;letter-spacing:-.025em;color:var(--z-canvas);text-wrap:balance;
-}
-.art-cta__card p{margin:0;max-width:40em;font-size:clamp(15px,1.2vw,18px);line-height:1.55;color:rgba(232,235,230,.72)}
-.art-cta__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
-
-/* --------------------------------------------------------------------------
-   Ритм страницы направления
-   Общие секции на главной идут с большим шагом — там между ними целый экран
-   контента. Здесь секции короче, и тот же шаг читается как дыры.
-   -------------------------------------------------------------------------- */
-.page-dir .clients{padding:clamp(28px,3.2vw,44px) 0}
-.page-dir .clients .section-eyebrow{margin-bottom:clamp(16px,2vw,24px)}
-.page-dir .process,
-.page-dir .reviews,
-.page-dir .faq{padding:clamp(40px,5vw,80px) 0}
-
-/* Этапы работы и цифры — один блок, а не две белые полосы подряд.
-   Заголовку даём воздух, этапы выравниваем по нижнему краю заголовков,
-   цифры кладём на серую карточку, чтобы они читались итогом блока,
-   а не случайными числами перед тёмной секцией. */
-.page-dir .process{padding-bottom:clamp(24px,3vw,40px)}
-.page-dir .process .section-head{margin-bottom:clamp(32px,4vw,52px)}
-.page-dir .timeline{margin-top:0}
-@media (min-width:1024px){
-  .page-dir .timeline__step h3{min-height:2.5em}
-}
-.page-dir .stats{padding:0 0 clamp(48px,6vw,88px)}
-.page-dir .stats__grid{
-  padding:clamp(24px,3vw,40px);
-  background:var(--surface-soft);border-radius:var(--radius-xl);
-}
-.page-dir .stats .stat{border-top-color:rgba(14,15,12,.16)}
-.page-dir .contacts{padding:clamp(40px,5vw,80px) 0 clamp(44px,5.5vw,88px)}
-.page-dir .section-head{margin-bottom:clamp(24px,2.8vw,36px)}
-.page-dir .timeline{margin-top:clamp(8px,1vw,16px)}

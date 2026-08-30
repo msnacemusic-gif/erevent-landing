@@ -71,8 +71,7 @@
 </div>
 
 <main>
-
-<section id="top" class="art-hero" data-screen-label="Первый экран">
+<section id="top" class="hero" data-screen-label="Первый экран">
   <div class="hero__bg" id="hero-bg">
     <video class="hero__video" id="hero-video" autoplay muted defaultmuted loop playsinline
            preload="auto" poster="../media/hero-still.jpg" aria-hidden="true">
@@ -82,31 +81,37 @@
   </div>
   <div class="hero__veil" aria-hidden="true"></div>
 
-  <div class="wrap art-hero__content">
-    <a href="#works" class="art-hero__badge reveal-init" style="--reveal-delay:40ms">Смета в день обращения →</a>
-    <h1 class="art-hero__title reveal-init" style="--reveal-delay:110ms">Экраны, звук и свет для мероприятий</h1>
-    <p class="art-hero__lead reveal-init" style="--reveal-delay:190ms">LED-экраны, TV-панели, звуковое и световое оборудование, трансляции.<br>Монтаж, настройка и дежурство инженера на площадке.</p>
-    <div class="art-hero__cta reveal-init" style="--reveal-delay:260ms">
-      <button type="button" class="btn btn--primary btn--lg js-go-form">Рассчитать проект</button>
-      <a href="#works" class="btn btn--tertiary btn--lg">Смотреть портфолио</a>
+  <div class="hero__content">
+    <p class="hero__eyebrow reveal-init" style="--reveal-delay:50ms">[СОБЫТИЯ РУМ — ЭКРАНЫ, ЗВУК И СВЕТ]</p>
+    <h1 class="hero__title reveal-init" style="--reveal-delay:120ms">Экраны, звук и свет для мероприятий</h1>
+    <div class="hero__row">
+      <p class="hero__lead reveal-init" style="--reveal-delay:200ms">LED-экраны, TV-панели, звуковое и световое оборудование, трансляции.<br>Монтаж, настройка и дежурство инженера на площадке.</p>
+      <div class="hero__cta reveal-init" style="--reveal-delay:280ms">
+    <button type="button" class="btn btn--primary btn--lg js-go-form">Рассчитать проект</button>
+    <a href="#cases" class="btn btn--ghost-dark">Смотреть портфолио</a>
+      </div>
     </div>
-    <p class="art-hero__meta reveal-init" style="--reveal-delay:330ms">100+ реализованных проектов · монтаж по всей России · смета в день обращения</p>
+    <div class="hero__foot reveal-init" style="--reveal-delay:360ms">
+      <span class="hero__foot-label">100+ реализованных проектов · монтаж по всей России · смета в день обращения</span>
+      <div class="hero__scroll-hint">
+        <span>Скролл</span>
+        <svg width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 1v17"></path><path d="M1.5 12.5 7 18.5l5.5-6"></path></svg>
+      </div>
+    </div>
   </div>
 </section>
-
 
 <section class="clients" data-screen-label="Клиенты">
   <p class="section-eyebrow section-eyebrow--dark reveal">[нам доверяют]</p>
   <div class="marquee-mask">
-    <div class="marquee-track marquee-track--clients">
-      <span class="marquee-group" id="page-clients-a"></span>
-      <span class="marquee-group" id="page-clients-b" aria-hidden="true"></span>
+    <div class="marquee-track" id="clients-track">
+      <span class="marquee-group" id="clients-group-a"></span>
+      <span class="marquee-group" id="clients-group-b" aria-hidden="true"></span>
     </div>
   </div>
 </section>
 
-
-<section id="what" class="art-what" data-screen-label="Что мы делаем">
+<section id="services" class="services" data-screen-label="Что мы делаем">
   <div class="wrap">
     <div class="section-head reveal">
       <div class="section-head__main">
@@ -189,25 +194,64 @@
         </span>
       </article>
     </div>
-    <p class="art-note reveal">Не нашли свою задачу в этих диапазонах — пришлите ТЗ, соберём комплект под неё.</p>
+    <p class="services__note reveal">Не нашли свою задачу в этих диапазонах — пришлите ТЗ, соберём комплект под неё.</p>
   </div>
 </section>
 
+<section class="stats" data-screen-label="Цифры">
+  <div class="wrap">
+    <p class="section-eyebrow reveal">[в цифрах]</p>
+    <div class="stats__grid" id="stats-grid">
+      <div class="stat reveal">
+        <div class="stat__row"><span class="stat__num" data-value="100" data-suffix="+">0</span></div>
+        <span class="stat__label">реализованных проектов</span>
+      </div>
+      <div class="stat reveal" style="--reveal-delay:80ms">
+        <div class="stat__row"><span class="stat__num" data-value="300" data-suffix="">0</span><span class="stat__unit">м²</span></div>
+        <span class="stat__label">собственного производства</span>
+      </div>
+      <div class="stat reveal" style="--reveal-delay:160ms">
+        <div class="stat__row"><span class="stat__num" data-value="7" data-suffix="">0</span></div>
+        <span class="stat__label">лет на рынке</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-<section id="works" class="art-works" data-screen-label="Портфолио">
+<section id="cases" class="cases" data-screen-label="Кейсы">
   <div class="wrap">
     <div class="section-head reveal">
       <div class="section-head__main">
-        <p class="section-eyebrow">[портфолио]</p>
-        <h2 class="section-title section-title--md">Портфолио</h2>
+        <p class="section-eyebrow">[кейсы]</p>
+        <h2 class="section-title">Кейсы</h2>
       </div>
-      <p class="section-head__note">Проекты, где мы отвечали за технику: экраны, звук и свет.</p>
+      <p class="section-head__note">Проекты, где мы отвечали за технику: экраны, звук и свет. Нажмите на строку — раскроются заказчик, задачи и площадка.</p>
     </div>
 
-    <div class="art-grid" id="page-grid"></div>
+    <div class="cases__list" id="cases-list"></div>
+
+    <div class="cases__more" id="cases-more" hidden>
+      <button type="button" class="btn btn--tertiary btn--lg" id="cases-more-btn">Показать ещё</button>
+    </div>
   </div>
 </section>
 
+<section id="reviews" class="reviews" data-screen-label="Отзывы">
+  <div class="wrap">
+    <div class="section-head section-head--dark reveal">
+      <div class="section-head__main">
+        <p class="section-eyebrow section-eyebrow--dark">[отзывы]</p>
+        <h2 class="section-title section-title--contacts">Отзывы</h2>
+      </div>
+      <div class="reviews__nav">
+        <button type="button" class="reviews__arrow" id="reviews-prev" aria-label="Предыдущий отзыв" aria-controls="reviews-track"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"></path></svg></button>
+        <button type="button" class="reviews__arrow" id="reviews-next" aria-label="Следующий отзыв" aria-controls="reviews-track"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"></path></svg></button>
+      </div>
+    </div>
+    <div class="reviews__viewport reveal" id="reviews-track" tabindex="0" role="group" aria-label="Отзывы заказчиков, прокручивается вбок"></div>
+    <div class="reviews__dots" id="reviews-dots" role="tablist" aria-label="Переключение отзывов"></div>
+  </div>
+</section>
 
 <section id="process" class="process" data-screen-label="Как работаем">
   <div class="wrap">
@@ -236,63 +280,12 @@
   </div>
 </section>
 
-
-<section class="stats" data-screen-label="Цифры">
-  <div class="wrap">
-    <div class="stats__grid" id="stats-grid">
-      <div class="stat reveal">
-        <div class="stat__row"><span class="stat__num" data-value="100" data-suffix="+">0</span></div>
-        <p class="stat__label">реализованных проектов</p>
-      </div>
-      <div class="stat reveal" style="--reveal-delay:80ms">
-        <div class="stat__row"><span class="stat__num" data-value="300" data-suffix="">0</span><span class="stat__unit">м²</span></div>
-        <p class="stat__label">собственного производства</p>
-      </div>
-      <div class="stat reveal" style="--reveal-delay:160ms">
-        <div class="stat__row"><span class="stat__num" data-value="7" data-suffix="">0</span></div>
-        <p class="stat__label">лет на рынке</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section id="reviews" class="reviews" data-screen-label="Отзывы">
-  <div class="wrap">
-    <div class="section-head section-head--dark reveal">
-      <div class="section-head__main">
-        <p class="section-eyebrow section-eyebrow--dark">[отзывы]</p>
-        <h2 class="section-title section-title--contacts">Отзывы</h2>
-      </div>
-      <div class="reviews__nav">
-        <button type="button" class="reviews__arrow" id="reviews-prev" aria-label="Предыдущий отзыв" aria-controls="reviews-track"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"></path></svg></button>
-        <button type="button" class="reviews__arrow" id="reviews-next" aria-label="Следующий отзыв" aria-controls="reviews-track"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"></path></svg></button>
-      </div>
-    </div>
-    <div class="reviews__viewport reveal" id="reviews-track" tabindex="0" role="group" aria-label="Отзывы заказчиков, прокручивается вбок"></div>
-    <div class="reviews__dots" id="reviews-dots" role="tablist" aria-label="Переключение отзывов"></div>
-  </div>
-</section>
-
-
-<section class="art-cta" data-screen-label="Финальный CTA">
-  <div class="wrap">
-    <div class="art-cta__card reveal">
-      <h2>Расскажите про площадку — соберём комплект и посчитаем</h2>
-      <p>Пришлём состав оборудования, смету и график монтажа. Звонок — по вашему запросу.</p>
-      <div class="art-cta__actions">
-        <button type="button" class="btn btn--primary btn--lg js-go-form">Обсудить проект</button>
-        <a href="https://t.me/sidorovnikitiy" target="_blank" rel="noopener" class="btn btn--ghost-dark">Написать в Telegram</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section id="contacts" class="contacts" data-screen-label="Заявка">
   <div class="wrap">
     <div class="section-head section-head--dark reveal">
       <p class="section-eyebrow section-eyebrow--dark">[заявка]</p>
       <h2 class="section-title section-title--contacts">Заявка на просчёт — вернёмся со сметой в тот же день</h2>
+      <p class="section-head__note section-head__note--dark">Пришлём состав оборудования, смету и график монтажа. Звонок — по вашему запросу.</p>
     </div>
 
     <div class="contacts__grid">
@@ -407,6 +400,7 @@
       </aside>
     </div>
   </div>
+</section>
 </main>
 
 <footer class="footer" data-screen-label="Футер">
@@ -464,6 +458,5 @@
 
 <script type="application/json" id="page-data">{"base": "../", "clients": ["Сбербанк", "Haval", "Parimatch", "BingX", "ВДНХ", "Парк Горького", "Зарядье", "ТРЦ «Метрополис»", "Музей Москвы", "Loft Hall", "Технопарк Сколково", "ЦВЗ «Манеж»", "Городские парки", "ТРЦ «Меридиан»", "Таврида", "БЦ Парк Победы"], "works": [{"n": "01", "title": "World Atomic Week", "year": "2025", "client": "ATOM EXPO", "tasks": "Аренда оборудования, застройка тематической зоны", "place": "ВДНХ"}, {"n": "04", "title": "Всероссийская неделя охраны труда", "year": "2024, 2025", "client": "Министерство труда, ген. подрядчик", "tasks": "Мебельное обеспечение форумной программы, оборудование стендов, клининг, хэлперы", "place": "Университет «Сириус»"}, {"n": "07", "title": "Турнир по падл-теннису", "year": "2025", "client": "Parimatch, ген. подрядчик", "tasks": "Звук, TV-панели, мебель, техническое сопровождение", "place": "Яхт-клуб «Адмирал»"}]}</script>
 <script src="../script.js"></script>
-<script src="../page.js"></script>
 </body>
 </html>
