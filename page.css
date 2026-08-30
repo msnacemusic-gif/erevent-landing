@@ -208,9 +208,25 @@
 .page-dir .clients{padding:clamp(28px,3.2vw,44px) 0}
 .page-dir .clients .section-eyebrow{margin-bottom:clamp(16px,2vw,24px)}
 .page-dir .process,
-.page-dir .stats,
 .page-dir .reviews,
 .page-dir .faq{padding:clamp(40px,5vw,80px) 0}
+
+/* Этапы работы и цифры — один блок, а не две белые полосы подряд.
+   Заголовку даём воздух, этапы выравниваем по нижнему краю заголовков,
+   цифры кладём на серую карточку, чтобы они читались итогом блока,
+   а не случайными числами перед тёмной секцией. */
+.page-dir .process{padding-bottom:clamp(24px,3vw,40px)}
+.page-dir .process .section-head{margin-bottom:clamp(32px,4vw,52px)}
+.page-dir .timeline{margin-top:0}
+@media (min-width:1024px){
+  .page-dir .timeline__step h3{min-height:2.5em}
+}
+.page-dir .stats{padding:0 0 clamp(48px,6vw,88px)}
+.page-dir .stats__grid{
+  padding:clamp(24px,3vw,40px);
+  background:var(--surface-soft);border-radius:var(--radius-xl);
+}
+.page-dir .stats .stat{border-top-color:rgba(14,15,12,.16)}
 .page-dir .contacts{padding:clamp(40px,5vw,80px) 0 clamp(44px,5.5vw,88px)}
 .page-dir .section-head{margin-bottom:clamp(24px,2.8vw,36px)}
 .page-dir .timeline{margin-top:clamp(8px,1vw,16px)}
