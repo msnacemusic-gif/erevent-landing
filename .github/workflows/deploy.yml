@@ -40,12 +40,12 @@ jobs:
           server-dir: /home/c/co522702/sobroom/public_html/
           # Действие сравнивает файлы с прошлой выкладкой и заливает только
           # изменённые. Служебное на сервер не уезжает.
-          exclude:
-            - "**/.git*"
-            - "**/.git*/**"
-            - "**/.github/**"
-            - "**/node_modules/**"
-            - "**/*.md"
-            - "chats/**"
-            - "project/**"
-            - "serverless/**"
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/node_modules/**
+            **/*.md
+            chats/**
+            project/**
+            serverless/**
