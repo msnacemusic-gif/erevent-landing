@@ -1,0 +1,51 @@
+# Автоматическая выкладка сайта на хостинг Timeweb по FTP.
+# Срабатывает на каждый пуш в main, а также вручную — кнопкой Run workflow
+# на вкладке Actions.
+#
+# Доступы лежат в секретах репозитория (Settings → Secrets and variables →
+# Actions): FTP_SERVER, FTP_USERNAME, FTP_PASSWORD. В коде их нет.
+name: Деплой на Timeweb
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Одновременно идёт только одна выкладка: два параллельных заливки
+# перетёрли бы файлы друг друга.
+concurrency:
+  group: ftp-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Залить файлы сайта на FTP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Забрать код
+        uses: actions/checkout@v4
+
+      - name: Залить по FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # Timeweb принимает обычный FTP. Если в панели хостинга включён
+          # FTPS — поменяйте на ftps.
+          protocol: ftp
+          port: 21
+          local-dir: ./
+          server-dir: /home/c/co522702/sobroom/public_html/
+          # Действие сравнивает файлы с прошлой выкладкой и заливает только
+          # изменённые. Служебное на сервер не уезжает.
+          exclude:
+            - "**/.git*"
+            - "**/.git*/**"
+            - "**/.github/**"
+            - "**/node_modules/**"
+            - "**/*.md"
+            - "chats/**"
+            - "project/**"
+            - "serverless/**"
