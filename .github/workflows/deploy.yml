@@ -52,6 +52,28 @@ jobs:
             project/**
             serverless/**
 
+      # Временная диагностика: смотрим, куда на сервере легли файлы
+      # и как устроены каталоги аккаунта.
+      - name: Показать каталоги на сервере
+        continue-on-error: true
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set +e
+          list () {
+            echo "== $1"
+            curl -sS --max-time 30 --list-only \
+              --user "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_SERVER$1" | head -40
+            echo
+          }
+          list "/"
+          list "//home/c/co522702/"
+          list "//home/c/co522702/sobroom/"
+          list "//home/c/co522702/sobroom/public_html/"
+          list "//home/c/co522702/public_html/"
+
       # Проверка после выкладки: открывается ли сайт по домену и что именно
       # отдаёт сервер. Шаг только сообщает результат и не роняет выкладку.
       - name: Проверить сайт
