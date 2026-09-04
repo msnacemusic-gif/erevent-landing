@@ -39,7 +39,9 @@ jobs:
           local-dir: ./
           server-dir: /home/c/co522702/sobroom/public_html/
           # Действие сравнивает файлы с прошлой выкладкой и заливает только
-          # изменённые. Служебное на сервер не уезжает.
+          # изменённые.
+          # Служебное на сервер не уезжает. .htaccess под исключения
+          # не попадает — он нужен хостингу, чтобы отдавать index.html.
           exclude: |
             **/.git*
             **/.git*/**
@@ -49,3 +51,22 @@ jobs:
             chats/**
             project/**
             serverless/**
+
+      # Быстрая проверка после выкладки: сайт открывается и это наши страницы.
+      # Шаг только сообщает результат и не роняет выкладку.
+      - name: Проверить сайт
+        continue-on-error: true
+        run: |
+          set +e
+          echo "== https://sobroom.ru/"
+          curl -sSL --max-time 40 -o page.html \
+            -w 'код ответа: %{http_code}\nконечный адрес: %{url_effective}\nразмер: %{size_download} байт\n' \
+            https://sobroom.ru/
+          echo "== заголовок страницы"
+          grep -o '<title>[^<]*</title>' page.html | head -1
+          if grep -q 'СОБЫТИЯ РУМ' page.html; then
+            echo "OK: отдаётся наш сайт"
+          else
+            echo "ВНИМАНИЕ: на странице нет нашей разметки — вероятно, всё ещё заглушка хостинга"
+            head -c 600 page.html
+          fi

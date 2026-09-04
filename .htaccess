@@ -1,0 +1,3 @@
+# Хостинг Timeweb кладёт в корень свою заглушку index.htm и отдаёт её
+# первой. Эта строка говорит серверу открывать наш index.html.
+DirectoryIndex index.html
