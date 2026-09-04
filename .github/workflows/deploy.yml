@@ -37,7 +37,10 @@ jobs:
           protocol: ftp
           port: 21
           local-dir: ./
-          server-dir: /home/c/co522702/sobroom/public_html/
+          # FTP-сервер отсчитывает путь от домашней папки аккаунта, поэтому
+          # путь короткий. Полный путь на сервере — /home/c/co522702/sobroom/public_html/,
+          # но если написать его целиком, внутри создастся вложенная копия.
+          server-dir: /sobroom/public_html/
           # Действие сравнивает файлы с прошлой выкладкой и заливает только
           # изменённые.
           # Служебное на сервер не уезжает. .htaccess под исключения
@@ -69,10 +72,8 @@ jobs:
             echo
           }
           list "/"
-          list "//home/c/co522702/"
-          list "//home/c/co522702/sobroom/"
-          list "//home/c/co522702/sobroom/public_html/"
-          list "//home/c/co522702/public_html/"
+          list "/sobroom/"
+          list "/sobroom/public_html/"
 
       # Проверка после выкладки: открывается ли сайт по домену и что именно
       # отдаёт сервер. Шаг только сообщает результат и не роняет выкладку.
