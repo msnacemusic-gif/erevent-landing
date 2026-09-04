@@ -52,21 +52,32 @@ jobs:
             project/**
             serverless/**
 
-      # Быстрая проверка после выкладки: сайт открывается и это наши страницы.
-      # Шаг только сообщает результат и не роняет выкладку.
+      # Проверка после выкладки: открывается ли сайт по домену и что именно
+      # отдаёт сервер. Шаг только сообщает результат и не роняет выкладку.
       - name: Проверить сайт
         continue-on-error: true
         run: |
           set +e
-          echo "== https://sobroom.ru/"
-          curl -sSL --max-time 40 -o page.html \
-            -w 'код ответа: %{http_code}\nконечный адрес: %{url_effective}\nразмер: %{size_download} байт\n' \
-            https://sobroom.ru/
-          echo "== заголовок страницы"
-          grep -o '<title>[^<]*</title>' page.html | head -1
+          echo "== куда указывает домен"
+          getent hosts sobroom.ru
+          getent hosts www.sobroom.ru
+          echo
+          echo "== ответы сервера"
+          for u in https://sobroom.ru/ https://sobroom.ru/index.html \
+                   https://sobroom.ru/styles.css https://sobroom.ru/.htaccess \
+                   https://www.sobroom.ru/; do
+            code=$(curl -sSL --max-time 30 -o /tmp/probe -w '%{http_code}' "$u")
+            size=$(stat -c%s /tmp/probe 2>/dev/null)
+            title=$(grep -o '<title>[^<]*</title>' /tmp/probe | head -1)
+            echo "$u -> код $code, $size байт  $title"
+          done
+          echo
+          echo "== заголовки ответа с /"
+          curl -sSI --max-time 30 https://sobroom.ru/ | head -12
+          echo
+          curl -sSL --max-time 30 -o page.html https://sobroom.ru/
           if grep -q 'СОБЫТИЯ РУМ' page.html; then
             echo "OK: отдаётся наш сайт"
           else
-            echo "ВНИМАНИЕ: на странице нет нашей разметки — вероятно, всё ещё заглушка хостинга"
-            head -c 600 page.html
+            echo "ВНИМАНИЕ: домен отдаёт не наш сайт"
           fi
