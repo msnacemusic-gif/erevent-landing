@@ -55,52 +55,24 @@ jobs:
             project/**
             serverless/**
 
-      # Временная диагностика: смотрим, куда на сервере легли файлы
-      # и как устроены каталоги аккаунта.
-      - name: Показать каталоги на сервере
-        continue-on-error: true
-        env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        run: |
-          set +e
-          list () {
-            echo "== $1"
-            curl -sS --max-time 30 --list-only \
-              --user "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_SERVER$1" | head -40
-            echo
-          }
-          list "/"
-          list "/sobroom/"
-          list "/sobroom/public_html/"
-
-      # Проверка после выкладки: открывается ли сайт по домену и что именно
-      # отдаёт сервер. Шаг только сообщает результат и не роняет выкладку.
+      # Проверка после выкладки: открывается ли сайт и все ли страницы на месте.
+      # Шаг только сообщает результат и не роняет выкладку.
       - name: Проверить сайт
         continue-on-error: true
         run: |
           set +e
-          echo "== куда указывает домен"
-          getent hosts sobroom.ru
-          getent hosts www.sobroom.ru
-          echo
-          echo "== ответы сервера"
-          for u in https://sobroom.ru/ https://sobroom.ru/index.html \
-                   https://sobroom.ru/styles.css https://sobroom.ru/.htaccess \
-                   https://www.sobroom.ru/; do
-            code=$(curl -sSL --max-time 30 -o /tmp/probe -w '%{http_code}' "$u")
-            size=$(stat -c%s /tmp/probe 2>/dev/null)
+          fail=0
+          for path in / /art-obekty/ /mebel-oborudovanie/ /keitering/ \
+                      /ekrany-svet-zvuk/ /privacy/ /styles.css /script.js; do
+            code=$(curl -sSL --max-time 30 -o /tmp/probe -w '%{http_code}' "https://sobroom.ru$path")
             title=$(grep -o '<title>[^<]*</title>' /tmp/probe | head -1)
-            echo "$u -> код $code, $size байт  $title"
+            echo "$path -> код $code  $title"
+            [ "$code" = "200" ] || fail=1
           done
           echo
-          echo "== заголовки ответа с /"
-          curl -sSI --max-time 30 https://sobroom.ru/ | head -12
-          echo
           curl -sSL --max-time 30 -o page.html https://sobroom.ru/
-          if grep -q 'СОБЫТИЯ РУМ' page.html; then
-            echo "OK: отдаётся наш сайт"
+          if grep -q 'СОБЫТИЯ РУМ' page.html && [ "$fail" = "0" ]; then
+            echo "OK: сайт открывается, все страницы отвечают"
           else
-            echo "ВНИМАНИЕ: домен отдаёт не наш сайт"
+            echo "ВНИМАНИЕ: сайт отвечает не полностью — смотрите коды выше"
           fi
