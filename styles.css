@@ -542,6 +542,8 @@ h1,h2,h3,p,blockquote,figure{margin:0}
 .production__lead{margin:0 0 24px;font-size:clamp(16px,1.25vw,19px);line-height:1.55;color:var(--text-body)}
 .production__tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
 .production__extra{margin-top:clamp(36px,4.5vw,64px);padding-top:clamp(32px,4vw,52px);border-top:1px solid rgba(14,15,12,.14)}
+/* Пока блок с медиа скрыт, продолжение не начинается с линейки. */
+.production__grid[hidden] + .wrap .production__extra:first-child{margin-top:0;padding-top:0;border-top:none}
 .production__extra .section-title{margin:0 0 20px}
 .production__extra .points{margin-bottom:0}
 .production__extra .production__tags{margin-bottom:0}
