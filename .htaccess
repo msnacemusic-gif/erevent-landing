@@ -1,3 +1,16 @@
 # Хостинг Timeweb кладёт в корень свою заглушку index.htm и отдаёт её
 # первой. Эта строка говорит серверу открывать наш index.html.
 DirectoryIndex index.html
+
+# Принудительный HTTPS.
+# Timeweb работает за прокси: сам сайт видит обычный HTTP, а о том, что
+# посетитель пришёл по защищённому адресу, сообщает заголовок
+# X-Forwarded-Proto. Поэтому проверяем и переменную HTTPS, и заголовок:
+# перенаправляем только если ни то, ни другое не говорит про https.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+  RewriteCond %{HTTP:X-Forwarded-SSL} !on [NC]
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+</IfModule>

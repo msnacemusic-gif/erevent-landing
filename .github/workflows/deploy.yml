@@ -55,24 +55,39 @@ jobs:
             project/**
             serverless/**
 
-      # Проверка после выкладки: открывается ли сайт и все ли страницы на месте.
-      # Шаг только сообщает результат и не роняет выкладку.
+      # Проверка после выкладки: перебрасывает ли http на https, открываются
+      # ли страницы и отдаются ли иконки. Шаг не роняет выкладку.
       - name: Проверить сайт
         continue-on-error: true
         run: |
           set +e
+          echo "== переход с http на https"
+          curl -sS --max-time 30 -o /dev/null -D /tmp/head http://sobroom.ru/
+          head -1 /tmp/head
+          grep -i '^location:' /tmp/head
+          final=$(curl -sSL --max-time 40 --max-redirs 5 -o /dev/null \
+                    -w '%{http_code} %{url_effective}' http://sobroom.ru/)
+          echo "после переходов: $final"
+          case "$final" in
+            "200 https://sobroom.ru/") echo "OK: http перебрасывает на https" ;;
+            *) echo "ВНИМАНИЕ: редирект не сработал или зациклился" ;;
+          esac
+          echo
+          echo "== страницы и файлы"
           fail=0
           for path in / /art-obekty/ /mebel-oborudovanie/ /keitering/ \
-                      /ekrany-svet-zvuk/ /privacy/ /styles.css /script.js; do
-            code=$(curl -sSL --max-time 30 -o /tmp/probe -w '%{http_code}' "https://sobroom.ru$path")
-            title=$(grep -o '<title>[^<]*</title>' /tmp/probe | head -1)
-            echo "$path -> код $code  $title"
-            [ "$code" = "200" ] || fail=1
+                      /ekrany-svet-zvuk/ /privacy/ /styles.css /script.js \
+                      /favicon.ico /media/favicon-32.png /media/favicon-16.png \
+                      /media/apple-touch-icon.png; do
+            out=$(curl -sSL --max-time 30 -o /dev/null \
+                    -w '%{http_code} %{content_type}' "https://sobroom.ru$path")
+            echo "$path -> $out"
+            case "$out" in 200*) ;; *) fail=1 ;; esac
           done
           echo
           curl -sSL --max-time 30 -o page.html https://sobroom.ru/
           if grep -q 'СОБЫТИЯ РУМ' page.html && [ "$fail" = "0" ]; then
-            echo "OK: сайт открывается, все страницы отвечают"
+            echo "OK: сайт открывается, все файлы на месте"
           else
-            echo "ВНИМАНИЕ: сайт отвечает не полностью — смотрите коды выше"
+            echo "ВНИМАНИЕ: что-то отвечает не так — смотрите коды выше"
           fi
