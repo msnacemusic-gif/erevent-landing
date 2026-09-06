@@ -85,6 +85,25 @@ jobs:
             case "$out" in 200*) ;; *) fail=1 ;; esac
           done
           echo
+          echo "== смешанное содержимое: ищем http:// в отданных файлах"
+          mixed=0
+          for f in / /styles.css /script.js /page.css /art-obekty/ /privacy/ \
+                   /privacy/privacy.css; do
+            hits=$(curl -sSL --max-time 30 "https://sobroom.ru$f" \
+                   | grep -oE 'http://[^"'"'"'` )]+' | sort -u)
+            if [ -n "$hits" ]; then
+              echo "$f:"
+              echo "$hits" | sed 's/^/    /'
+              mixed=1
+            fi
+          done
+          if [ "$mixed" = "0" ]; then
+            echo "OK: ссылок по http в отданных файлах нет"
+          else
+            echo "ВНИМАНИЕ: найдены ссылки по http — они и дают «не защищено»"
+          fi
+
+          echo
           curl -sSL --max-time 30 -o page.html https://sobroom.ru/
           if grep -q 'СОБЫТИЯ РУМ' page.html && [ "$fail" = "0" ]; then
             echo "OK: сайт открывается, все файлы на месте"
