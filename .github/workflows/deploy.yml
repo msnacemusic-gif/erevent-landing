@@ -26,6 +26,57 @@ jobs:
       - name: Забрать код
         uses: actions/checkout@v4
 
+      # Настройки приёмника заявок собираются из секретов репозитория.
+      # В репозитории их нет: файл создаётся здесь и уезжает вместе с сайтом.
+      # Значения передаются в base64, чтобы кавычки и спецсимволы в пароле
+      # не сломали синтаксис PHP.
+      - name: Собрать настройки приёмника заявок
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          MAIL_USER: ${{ secrets.MAIL_USER }}
+          MAIL_PASS: ${{ secrets.MAIL_PASS }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+          LEADS_USER: ${{ secrets.LEADS_USER }}
+          LEADS_PASS: ${{ secrets.LEADS_PASS }}
+        run: |
+          b64 () { printf '%s' "$1" | base64 -w0; }
+          {
+            echo "<?php"
+            echo "// Файл собран выкладкой из секретов репозитория. Не редактировать вручную."
+            echo "return ["
+            echo "    'db_host' => base64_decode('$(b64 "${DB_HOST:-localhost}")'),"
+            echo "    'db_name' => base64_decode('$(b64 "$DB_NAME")'),"
+            echo "    'db_user' => base64_decode('$(b64 "$DB_USER")'),"
+            echo "    'db_pass' => base64_decode('$(b64 "$DB_PASS")'),"
+            echo "    'bot_token' => base64_decode('$(b64 "$BOT_TOKEN")'),"
+            echo "    'chat_id' => base64_decode('$(b64 "$CHAT_ID")'),"
+            echo "    'mail_host' => 'smtp.timeweb.ru',"
+            echo "    'mail_port' => 465,"
+            echo "    'mail_user' => base64_decode('$(b64 "$MAIL_USER")'),"
+            echo "    'mail_pass' => base64_decode('$(b64 "$MAIL_PASS")'),"
+            echo "    'mail_to' => base64_decode('$(b64 "$MAIL_TO")'),"
+            echo "    'leads_user' => base64_decode('$(b64 "$LEADS_USER")'),"
+            echo "    'leads_pass' => base64_decode('$(b64 "$LEADS_PASS")'),"
+            echo "    'site' => 'https://sobroom.ru',"
+            echo "];"
+          } > form/config.php
+          php -l form/config.php || true
+          missing=""
+          for name in DB_NAME DB_USER DB_PASS BOT_TOKEN CHAT_ID MAIL_USER MAIL_PASS MAIL_TO LEADS_USER LEADS_PASS; do
+            [ -z "${!name}" ] && missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "ВНИМАНИЕ: не заданы секреты:$missing"
+            echo "Пока их нет, заявки пишутся в запасной журнал на сервере."
+          else
+            echo "Все секреты на месте."
+          fi
+
       - name: Залить по FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -84,6 +135,31 @@ jobs:
             echo "$path -> $out"
             case "$out" in 200*) ;; *) fail=1 ;; esac
           done
+          echo
+          echo "== приёмник заявок"
+          # Заявка без телефона и почты: обработчик обязан её отклонить.
+          # В базу при этом ничего не пишется — лишних записей не появится.
+          out=$(curl -sS --max-time 30 -w '\n%{http_code}' \
+                  -F 'name=Проверка выкладки' https://sobroom.ru/form/submit.php)
+          echo "$out" | tail -2
+          case "$(echo "$out" | tail -1)" in
+            422) echo "OK: обработчик работает и проверяет контакты" ;;
+            *) echo "ВНИМАНИЕ: обработчик отвечает не так, как ожидалось" ;;
+          esac
+
+          echo
+          echo "== закрытые адреса"
+          for path in /form/config.php /form/lib.php /form/fallback/leads.jsonl \
+                      /zayavki-pzned3/; do
+            code=$(curl -sS --max-time 30 -o /dev/null -w '%{http_code}' "https://sobroom.ru$path")
+            case "$path:$code" in
+              /zayavki-pzned3/:401) echo "$path -> $code (просит пароль — верно)" ;;
+              /zayavki-pzned3/:*) echo "$path -> $code ВНИМАНИЕ: страница заявок открыта без пароля" ;;
+              *:403|*:404) echo "$path -> $code (закрыт — верно)" ;;
+              *) echo "$path -> $code ВНИМАНИЕ: файл отдаётся наружу" ;;
+            esac
+          done
+
           echo
           echo "== смешанное содержимое: ищем http:// в отданных файлах"
           mixed=0

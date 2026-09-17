@@ -1,0 +1,11 @@
+# В этой папке лежат вложения из заявок. Ничего исполняемого здесь быть
+# не должно: любой файл отдаём как обычный текст или скачивание.
+Options -Indexes
+
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .pht .phar .cgi .pl .py
+AddType text/plain .php .phtml .php3 .php4 .php5 .php7 .php8 .pht .phar .cgi .pl .py
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Content-Disposition "attachment"
+</IfModule>

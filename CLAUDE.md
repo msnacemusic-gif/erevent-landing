@@ -26,11 +26,22 @@ Cloudflare, Brevo, @BotFather, домен. Там шаги описывать н
 GitHub Pages отдаёт ветку `main`, правки выкатываются автоматически.
 
 - `index.html`, `styles.css`, `script.js` — главная и общий код
+- `art-obekty/`, `mebel-oborudovanie/`, `keitering/`, `ekrany-svet-zvuk/` —
+  страницы направлений, общие `page.css` и данные в блоке `page-data`
 - `privacy/` — политика конфиденциальности
-- `art-obekty/` — страница декораций и арт-объектов (свои `art.css`, `art.js`)
-- `media/` — фото, логотипы, hero-видео
-- `serverless/telegram-relay.js` — приёмник заявок на Cloudflare Worker
+- `media/` — фото, логотипы, hero-видео, иконки
+- `form/` — приёмник заявок на PHP: `submit.php`, общий `lib.php`,
+  вложения в `uploads/`. Настройки `form/config.php` в репозитории не лежат:
+  их собирает выкладка из секретов GitHub
+- `zayavki-pzned3/` — страница просмотра заявок, вход по паролю
+- `serverless/telegram-relay.js` — прежний приёмник на Cloudflare, больше
+  не используется, оставлен на случай отката
 - `project/`, `chats/` — исходные макеты Claude Design, сайт их не использует
+
+Сайт выкладывается на хостинг Timeweb по FTP из `.github/workflows/deploy.yml`.
+Путь на сервере отсчитывается от домашней папки аккаунта: `/sobroom/public_html/`.
+Заявки пишутся в базу MySQL на том же сервере и только после этого уходят
+в Telegram и на почту — так первичная запись остаётся в России.
 
 `styles.css` и `script.js` общие для всех страниц. Скрипт проверяет наличие
 блока перед обращением к нему — страница без кейсов или без видео его не

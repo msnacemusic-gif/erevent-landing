@@ -1,0 +1,12 @@
+# Настройки и общий код напрямую из браузера не открываются.
+<FilesMatch "^(config\.php|config\.sample\.php|lib\.php)$">
+  Require all denied
+</FilesMatch>
+
+# Запасной журнал заявок — закрыт целиком.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^fallback/ - [F,L]
+</IfModule>
+
+Options -Indexes

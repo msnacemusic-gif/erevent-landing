@@ -5,11 +5,11 @@
 
   var EASE = 'cubic-bezier(0.16,1,0.3,1)';
 
-  /* Адрес приёмника заявок (Cloudflare Worker из serverless/telegram-relay.js).
-     Он держит токен бота у себя и пересылает заявку в @Ereventbot_bot.
-     Пустая строка — форма только имитирует отправку и заявки никуда
-     не уходят. */
-  var LEAD_ENDPOINT = 'https://lingering-credit-51ce.msnace-music.workers.dev/';
+  /* Приёмник заявок на своём хостинге: form/submit.php. Он записывает
+     заявку в базу на сервере в России и только потом шлёт уведомления
+     в Telegram и на почту. Адрес относительный — на внутренних страницах
+     к нему подставляется «../» (см. PAGE.base ниже). */
+  var LEAD_ENDPOINT = 'form/submit.php';
 
   /* ------------------------------------------------------------------ */
   /* Data                                                                 */
@@ -41,6 +41,9 @@
     if (!el) return {};
     try { return JSON.parse(el.textContent) || {}; } catch (e) { return {}; }
   })();
+
+  // На страницах направлений сайт лежит на уровень выше.
+  LEAD_ENDPOINT = (PAGE.base || '') + LEAD_ENDPOINT;
 
   var CLIENTS = ['Росконгресс', 'Сбербанк', 'Parimatch', 'Haval', 'BingX', 'VK', 'Росатом', 'Минтруд', 'Росмолодёжь'];
 
