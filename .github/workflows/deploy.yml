@@ -154,7 +154,8 @@ jobs:
             code=$(curl -sS --max-time 30 -o /dev/null -w '%{http_code}' "https://sobroom.ru$path")
             case "$path:$code" in
               /zayavki-pzned3/:401) echo "$path -> $code (просит пароль — верно)" ;;
-              /zayavki-pzned3/:*) echo "$path -> $code ВНИМАНИЕ: страница заявок открыта без пароля" ;;
+              /zayavki-pzned3/:200) echo "$path -> $code ВНИМАНИЕ: страница заявок открыта без пароля" ;;
+              /zayavki-pzned3/:*) echo "$path -> $code ВНИМАНИЕ: страница заявок не открывается" ;;
               *:403|*:404) echo "$path -> $code (закрыт — верно)" ;;
               *) echo "$path -> $code ВНИМАНИЕ: файл отдаётся наружу" ;;
             esac
