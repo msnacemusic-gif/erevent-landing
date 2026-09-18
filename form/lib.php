@@ -146,10 +146,17 @@ function json_out(array $data, int $code = 200): void
 /* Telegram                                                             */
 /* ------------------------------------------------------------------ */
 
-function tg_send(string $html): bool
+function tg_send(string $html, ?array &$log = null): bool
 {
     $c = cfg();
+    $note = function (string $line) use (&$log) { if (is_array($log)) { $log[] = $line; } };
+
     if ($c['bot_token'] === '' || $c['chat_id'] === '') {
+        $note('не задан токен бота или адрес чата');
+        return false;
+    }
+    if (!function_exists('curl_init')) {
+        $note('на хостинге нет расширения curl');
         return false;
     }
 
@@ -169,7 +176,10 @@ function tg_send(string $html): bool
         CURLOPT_TIMEOUT => 15,
     ]);
     $res = curl_exec($ch);
-    $ok = $res !== false && curl_getinfo($ch, CURLINFO_RESPONSE_CODE) === 200;
+    $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    $ok = $res !== false && $code === 200;
+    $note('ответ Telegram: код ' . $code
+        . ($res === false ? ', ошибка связи: ' . curl_error($ch) : ' ' . mb_substr((string) $res, 0, 300)));
     if (!$ok) {
         error_log('erevent: telegram не ответил — ' . curl_error($ch) . ' ' . (string) $res);
     }
@@ -185,10 +195,13 @@ function tg_send(string $html): bool
  * Небольшой SMTP-клиент. Готовой библиотеки на хостинге нет, а встроенная
  * функция mail() не умеет авторизацию, поэтому говорим с сервером сами.
  */
-function smtp_send(string $subject, string $html, string $replyTo = ''): bool
+function smtp_send(string $subject, string $html, string $replyTo = '', ?array &$log = null): bool
 {
     $c = cfg();
+    $note = function (string $line) use (&$log) { if (is_array($log)) { $log[] = $line; } };
+
     if ($c['mail_user'] === '' || $c['mail_pass'] === '' || $c['mail_to'] === '') {
+        $note('не заданы адрес ящика, пароль или получатель');
         return false;
     }
 
@@ -199,8 +212,10 @@ function smtp_send(string $subject, string $html, string $replyTo = ''): bool
 
     $port = (int) $c['mail_port'];
     $host = ($port === 465 ? 'ssl://' : '') . $c['mail_host'];
+    $note('соединяемся с ' . $host . ':' . $port);
     $conn = @fsockopen($host, $port, $errno, $errstr, 20);
     if (!$conn) {
+        $note('соединение не открылось: ' . $errstr . ' (' . $errno . ')');
         error_log("erevent: SMTP не открылся — $errstr");
         return false;
     }
@@ -238,10 +253,14 @@ function smtp_send(string $subject, string $html, string $replyTo = ''): bool
     if ($ok) {
         $say('AUTH LOGIN');
         $say(base64_encode($c['mail_user']));
-        $ok = $code($say(base64_encode($c['mail_pass']))) === 235;
+        $answer = $say(base64_encode($c['mail_pass']));
+        $ok = $code($answer) === 235;
+        $note('вход в ящик: ' . trim(mb_substr($answer, 0, 200)));
     }
     if ($ok) {
-        $ok = $code($say('MAIL FROM:<' . $c['mail_user'] . '>')) === 250;
+        $answer = $say('MAIL FROM:<' . $c['mail_user'] . '>');
+        $ok = $code($answer) === 250;
+        $note('отправитель: ' . trim(mb_substr($answer, 0, 200)));
     }
     foreach ($recipients as $to) {
         if (!$ok) {
@@ -268,8 +287,11 @@ function smtp_send(string $subject, string $html, string $replyTo = ''): bool
         // Точка в начале строки завершила бы письмо — экранируем.
         $message = preg_replace('/^\./m', '..', $message);
         fwrite($conn, $message . "\r\n.\r\n");
-        $ok = $code($read()) === 250;
+        $answer = $read();
+        $ok = $code($answer) === 250;
+        $note('отправка письма: ' . trim(mb_substr($answer, 0, 200)));
     } else {
+        $note('сервер не принял команду DATA');
         $ok = false;
     }
 

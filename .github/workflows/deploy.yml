@@ -106,6 +106,18 @@ jobs:
             project/**
             serverless/**
 
+      # Временный шаг: показывает, что отвечают Telegram и почтовый сервер.
+      # Убирается, как только уведомления заработают.
+      - name: Диагностика уведомлений
+        continue-on-error: true
+        env:
+          LEADS_USER: ${{ secrets.LEADS_USER }}
+          LEADS_PASS: ${{ secrets.LEADS_PASS }}
+        run: |
+          set +e
+          curl -sS --max-time 90 -u "$LEADS_USER:$LEADS_PASS" \
+            https://sobroom.ru/form/diag.php
+
       # Проверка после выкладки: перебрасывает ли http на https, открываются
       # ли страницы и отдаются ли иконки. Шаг не роняет выкладку.
       - name: Проверить сайт
