@@ -177,23 +177,35 @@ function tg_send(string $html, ?array &$log = null): bool
         'disable_web_page_preview' => true,
     ]);
 
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => $body,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => 15,
-    ]);
-    $res = curl_exec($ch);
-    $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-    $ok = $res !== false && $code === 200;
-    $note('ответ Telegram: код ' . $code
-        . ($res === false ? ', ошибка связи: ' . curl_error($ch) : ' ' . mb_substr((string) $res, 0, 300)));
-    if (!$ok) {
-        error_log('erevent: telegram не ответил — ' . curl_error($ch) . ' ' . (string) $res);
+    // Связь с Telegram с этого сервера бывает неустойчивой, поэтому
+    // повторяем попытку трижды с небольшой паузой.
+    for ($attempt = 1; $attempt <= 3; $attempt++) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $body,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 20,
+            CURLOPT_CONNECTTIMEOUT => 10,
+        ]);
+        $res = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+        $err = curl_error($ch);
+        curl_close($ch);
+
+        if ($res !== false && $code === 200) {
+            $note('попытка ' . $attempt . ': отправлено');
+            return true;
+        }
+        $note('попытка ' . $attempt . ': код ' . $code
+            . ($res === false ? ', ошибка связи: ' . $err : ' ' . mb_substr((string) $res, 0, 300)));
+        if ($attempt < 3) {
+            sleep(2);
+        }
     }
-    curl_close($ch);
-    return $ok;
+
+    error_log('erevent: telegram недоступен после трёх попыток');
+    return false;
 }
 
 /* ------------------------------------------------------------------ */
