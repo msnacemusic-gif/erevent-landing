@@ -164,6 +164,15 @@ jobs:
             *) echo "ВНИМАНИЕ: обработчик отвечает не так, как ожидалось" ;;
           esac
 
+          # Отметку «уведомление доставлено» принимаем только с подписью,
+          # которую выдал приёмник. Чужая отметка обязана отлетать.
+          code=$(curl -sS --max-time 30 -o /dev/null -w '%{http_code}' \
+                   -F 'id=1' -F 'token=подделка' https://sobroom.ru/form/notified.php)
+          case "$code" in
+            403) echo "OK: отметку о доставке без подписи не принимают" ;;
+            *) echo "ВНИМАНИЕ: form/notified.php ответил $code вместо 403" ;;
+          esac
+
           echo
           echo "== закрытые адреса"
           for path in /form/config.php /form/lib.php /form/fallback/leads.jsonl \
