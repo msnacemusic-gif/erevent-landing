@@ -42,6 +42,15 @@ function cfg(): array
 
     $file = __DIR__ . '/config.php';
     $cfg = is_readable($file) ? array_merge($defaults, (array) require $file) : $defaults;
+
+    // Значения приходят из секретов, куда их вставляют вручную: лишний
+    // пробел или перевод строки в конце ломал бы адрес запроса и вход
+    // в почтовый ящик. Подчищаем.
+    foreach ($cfg as $key => $value) {
+        if (is_string($value)) {
+            $cfg[$key] = trim($value);
+        }
+    }
     return $cfg;
 }
 
@@ -192,31 +201,78 @@ function tg_send(string $html, ?array &$log = null): bool
 /* ------------------------------------------------------------------ */
 
 /**
- * Небольшой SMTP-клиент. Готовой библиотеки на хостинге нет, а встроенная
- * функция mail() не умеет авторизацию, поэтому говорим с сервером сами.
+ * Отправка письма.
+ *
+ * Сначала пробуем поговорить с почтовым сервером напрямую — так письмо
+ * уходит от нашего ящика и не попадает в спам. Хостинги закрывают разные
+ * порты, поэтому перебираем обычные сочетания. Если ни одно не открылось,
+ * отдаём письмо самому серверу через встроенную отправку PHP: на хостинге
+ * с почтой на том же домене это работает и остаётся в российском контуре.
  */
 function smtp_send(string $subject, string $html, string $replyTo = '', ?array &$log = null): bool
 {
     $c = cfg();
     $note = function (string $line) use (&$log) { if (is_array($log)) { $log[] = $line; } };
 
-    if ($c['mail_user'] === '' || $c['mail_pass'] === '' || $c['mail_to'] === '') {
-        $note('не заданы адрес ящика, пароль или получатель');
+    if ($c['mail_to'] === '') {
+        $note('не задан получатель письма');
         return false;
     }
-
     $recipients = array_values(array_filter(array_map('trim', explode(',', $c['mail_to']))));
     if (!$recipients) {
         return false;
     }
 
-    $port = (int) $c['mail_port'];
-    $host = ($port === 465 ? 'ssl://' : '') . $c['mail_host'];
-    $note('соединяемся с ' . $host . ':' . $port);
-    $conn = @fsockopen($host, $port, $errno, $errstr, 20);
+    $from = $c['mail_user'] !== '' ? $c['mail_user'] : 'noreply@sobroom.ru';
+    $headers = [
+        'From: =?UTF-8?B?' . base64_encode('СОБЫТИЯ РУМ — сайт') . '?= <' . $from . '>',
+        'MIME-Version: 1.0',
+        'Content-Type: text/html; charset=UTF-8',
+        'Content-Transfer-Encoding: base64',
+    ];
+    if ($replyTo !== '') {
+        $headers[] = 'Reply-To: ' . $replyTo;
+    }
+    $subjectEnc = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+    $bodyEnc = chunk_split(base64_encode($html));
+
+    if ($c['mail_user'] !== '' && $c['mail_pass'] !== '') {
+        // Порядок: сначала шифрованные порты, потом обычные, потом локальный.
+        $tries = [
+            [$c['mail_host'], (int) $c['mail_port'] ?: 465, 'ssl'],
+            [$c['mail_host'], 587, 'tls'],
+            [$c['mail_host'], 25, 'plain'],
+            ['localhost', 25, 'plain'],
+        ];
+        foreach ($tries as [$host, $port, $mode]) {
+            if (smtp_try($host, $port, $mode, $recipients, $headers, $subjectEnc, $bodyEnc, $note)) {
+                $note('письмо ушло через ' . $host . ':' . $port . ' (' . $mode . ')');
+                return true;
+            }
+        }
+    } else {
+        $note('логин или пароль ящика не заданы — сразу пробуем встроенную отправку');
+    }
+
+    // Запасной путь: встроенная отправка самого хостинга.
+    $ok = @mail(implode(', ', $recipients), $subjectEnc, $bodyEnc,
+        implode("\r\n", $headers));
+    $note('встроенная отправка PHP: ' . ($ok ? 'принято' : 'отказ'));
+    if (!$ok) {
+        error_log('erevent: письмо не ушло ни одним способом');
+    }
+    return $ok;
+}
+
+/** Один заход на почтовый сервер. true — письмо принято. */
+function smtp_try(string $host, int $port, string $mode, array $recipients, array $headers,
+                  string $subjectEnc, string $bodyEnc, callable $note): bool
+{
+    $c = cfg();
+    $target = ($mode === 'ssl' ? 'ssl://' : '') . $host;
+    $conn = @fsockopen($target, $port, $errno, $errstr, 10);
     if (!$conn) {
-        $note('соединение не открылось: ' . $errstr . ' (' . $errno . ')');
-        error_log("erevent: SMTP не открылся — $errstr");
+        $note($host . ':' . $port . ' — не открылось (' . $errstr . ')');
         return false;
     }
     stream_set_timeout($conn, 20);
@@ -236,16 +292,17 @@ function smtp_send(string $subject, string $html, string $replyTo = '', ?array &
         return $read();
     };
     $code = fn(string $r): int => (int) substr($r, 0, 3);
+    $host_name = $_SERVER['SERVER_NAME'] ?? 'sobroom.ru';
 
     $ok = $code($read()) === 220;
-    $hello = $say('EHLO ' . ($_SERVER['SERVER_NAME'] ?? 'sobroom.ru'));
+    $hello = $ok ? $say('EHLO ' . $host_name) : '';
 
-    // Порт 587 — открытое соединение с последующим переходом на шифрование.
-    if ($ok && $port !== 465 && stripos($hello, 'STARTTLS') !== false) {
+    if ($ok && $mode === 'tls') {
         if ($code($say('STARTTLS')) === 220
             && stream_socket_enable_crypto($conn, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
-            $hello = $say('EHLO ' . ($_SERVER['SERVER_NAME'] ?? 'sobroom.ru'));
+            $hello = $say('EHLO ' . $host_name);
         } else {
+            $note($host . ':' . $port . ' — не удалось включить шифрование');
             $ok = false;
         }
     }
@@ -255,12 +312,12 @@ function smtp_send(string $subject, string $html, string $replyTo = '', ?array &
         $say(base64_encode($c['mail_user']));
         $answer = $say(base64_encode($c['mail_pass']));
         $ok = $code($answer) === 235;
-        $note('вход в ящик: ' . trim(mb_substr($answer, 0, 200)));
+        if (!$ok) {
+            $note($host . ':' . $port . ' — вход не принят: ' . trim(mb_substr($answer, 0, 150)));
+        }
     }
     if ($ok) {
-        $answer = $say('MAIL FROM:<' . $c['mail_user'] . '>');
-        $ok = $code($answer) === 250;
-        $note('отправитель: ' . trim(mb_substr($answer, 0, 200)));
+        $ok = $code($say('MAIL FROM:<' . $c['mail_user'] . '>')) === 250;
     }
     foreach ($recipients as $to) {
         if (!$ok) {
@@ -270,36 +327,24 @@ function smtp_send(string $subject, string $html, string $replyTo = '', ?array &
     }
 
     if ($ok && $code($say('DATA')) === 354) {
-        $boundaryless = [
-            'From: =?UTF-8?B?' . base64_encode('СОБЫТИЯ РУМ — сайт') . '?= <' . $c['mail_user'] . '>',
+        $message = implode("\r\n", array_merge($headers, [
             'To: ' . implode(', ', $recipients),
-            'Subject: =?UTF-8?B?' . base64_encode($subject) . '?=',
+            'Subject: ' . $subjectEnc,
             'Date: ' . date('r'),
-            'MIME-Version: 1.0',
-            'Content-Type: text/html; charset=UTF-8',
-            'Content-Transfer-Encoding: base64',
-        ];
-        if ($replyTo !== '') {
-            $boundaryless[] = 'Reply-To: ' . $replyTo;
-        }
-        $message = implode("\r\n", $boundaryless) . "\r\n\r\n"
-            . chunk_split(base64_encode($html));
-        // Точка в начале строки завершила бы письмо — экранируем.
+        ])) . "\r\n\r\n" . $bodyEnc;
         $message = preg_replace('/^\./m', '..', $message);
         fwrite($conn, $message . "\r\n.\r\n");
         $answer = $read();
         $ok = $code($answer) === 250;
-        $note('отправка письма: ' . trim(mb_substr($answer, 0, 200)));
-    } else {
-        $note('сервер не принял команду DATA');
+        if (!$ok) {
+            $note($host . ':' . $port . ' — письмо не принято: ' . trim(mb_substr($answer, 0, 150)));
+        }
+    } elseif ($ok) {
+        $note($host . ':' . $port . ' — сервер не принял команду DATA');
         $ok = false;
     }
 
     $say('QUIT');
     fclose($conn);
-
-    if (!$ok) {
-        error_log('erevent: письмо не ушло');
-    }
     return $ok;
 }
