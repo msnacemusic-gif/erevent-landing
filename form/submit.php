@@ -172,7 +172,22 @@ if ($file['note'] !== '') {
 
 $head = $leadId > 0 ? '' : '⚠️ <b>Заявка с сайта — не записалась в базу!</b>';
 
-// Если связи нет, заявка остаётся в очереди: её дошлёт form/retry.php.
-notify_lead($row, $leadId ?: null, $head);
+// Сервер хостинга не выпускает исходящие соединения, поэтому попытка
+// может не пройти. Что не ушло — остаётся в очереди (form/retry.php),
+// а браузер посетителя дублирует уведомление через Cloudflare.
+[$tgSent] = notify_lead($row, $leadId ?: null, $head);
 
-json_out(['ok' => true]);
+$answer = ['ok' => true];
+if (!$tgSent) {
+    // Просим браузер отправить уведомление за нас.
+    $answer['notify'] = true;
+    if ($file['url'] !== '') {
+        $answer['file_url'] = $file['url'];
+    }
+    if ($leadId > 0) {
+        $answer['id'] = $leadId;
+        $answer['token'] = lead_token($leadId);
+    }
+}
+
+json_out($answer);

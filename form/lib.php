@@ -486,3 +486,17 @@ function notify_lead(array $row, ?int $id = null, string $head = ''): array
 
     return [$tg, $mail];
 }
+
+/**
+ * Подпись для отметки «уведомление отправлено из браузера».
+ *
+ * Браузер получает её вместе с ответом на заявку и возвращает обратно,
+ * когда уведомление ушло через Cloudflare. Без подписи отметку поставить
+ * нельзя — иначе любой мог бы «погасить» чужую заявку в очереди.
+ */
+function lead_token(int $id): string
+{
+    $c = cfg();
+    $secret = $c['bot_token'] . '|' . $c['db_pass'] . '|' . $c['leads_pass'];
+    return hash_hmac('sha256', 'lead:' . $id, $secret);
+}

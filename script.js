@@ -794,9 +794,51 @@
 
     fetch(LEAD_ENDPOINT, { method: 'POST', body: payload })
       .then(function (res) { return res.ok ? res.json() : { ok: false }; })
-      .then(function (data) { if (data && data.ok) showSent(); else showFailed(); })
+      .then(function (data) {
+        if (!data || !data.ok) { showFailed(); return; }
+        showSent();
+
+        // Сервер хостинга не выпускает исходящие соединения, поэтому
+        // уведомление в Telegram отправляем из браузера — и только после
+        // того, как заявка уже записана на сервере.
+        if (data.notify) relayNotice(payload, data);
+      })
       .catch(showFailed);
   });
+
+  /* ------------------------------------------------------------------ */
+  /* Дубль уведомления из браузера                                        */
+  /* ------------------------------------------------------------------ */
+
+  /* Приёмник на Cloudflare: он умеет писать в Telegram. Файл повторно
+     не отправляем — вместо него идёт ссылка на уже сохранённое вложение. */
+  var NOTICE_ENDPOINT = 'https://lingering-credit-51ce.msnace-music.workers.dev/';
+
+  function relayNotice(payload, data) {
+    var copy = new FormData();
+    ['name', 'phone', 'email', 'channel', 'comment', 'page'].forEach(function (key) {
+      var value = payload.get(key);
+      if (value) copy.set(key, value);
+    });
+
+    if (data.file_url) {
+      var comment = copy.get('comment') || '';
+      copy.set('comment', (comment ? comment + '\n' : '') + 'Файл: ' + data.file_url);
+    }
+
+    fetch(NOTICE_ENDPOINT, { method: 'POST', body: copy })
+      .then(function (res) { return res.ok; })
+      .then(function (sent) {
+        // Отмечаем на сайте, что уведомление дошло, — иначе его повторно
+        // отправит очередь досылки и в группу придёт дубль.
+        if (!sent || !data.id || !data.token) return;
+        var mark = new FormData();
+        mark.set('id', data.id);
+        mark.set('token', data.token);
+        return fetch((PAGE.base || '') + 'form/notified.php', { method: 'POST', body: mark });
+      })
+      .catch(function () { /* не дошло — заявка останется в очереди на сервере */ });
+  }
 
   /* ------------------------------------------------------------------ */
   /* Cookie notice                                                        */
