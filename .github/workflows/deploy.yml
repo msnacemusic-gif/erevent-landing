@@ -45,6 +45,7 @@ jobs:
           MAIL_PORT: ${{ secrets.MAIL_PORT }}
           LEADS_USER: ${{ secrets.LEADS_USER }}
           LEADS_PASS: ${{ secrets.LEADS_PASS }}
+          CRON_KEY: ${{ secrets.CRON_KEY }}
         run: |
           b64 () { printf '%s' "$1" | base64 -w0; }
           {
@@ -64,6 +65,7 @@ jobs:
             echo "    'mail_to' => base64_decode('$(b64 "$MAIL_TO")'),"
             echo "    'leads_user' => base64_decode('$(b64 "$LEADS_USER")'),"
             echo "    'leads_pass' => base64_decode('$(b64 "$LEADS_PASS")'),"
+            echo "    'cron_key' => base64_decode('$(b64 "$CRON_KEY")'),"
             echo "    'site' => 'https://sobroom.ru',"
             echo "];"
           } > form/config.php

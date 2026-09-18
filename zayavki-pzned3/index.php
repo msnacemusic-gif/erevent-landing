@@ -196,12 +196,14 @@ function nice_date(string $value): string
   .comment.is-short{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
   .empty{padding:40px;text-align:center;color:var(--mute)}
   .tag{display:inline-block;padding:2px 10px;border-radius:9999px;background:var(--soft);font-size:12px}
+  .tag--wait{background:#ffe9c9;color:#7a4a00}
 </style>
 </head>
 <body>
 
 <h1>Заявки с сайта</h1>
-<p class="sub">Всего: <?= count($leads) ?>. Новые сверху. Телефон и длинный комментарий раскрываются по клику.</p>
+<p class="sub">Всего: <?= count($leads) ?>. Новые сверху. Телефон и длинный комментарий раскрываются по клику.
+  Пометка «ждёт» — уведомление ещё не дошло, сайт досылает его сам.</p>
 
 <?php if ($dbError !== ''): ?>
   <p class="warn"><?= h($dbError) ?></p>
@@ -228,6 +230,16 @@ function nice_date(string $value): string
       <tr>
         <td class="date"><?= h(nice_date((string) ($l['created_at'] ?? ''))) ?>
           <?php if (!empty($l['from_file'])): ?><br><span class="tag">из журнала</span><?php endif; ?>
+          <?php
+            // Что из уведомлений ещё не дошло. Такие заявки досылает
+            // form/retry.php по расписанию.
+            $pending = [];
+            if (isset($l['tg_sent']) && !$l['tg_sent']) { $pending[] = 'telegram'; }
+            if (isset($l['mail_sent']) && !$l['mail_sent']) { $pending[] = 'почта'; }
+          ?>
+          <?php if ($pending && empty($l['from_file'])): ?>
+            <br><span class="tag tag--wait">ждёт: <?= h(implode(', ', $pending)) ?></span>
+          <?php endif; ?>
         </td>
         <td>
           <span class="name"><?= h($l['name'] ?? '') ?: '<span class="muted">без имени</span>' ?></span>

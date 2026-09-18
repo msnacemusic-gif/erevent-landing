@@ -37,6 +37,7 @@ function cfg(): array
         'mail_port' => 465,
         'leads_user' => '',
         'leads_pass' => '',
+        'cron_key' => '',
         'site' => 'https://sobroom.ru',
     ];
 
@@ -103,6 +104,23 @@ function ensure_tables(PDO $pdo): void
             INDEX (created_at)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4'
     );
+
+    // Поля очереди уведомлений добавляем к уже существующей таблице.
+    $have = [];
+    foreach ($pdo->query('SHOW COLUMNS FROM leads')->fetchAll() as $col) {
+        $have[$col['Field']] = true;
+    }
+    $extra = [
+        'tg_sent' => 'TINYINT(1) NOT NULL DEFAULT 0',
+        'mail_sent' => 'TINYINT(1) NOT NULL DEFAULT 0',
+        'notify_tries' => 'SMALLINT UNSIGNED NOT NULL DEFAULT 0',
+        'notify_last' => 'DATETIME NULL',
+    ];
+    foreach ($extra as $name => $type) {
+        if (!isset($have[$name])) {
+            $pdo->exec('ALTER TABLE leads ADD COLUMN ' . $name . ' ' . $type);
+        }
+    }
 
     // Счётчик неудачных входов на страницу заявок — для блокировки перебора.
     $pdo->exec(
@@ -389,4 +407,82 @@ function smtp_try(string $host, int $port, string $mode, array $recipients, arra
     $say('QUIT');
     fclose($conn);
     return $ok;
+}
+
+/* ------------------------------------------------------------------ */
+/* Уведомления о заявке                                                 */
+/* ------------------------------------------------------------------ */
+
+/** Текст уведомления по данным заявки. Одинаковый для бота и письма. */
+function lead_message(array $row, string $head = ''): string
+{
+    $rows = [
+        'Имя' => $row['name'] ?? '',
+        'Телефон' => $row['phone'] ?? '',
+        'Email' => $row['email'] ?? '',
+        'Ответить в' => $row['channel'] ?? '',
+        'Услуга' => $row['service'] ?? '',
+        'Комментарий' => $row['comment'] ?? '',
+    ];
+
+    $body = '';
+    foreach ($rows as $label => $value) {
+        if ((string) $value !== '') {
+            $body .= '<b>' . h($label) . ':</b> ' . h((string) $value) . "\n";
+        }
+    }
+
+    if (!empty($row['file_url'])) {
+        $body .= "\n<b>Файл:</b> <a href=\"" . h($row['file_url']) . '">'
+            . h($row['file_name'] ?: 'вложение') . "</a>\n"
+            . "<i>Ссылка личная — не пересылайте её посторонним.</i>\n";
+    }
+    if (!empty($row['page'])) {
+        $body .= "\n<i>" . h($row['page']) . '</i>';
+    }
+
+    if ($head === '') {
+        $head = '🔔 <b>Новая заявка с сайта</b>';
+    }
+    return $head . "\n\n" . $body;
+}
+
+/**
+ * Отправляет уведомления по заявке и запоминает, что удалось.
+ * Возвращает [tg_sent, mail_sent].
+ */
+function notify_lead(array $row, ?int $id = null, string $head = ''): array
+{
+    $text = lead_message($row, $head);
+
+    $tg = !empty($row['tg_sent']) ? true : tg_send($text);
+
+    $mail = !empty($row['mail_sent']);
+    if (!$mail) {
+        $who = trim(($row['name'] ?? '') . ' '
+            . (($row['phone'] ?? '') !== '' ? $row['phone'] : ($row['email'] ?? '')));
+        $replyTo = filter_var($row['email'] ?? '', FILTER_VALIDATE_EMAIL) ? $row['email'] : '';
+        $mail = smtp_send(
+            'Заявка с сайта — ' . ($who !== '' ? $who : 'без имени'),
+            '<div style="font:15px/1.6 Arial,sans-serif;color:#0e0f0c">'
+                . str_replace("\n", '<br>', $text) . '</div>',
+            $replyTo
+        );
+    }
+
+    // Отмечаем в базе, что дошло: недоставленное досылает form/retry.php.
+    $pdo = db();
+    if ($pdo && $id) {
+        try {
+            $pdo->prepare(
+                'UPDATE leads SET tg_sent = :tg, mail_sent = :mail,
+                    notify_tries = notify_tries + 1, notify_last = NOW()
+                 WHERE id = :id'
+            )->execute(['tg' => $tg ? 1 : 0, 'mail' => $mail ? 1 : 0, 'id' => $id]);
+        } catch (Throwable $e) {
+            error_log('erevent: не удалось отметить отправку — ' . $e->getMessage());
+        }
+    }
+
+    return [$tg, $mail];
 }

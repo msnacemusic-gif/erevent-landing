@@ -105,7 +105,8 @@ if ($upload && ($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) 
 /* Запись — раньше любой отправки наружу                                */
 /* ------------------------------------------------------------------ */
 
-function save_lead(array $lead, array $file): bool
+/** Возвращает номер записи в базе, 0 — если ушло только в запасной журнал. */
+function save_lead(array $lead, array $file): int
 {
     $row = [
         'created_at' => date('Y-m-d H:i:s'),
@@ -129,7 +130,7 @@ function save_lead(array $lead, array $file): bool
                     VALUES (:created_at, :name, :phone, :email, :channel, :service,
                         :comment, :file_name, :file_url, :ip, :page)';
             $pdo->prepare($sql)->execute($row);
-            return true;
+            return (int) $pdo->lastInsertId();
         } catch (Throwable $e) {
             error_log('erevent: запись в базу не прошла — ' . $e->getMessage());
         }
@@ -141,52 +142,37 @@ function save_lead(array $lead, array $file): bool
         @mkdir($dir, 0700, true);
     }
     $line = json_encode($row, JSON_UNESCAPED_UNICODE) . PHP_EOL;
-    return (bool) @file_put_contents($dir . '/leads.jsonl', $line, FILE_APPEND | LOCK_EX);
+    @file_put_contents($dir . '/leads.jsonl', $line, FILE_APPEND | LOCK_EX);
+    return 0;
 }
 
-$saved = save_lead($lead, $file);
+$leadId = save_lead($lead, $file);
 
 /* ------------------------------------------------------------------ */
 /* Уведомления                                                          */
 /* ------------------------------------------------------------------ */
 
-$rows = [
-    'Имя' => $lead['name'],
-    'Телефон' => $lead['phone'],
-    'Email' => $lead['email'],
-    'Ответить в' => $lead['channel'],
-    'Услуга' => $lead['service'],
-    'Комментарий' => $lead['comment'],
+$row = [
+    'name' => $lead['name'],
+    'phone' => $lead['phone'],
+    'email' => $lead['email'],
+    'channel' => $lead['channel'],
+    'service' => $lead['service'],
+    'comment' => $lead['comment'],
+    'file_name' => $file['name'],
+    'file_url' => $file['url'],
+    'page' => $lead['page'],
 ];
 
-$body = '';
-foreach ($rows as $label => $value) {
-    if ($value !== '') {
-        $body .= '<b>' . h($label) . ':</b> ' . h($value) . "\n";
-    }
+// О не принятом файле предупреждаем прямо в тексте уведомления.
+if ($file['note'] !== '') {
+    $row['comment'] = trim($row['comment'] . "\n⚠️ " . $file['note']
+        . ($file['name'] !== '' ? ' — ' . $file['name'] : ''));
 }
 
-if ($file['url'] !== '') {
-    $body .= "\n<b>Файл:</b> <a href=\"" . h($file['url']) . '">' . h($file['name']) . "</a>\n"
-        . "<i>Ссылка личная — не пересылайте её посторонним.</i>\n";
-} elseif ($file['note'] !== '') {
-    $body .= "\n⚠️ <b>" . h($file['note']) . '</b>' . ($file['name'] !== '' ? ' — ' . h($file['name']) : '') . "\n";
-}
+$head = $leadId > 0 ? '' : '⚠️ <b>Заявка с сайта — не записалась в базу!</b>';
 
-if ($lead['page'] !== '') {
-    $body .= "\n<i>" . h($lead['page']) . '</i>';
-}
-
-$head = $saved ? '🔔 <b>Новая заявка с сайта</b>' : '⚠️ <b>Заявка с сайта — не записалась в базу!</b>';
-tg_send($head . "\n\n" . $body);
-
-$who = trim($lead['name'] . ' ' . ($lead['phone'] !== '' ? $lead['phone'] : $lead['email']));
-$replyTo = filter_var($lead['email'], FILTER_VALIDATE_EMAIL) ? $lead['email'] : '';
-smtp_send(
-    'Заявка с сайта — ' . ($who !== '' ? $who : 'без имени'),
-    '<div style="font:15px/1.6 Arial,sans-serif;color:#0e0f0c">'
-        . str_replace("\n", '<br>', $body) . '</div>',
-    $replyTo
-);
+// Если связи нет, заявка остаётся в очереди: её дошлёт form/retry.php.
+notify_lead($row, $leadId ?: null, $head);
 
 json_out(['ok' => true]);
