@@ -35,8 +35,10 @@ GitHub Pages отдаёт ветку `main`, правки выкатываютс
   `form/config.php` в репозитории не лежат: их собирает выкладка из секретов
   GitHub. Диагностика связи — `form/diag.php` под паролем страницы заявок
 - `zayavki-pzned3/` — страница просмотра заявок, вход по паролю
-- `serverless/telegram-relay.js` — прежний приёмник на Cloudflare, больше
-  не используется, оставлен на случай отката
+- `serverless/telegram-relay.js` — приёмник на Cloudflare, который пишет
+  в Telegram. Заявку туда отправляет браузер, а не сервер хостинга.
+  В переменной `ALLOW_ORIGIN` должен стоять `https://sobroom.ru`, иначе
+  браузер не узнает, дошло ли уведомление
 - `project/`, `chats/` — исходные макеты Claude Design, сайт их не использует
 
 Сайт выкладывается на хостинг Timeweb по FTP из `.github/workflows/deploy.yml`.

@@ -14,7 +14,8 @@
  * Обязательные переменные:
  *   BOT_TOKEN    — токен от @BotFather (тип Secret)
  *   CHAT_ID      — куда слать заявки: ваш ID или ID группы
- *   ALLOW_ORIGIN — адрес сайта, которому разрешено слать сюда заявки
+ *   ALLOW_ORIGIN — адрес сайта, которому разрешено слать сюда заявки.
+ *                  Адресов может быть несколько, через запятую
  *
  * Почта (необязательно, но заказчик просил дубль):
  *   MAIL_API_KEY — ключ Brevo (тип Secret)
@@ -40,7 +41,7 @@ const MAX_FIELD_CHARS = 2000;
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const origin = env.ALLOW_ORIGIN || '*';
+    const origin = allowOrigin(request, env);
 
     if (request.method === 'OPTIONS') return preflight(origin);
 
@@ -308,9 +309,24 @@ async function tgForm(env, method, body) {
   return data;
 }
 
+// Браузер читает ответ чужого адреса только с разрешения. Сайт живёт
+// на sobroom.ru, но раньше был на GitHub Pages, поэтому в ALLOW_ORIGIN
+// можно перечислить несколько адресов через запятую — разрешение получит
+// тот, с которого пришёл запрос.
+function allowOrigin(request, env) {
+  const list = String(env.ALLOW_ORIGIN || '*')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+  if (!list.length || list.includes('*')) return '*';
+  const from = request.headers.get('Origin') || '';
+  return list.includes(from) ? from : list[0];
+}
+
 function cors(origin) {
   return {
     'access-control-allow-origin': origin,
+    vary: 'Origin',
     'access-control-allow-methods': 'POST, GET, OPTIONS',
     'access-control-allow-headers': 'content-type',
     'access-control-max-age': '86400',
