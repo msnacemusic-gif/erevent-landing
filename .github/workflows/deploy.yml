@@ -41,6 +41,8 @@ jobs:
           MAIL_USER: ${{ secrets.MAIL_USER }}
           MAIL_PASS: ${{ secrets.MAIL_PASS }}
           MAIL_TO: ${{ secrets.MAIL_TO }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT }}
           LEADS_USER: ${{ secrets.LEADS_USER }}
           LEADS_PASS: ${{ secrets.LEADS_PASS }}
         run: |
@@ -55,8 +57,8 @@ jobs:
             echo "    'db_pass' => base64_decode('$(b64 "$DB_PASS")'),"
             echo "    'bot_token' => base64_decode('$(b64 "$BOT_TOKEN")'),"
             echo "    'chat_id' => base64_decode('$(b64 "$CHAT_ID")'),"
-            echo "    'mail_host' => 'smtp.timeweb.ru',"
-            echo "    'mail_port' => 465,"
+            echo "    'mail_host' => base64_decode('$(b64 "${MAIL_HOST:-smtp.timeweb.ru}")'),"
+            echo "    'mail_port' => ${MAIL_PORT:-465},"
             echo "    'mail_user' => base64_decode('$(b64 "$MAIL_USER")'),"
             echo "    'mail_pass' => base64_decode('$(b64 "$MAIL_PASS")'),"
             echo "    'mail_to' => base64_decode('$(b64 "$MAIL_TO")'),"
@@ -109,6 +111,7 @@ jobs:
       # Временный шаг: показывает, что отвечают Telegram и почтовый сервер.
       # Убирается, как только уведомления заработают.
       - name: Диагностика уведомлений
+        if: github.event_name == 'workflow_dispatch'
         continue-on-error: true
         env:
           LEADS_USER: ${{ secrets.LEADS_USER }}

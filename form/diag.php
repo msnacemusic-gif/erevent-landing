@@ -64,7 +64,7 @@ if ($c['bot_token'] !== '' && extension_loaded('curl')) {
     }
 }
 $log = [];
-$sent = tg_send('🧪 <b>Проверка связи</b>\nЕсли вы это видите — бот пишет в этот чат.', $log);
+$sent = tg_send("🧪 <b>Проверка связи</b>\n\nЕсли вы это видите — бот пишет в этот чат.", $log);
 line('пробная отправка', $sent ? 'ушла' : 'НЕ УШЛА');
 foreach ($log as $l) { echo '  ' . $l . PHP_EOL; }
 
