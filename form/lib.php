@@ -237,18 +237,21 @@ function smtp_send(string $subject, string $html, string $replyTo = '', ?array &
     $bodyEnc = chunk_split(base64_encode($html));
 
     if ($c['mail_user'] !== '' && $c['mail_pass'] !== '') {
-        // Порядок: сначала шифрованные порты, потом обычные, потом локальный.
-        $tries = [
-            [$c['mail_host'], (int) $c['mail_port'] ?: 465, 'ssl'],
-            [$c['mail_host'], 587, 'tls'],
-            [$c['mail_host'], 25, 'plain'],
-            ['localhost', 25, 'plain'],
-        ];
-        foreach ($tries as [$host, $port, $mode]) {
-            if (smtp_try($host, $port, $mode, $recipients, $headers, $subjectEnc, $bodyEnc, $note)) {
-                $note('письмо ушло через ' . $host . ':' . $port . ' (' . $mode . ')');
+        // Сначала порт из настроек, затем остальные обычные для хостингов.
+        $ports = array_values(array_unique(array_filter([
+            (int) $c['mail_port'], 2525, 465, 587, 25,
+        ])));
+        foreach ($ports as $port) {
+            $mode = smtp_mode($port);
+            if (smtp_try($c['mail_host'], $port, $mode, $recipients, $headers, $subjectEnc, $bodyEnc, $note)) {
+                $note('ПИСЬМО УШЛО через ' . $c['mail_host'] . ':' . $port . ' (' . $mode . ')');
                 return true;
             }
+        }
+        // Почтовый сервер может стоять на той же машине, что и сайт.
+        if (smtp_try('localhost', 25, 'plain', $recipients, $headers, $subjectEnc, $bodyEnc, $note)) {
+            $note('ПИСЬМО УШЛО через localhost:25');
+            return true;
         }
     } else {
         $note('логин или пароль ящика не заданы — сразу пробуем встроенную отправку');
@@ -264,6 +267,18 @@ function smtp_send(string $subject, string $html, string $replyTo = '', ?array &
     return $ok;
 }
 
+/** Какой режим шифрования обычно соответствует порту. */
+function smtp_mode(int $port): string
+{
+    if ($port === 465) {
+        return 'ssl';    // шифрование сразу при подключении
+    }
+    if ($port === 587) {
+        return 'tls';    // подключение открытое, шифрование включается командой
+    }
+    return 'plain';      // 25 и 2525 — без шифрования, но попробуем включить
+}
+
 /** Один заход на почтовый сервер. true — письмо принято. */
 function smtp_try(string $host, int $port, string $mode, array $recipients, array $headers,
                   string $subjectEnc, string $bodyEnc, callable $note): bool
@@ -272,7 +287,8 @@ function smtp_try(string $host, int $port, string $mode, array $recipients, arra
     $target = ($mode === 'ssl' ? 'ssl://' : '') . $host;
     $conn = @fsockopen($target, $port, $errno, $errstr, 10);
     if (!$conn) {
-        $note($host . ':' . $port . ' — не открылось (' . $errstr . ')');
+        $note($host . ':' . $port . ' (' . $mode . ') — соединение не открылось: '
+            . $errstr . ' [' . $errno . ']');
         return false;
     }
     stream_set_timeout($conn, 20);
@@ -294,16 +310,24 @@ function smtp_try(string $host, int $port, string $mode, array $recipients, arra
     $code = fn(string $r): int => (int) substr($r, 0, 3);
     $host_name = $_SERVER['SERVER_NAME'] ?? 'sobroom.ru';
 
-    $ok = $code($read()) === 220;
+    $tag = $host . ':' . $port . ' (' . $mode . ')';
+    $greeting = $read();
+    $ok = $code($greeting) === 220;
+    $note($tag . ' — соединение открыто, приветствие: ' . trim(mb_substr($greeting, 0, 120)));
     $hello = $ok ? $say('EHLO ' . $host_name) : '';
 
-    if ($ok && $mode === 'tls') {
+    // На открытых портах шифрование включаем, если сервер его предлагает:
+    // пароль ящика не должен идти по сети открытым текстом.
+    if ($ok && ($mode === 'tls' || ($mode === 'plain' && stripos($hello, 'STARTTLS') !== false))) {
         if ($code($say('STARTTLS')) === 220
-            && stream_socket_enable_crypto($conn, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+            && @stream_socket_enable_crypto($conn, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
             $hello = $say('EHLO ' . $host_name);
-        } else {
-            $note($host . ':' . $port . ' — не удалось включить шифрование');
+            $note($tag . ' — шифрование включено');
+        } elseif ($mode === 'tls') {
+            $note($tag . ' — шифрование включить не удалось');
             $ok = false;
+        } else {
+            $note($tag . ' — шифрование недоступно, продолжаем без него');
         }
     }
 
@@ -312,18 +336,24 @@ function smtp_try(string $host, int $port, string $mode, array $recipients, arra
         $say(base64_encode($c['mail_user']));
         $answer = $say(base64_encode($c['mail_pass']));
         $ok = $code($answer) === 235;
-        if (!$ok) {
-            $note($host . ':' . $port . ' — вход не принят: ' . trim(mb_substr($answer, 0, 150)));
-        }
+        $note($tag . ' — вход в ящик: ' . trim(mb_substr($answer, 0, 150)));
     }
     if ($ok) {
-        $ok = $code($say('MAIL FROM:<' . $c['mail_user'] . '>')) === 250;
+        $answer = $say('MAIL FROM:<' . $c['mail_user'] . '>');
+        $ok = $code($answer) === 250;
+        if (!$ok) {
+            $note($tag . ' — отправитель не принят: ' . trim(mb_substr($answer, 0, 150)));
+        }
     }
     foreach ($recipients as $to) {
         if (!$ok) {
             break;
         }
-        $ok = in_array($code($say('RCPT TO:<' . $to . '>')), [250, 251], true);
+        $answer = $say('RCPT TO:<' . $to . '>');
+        $ok = in_array($code($answer), [250, 251], true);
+        if (!$ok) {
+            $note($tag . ' — получатель не принят: ' . trim(mb_substr($answer, 0, 150)));
+        }
     }
 
     if ($ok && $code($say('DATA')) === 354) {
@@ -337,10 +367,10 @@ function smtp_try(string $host, int $port, string $mode, array $recipients, arra
         $answer = $read();
         $ok = $code($answer) === 250;
         if (!$ok) {
-            $note($host . ':' . $port . ' — письмо не принято: ' . trim(mb_substr($answer, 0, 150)));
+            $note($tag . ' — письмо не принято: ' . trim(mb_substr($answer, 0, 150)));
         }
     } elseif ($ok) {
-        $note($host . ':' . $port . ' — сервер не принял команду DATA');
+        $note($tag . ' — сервер не принял команду DATA');
         $ok = false;
     }
 
