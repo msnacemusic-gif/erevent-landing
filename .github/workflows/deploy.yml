@@ -146,7 +146,7 @@ jobs:
           for path in / /art-obekty/ /mebel-oborudovanie/ /keitering/ \
                       /ekrany-svet-zvuk/ /privacy/ /styles.css /script.js \
                       /favicon.ico /media/favicon-32.png /media/favicon-16.png \
-                      /media/apple-touch-icon.png; do
+                      /media/apple-touch-icon.png /robots.txt /sitemap.xml; do
             out=$(curl -sSL --max-time 30 -o /dev/null \
                     -w '%{http_code} %{content_type}' "https://sobroom.ru$path")
             echo "$path -> $out"
@@ -188,6 +188,28 @@ jobs:
             '') echo "ВНИМАНИЕ: разрешения нет — браузер не узнает, дошло ли уведомление" ;;
             *) echo "ВНИМАНИЕ: разрешено только $allow — нужен https://sobroom.ru" ;;
           esac
+
+          echo
+          echo "== для поисковиков"
+          # Служебные адреса не должны попасть ни в карту сайта, ни в обход.
+          map=$(curl -sSL --max-time 30 https://sobroom.ru/sitemap.xml)
+          echo "адресов в карте сайта: $(echo "$map" | grep -c '<loc>')"
+          case "$map" in
+            *zayavki*) echo "ВНИМАНИЕ: страница заявок попала в карту сайта" ;;
+            *) echo "OK: страницы заявок в карте сайта нет" ;;
+          esac
+          curl -sSL --max-time 30 https://sobroom.ru/robots.txt \
+            | grep -q 'Disallow: /zayavki-' \
+            && echo "OK: страница заявок закрыта от поисковиков" \
+            || echo "ВНИМАНИЕ: в robots.txt нет запрета на /zayavki-"
+          curl -sSL --max-time 30 https://sobroom.ru/ \
+            | grep -q 'yandex-verification' \
+            && echo "OK: подтверждение Яндекс.Вебмастера на месте" \
+            || echo "ВНИМАНИЕ: мета-тега Яндекс.Вебмастера нет на главной"
+          curl -sSL --max-time 30 https://sobroom.ru/script.js \
+            | grep -q '112861418' \
+            && echo "OK: счётчик Метрики выложен" \
+            || echo "ВНИМАНИЕ: счётчика Метрики нет в script.js"
 
           echo
           echo "== закрытые адреса"

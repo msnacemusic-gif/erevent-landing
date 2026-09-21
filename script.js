@@ -847,6 +847,40 @@
   /* Cookie notice                                                        */
   /* ------------------------------------------------------------------ */
 
+  // Счётчик Яндекс.Метрики. Он ставит свои cookie, поэтому запускаем его
+  // только после того, как посетитель согласился в баннере. На страницах
+  // без баннера — в политике и на странице заявок — счётчика нет вовсе.
+  var METRIKA_ID = 112861418;
+
+  function loadMetrika() {
+    if (window.ym) return;
+
+    var src = 'https://mc.yandex.ru/metrika/tag.js?id=' + METRIKA_ID;
+    for (var i = 0; i < document.scripts.length; i++) {
+      if (document.scripts[i].src === src) return;
+    }
+
+    window.ym = function () { (window.ym.a = window.ym.a || []).push(arguments); };
+    window.ym.l = 1 * new Date();
+
+    var tag = document.createElement('script');
+    var first = document.getElementsByTagName('script')[0];
+    tag.async = 1;
+    tag.src = src;
+    first.parentNode.insertBefore(tag, first);
+
+    window.ym(METRIKA_ID, 'init', {
+      ssr: true,
+      webvisor: true,
+      clickmap: true,
+      ecommerce: 'dataLayer',
+      referrer: document.referrer,
+      url: location.href,
+      accurateTrackBounce: true,
+      trackLinks: true
+    });
+  }
+
   (function setupCookieNotice() {
     var banner = document.getElementById('cookie-banner');
     var accept = document.getElementById('cookie-accept');
@@ -863,13 +897,15 @@
       try { window.localStorage.setItem(KEY, '1'); } catch (e) {}
     }
 
-    if (stored()) return;
+    // Согласие уже давали — счётчик можно поднимать сразу.
+    if (stored()) { loadMetrika(); return; }
 
     banner.hidden = false;
     banner.classList.add('is-visible');
 
     accept.addEventListener('click', function () {
       remember();
+      loadMetrika();
       banner.classList.remove('is-visible');
       banner.hidden = true;
     });
