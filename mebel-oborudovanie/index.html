@@ -367,16 +367,26 @@
             <input type="hidden" name="channel" id="f-channel" value="Telegram">
           </div>
 
-          <label class="field">
-            <span class="field__label">Комментарий к задаче</span>
-            <textarea name="comment" id="f-comment" rows="4" placeholder="Дата и площадка мероприятия, что нужно, сколько зон, есть ли планировка"></textarea>
-          </label>
+          <!-- Всё необязательное убрано под кнопку: форму открывают, чтобы
+               быстро оставить контакты, а подробности дописывают по желанию. -->
+          <button type="button" class="form-more__toggle" id="form-more-toggle"
+                  aria-expanded="false" aria-controls="form-more">
+            <span>Дополнительно</span>
+            <svg class="form-more__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
 
-          <label class="file-field" for="f-file">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17V7M8 11l4-4 4 4"></path><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path></svg>
-            <span id="file-label">Прикрепить файл — ТЗ, план площадки, референсы (до 50 МБ)</span>
-            <input type="file" id="f-file" name="file" hidden>
-          </label>
+          <div class="form-more" id="form-more" hidden>
+            <label class="field">
+              <span class="field__label">Комментарий к задаче</span>
+              <textarea name="comment" id="f-comment" rows="4" placeholder="Дата и площадка мероприятия, что нужно, сколько зон, есть ли планировка"></textarea>
+            </label>
+
+            <label class="file-field" for="f-file">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17V7M8 11l4-4 4 4"></path><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path></svg>
+              <span id="file-label">Прикрепить файл — ТЗ, план площадки, референсы (до 50 МБ)</span>
+              <input type="file" id="f-file" name="file" hidden>
+            </label>
+          </div>
 
           <label class="checkbox">
             <input type="checkbox" id="f-agree" name="agree" class="checkbox__input">

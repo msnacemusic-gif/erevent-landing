@@ -541,6 +541,40 @@
   updateTimeline();
 
   /* ------------------------------------------------------------------ */
+  /* Форма: необязательные поля под кнопкой «Дополнительно»               */
+  /* ------------------------------------------------------------------ */
+
+  // Блок раскрыт — значит, человеку есть что дописать. Сам блок ничего
+  // не отправляет: и комментарий, и вложение уходят как раньше.
+  function openFormMore() {
+    var more = document.getElementById('form-more');
+    var toggle = document.getElementById('form-more-toggle');
+    if (!more || !toggle || !more.hidden) return;
+    more.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+
+  (function setupFormMore() {
+    var more = document.getElementById('form-more');
+    var toggle = document.getElementById('form-more-toggle');
+    if (!more || !toggle) return;
+
+    toggle.addEventListener('click', function () {
+      var open = more.hidden;
+      more.hidden = !open;
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    // Браузер вернул заполненный комментарий или выбранный файл после
+    // «назад» — прятать их нельзя, иначе человек решит, что всё пропало.
+    var comment = document.getElementById('f-comment');
+    var file = document.getElementById('f-file');
+    if ((comment && comment.value.trim() !== '') || (file && file.files && file.files.length)) {
+      openFormMore();
+    }
+  })();
+
+  /* ------------------------------------------------------------------ */
   /* Service cards → append to comment + scroll to form                   */
   /* ------------------------------------------------------------------ */
 
@@ -567,6 +601,9 @@
       if (textarea && name) {
         var c = textarea.value;
         if (c.indexOf(name) === -1) textarea.value = c ? c + ', ' + name : name;
+        // Услугу подставили в комментарий — показываем её, иначе выбор
+        // окажется спрятан и человек подумает, что ничего не произошло.
+        openFormMore();
       }
       scrollToEl('form');
     });
