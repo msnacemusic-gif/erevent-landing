@@ -81,6 +81,16 @@ jobs:
             echo "Все секреты на месте."
           fi
 
+      # Браузер держит стили и скрипт в своей памяти и может неделями
+      # отдавать старые. Поэтому на выкладке в адрес каждого такого файла
+      # подставляется номер правки: адрес меняется — браузер идёт за новым.
+      - name: Проставить версию стилей и скрипта
+        run: |
+          v=$(git rev-parse --short HEAD)
+          grep -rl '?v=dev' --include='*.html' . | xargs sed -i "s/?v=dev/?v=$v/g"
+          echo "версия файлов: $v"
+          grep -rho '?v=[0-9a-f]*' --include='*.html' . | sort -u
+
       - name: Залить по FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -187,6 +197,22 @@ jobs:
             '*'|https://sobroom.ru) echo "OK: браузеру с sobroom.ru разрешено ($allow)" ;;
             '') echo "ВНИМАНИЕ: разрешения нет — браузер не узнает, дошло ли уведомление" ;;
             *) echo "ВНИМАНИЕ: разрешено только $allow — нужен https://sobroom.ru" ;;
+          esac
+
+          echo
+          echo "== память браузера"
+          # Главная не должна кэшироваться, иначе посетитель неделю видит
+          # старую версию. У стилей и скрипта в адресе стоит номер правки.
+          page=$(curl -sSI --max-time 30 https://sobroom.ru/ | tr -d '\r')
+          echo "$page" | grep -i '^cache-control' || echo "заголовка Cache-Control у страницы нет"
+          case "$page" in
+            *no-cache*) echo "OK: страницы не залёживаются в памяти браузера" ;;
+            *) echo "ВНИМАНИЕ: страница кэшируется — правки увидят не сразу" ;;
+          esac
+          stamp=$(curl -sSL --max-time 30 https://sobroom.ru/ | grep -o 'styles\.css?v=[0-9a-f]*' | head -1)
+          case "$stamp" in
+            *v=dev|'') echo "ВНИМАНИЕ: версия стилей не проставлена ($stamp)" ;;
+            *) echo "OK: стили выложены с версией — $stamp" ;;
           esac
 
           echo
