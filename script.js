@@ -400,6 +400,9 @@
     var section = document.getElementById('reviews');
     if (!viewport || !section) return;
 
+    // Блок скрыт в разметке — карусель не собираем.
+    if (section.hidden) return;
+
     // Отзывов нет вовсе — блок не показываем, чем пустая полоса.
     if (!REVIEWS.length) { section.hidden = true; return; }
 
