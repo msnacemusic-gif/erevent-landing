@@ -326,6 +326,22 @@ h1,h2,h3,p,blockquote,figure{margin:0}
 .service-card__title--display:not(.service-card__title--md){font-size:clamp(26px,3vw,44px);margin-bottom:12px;line-height:1.02}
 .service-card__title--md{font-size:clamp(22px,2.2vw,32px);line-height:1.05}
 .service-card__body{display:block;margin:0;font-size:15px;line-height:1.5;transition:color .35s ease,opacity .35s ease}
+/* Подробности внутри карточки услуги: по кнопке, чтобы плитка оставалась
+   ровной, а детали были под рукой у того, кому они нужны. */
+.card-more{display:block;margin-top:18px}
+.card-more__toggle{
+  display:inline-flex;align-items:center;gap:7px;padding:0;border:none;background:none;
+  font-family:inherit;font-size:14px;font-weight:700;color:var(--z-green);cursor:pointer;
+}
+.card-more__toggle:hover{text-decoration:underline;text-underline-offset:3px}
+.card-more__chevron{flex:0 0 auto;transition:transform .2s ease}
+.card-more__toggle[aria-expanded="true"] .card-more__chevron{transform:rotate(180deg)}
+.card-more__body{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.card-more__body[hidden]{display:none}
+.card-more__row{display:block;font-size:14px;line-height:1.5;color:var(--text-on-dark)}
+.card-more__row b{font-weight:700;color:var(--z-canvas)}
+@media (prefers-reduced-motion:reduce){.card-more__chevron{transition:none}}
+
 .service-card__tags{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 
 .service-card--wide{grid-column:auto}

@@ -575,6 +575,24 @@
   })();
 
   /* ------------------------------------------------------------------ */
+  /* Подробности внутри карточки услуги                                   */
+  /* ------------------------------------------------------------------ */
+
+  Array.prototype.forEach.call(document.querySelectorAll('.card-more__toggle'), function (toggle) {
+    var body = document.getElementById(toggle.getAttribute('aria-controls'));
+    if (!body) return;
+
+    toggle.addEventListener('click', function (e) {
+      // Клик по самой карточке уводит к форме — здесь это помешало бы
+      // прочитать то, что человек только что открыл.
+      e.stopPropagation();
+      var open = body.hidden;
+      body.hidden = !open;
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+
+  /* ------------------------------------------------------------------ */
   /* Service cards → append to comment + scroll to form                   */
   /* ------------------------------------------------------------------ */
 
