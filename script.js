@@ -575,6 +575,35 @@
   })();
 
   /* ------------------------------------------------------------------ */
+  /* Кейсы в разметке: открыть нужный по ссылке с якорем                  */
+  /* ------------------------------------------------------------------ */
+
+  (function setupCaseAnchors() {
+    var cards = document.querySelectorAll('details.case');
+    if (!cards.length) return;
+
+    // Со страницы направления можно прийти по ссылке «Весь кейс →» —
+    // тогда сразу раскрываем нужный кейс и подводим к нему страницу.
+    function openFromHash() {
+      var id = (location.hash || '').replace('#', '');
+      if (!id) return;
+      var card = document.getElementById(id);
+      if (!card || card.tagName !== 'DETAILS') return;
+      card.open = true;
+      // Браузер сам прыгает к якорю сразу после загрузки — и ставит карточку
+      // впритык к верху, под шапку. Подводим её чуть позже и с отступом.
+      setTimeout(function () { scrollToEl(id); }, 80);
+    }
+
+    openFromHash();
+    window.addEventListener('hashchange', openFromHash);
+
+    Array.prototype.forEach.call(document.querySelectorAll('details.case .js-case-cta'), function (btn) {
+      btn.addEventListener('click', function () { scrollToEl('form'); });
+    });
+  })();
+
+  /* ------------------------------------------------------------------ */
   /* Подробности внутри карточки услуги                                   */
   /* ------------------------------------------------------------------ */
 

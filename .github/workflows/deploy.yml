@@ -190,6 +190,20 @@ jobs:
           esac
 
           echo
+          echo "== кейсы и переадресация на страницах услуг"
+          for path in /art-obekty/ /keitering/ /mebel-oborudovanie/ /ekrany-svet-zvuk/; do
+            # Сколько переходов делает адрес и чем заканчивается: цикл
+            # переадресаций виден сразу по числу шагов.
+            hops=$(curl -sIL --max-time 40 --max-redirs 10 "https://sobroom.ru$path" \
+                   | grep -ciE '^HTTP/' || true)
+            code=$(curl -sIL --max-time 40 --max-redirs 10 -o /dev/null \
+                     -w '%{http_code}' "https://sobroom.ru$path")
+            cards=$(curl -sSL --max-time 40 "https://sobroom.ru$path" \
+                    | grep -c '<details class="case"' || true)
+            echo "$path -> $code, шагов: $hops, карточек кейсов в коде: $cards"
+          done
+
+          echo
           echo "== для поисковиков"
           # Служебные адреса не должны попасть ни в карту сайта, ни в обход.
           map=$(curl -sSL --max-time 30 https://sobroom.ru/sitemap.xml)

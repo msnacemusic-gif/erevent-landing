@@ -231,13 +231,58 @@
         <p class="section-eyebrow">[кейсы]</p>
         <h2 class="section-title">Кейсы</h2>
       </div>
-      <p class="section-head__note">Проекты, где мы отвечали за технику: экраны, звук и свет. Нажмите на строку — раскроются заказчик, задачи и площадка.</p>
+      <p class="section-head__note">Проекты, где мы отвечали за технику: экраны, звук и свет. Нажмите на строку — раскроются задачи и что мы сделали.</p>
     </div>
 
-    <div class="cases__list" id="cases-list"></div>
 
-    <div class="cases__more" id="cases-more" hidden>
-      <button type="button" class="btn btn--tertiary btn--lg" id="cases-more-btn">Показать ещё</button>
+    <div class="cases__list">
+      <details class="case" open>
+        <summary class="case__row">
+          <span class="case__n">01</span>
+          <h3 class="case__title">«Карма»</h3>
+          <span class="case__note">кратко</span>
+          <span class="case__chevron"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </summary>
+        <div class="case__panel">
+          <div class="case__info">
+            <div class="case__fields">
+              <div class="case__field"><p class="case__field-label">Площадка</p><p class="case__field-value">отель Stella di Mosca</p></div>
+            </div>
+            <div class="case__tasks">
+              <p>Реализация</p>
+              <ul class="case__list">
+                <li>монтаж видео-, звукового и светового оборудования</li>
+                <li>организация онлайн-трансляции</li>
+                <li>техническое сопровождение мероприятия</li>
+              </ul>
+            </div>
+            <p class="case__link"><a href="../art-obekty/#case-karma">Весь кейс →</a></p>
+          </div>
+        </div>
+      </details>
+      <details class="case">
+        <summary class="case__row">
+          <span class="case__n">02</span>
+          <h3 class="case__title">Благотворительный забег</h3>
+          <span class="case__note">кратко</span>
+          <span class="case__chevron"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </summary>
+        <div class="case__panel">
+          <div class="case__info">
+            <div class="case__fields">
+              <div class="case__field"><p class="case__field-label">Площадка</p><p class="case__field-value">парк ВДНХ</p></div>
+            </div>
+            <div class="case__tasks">
+              <p>Реализация</p>
+              <ul class="case__list">
+                <li>установка и настройка звукового оборудования</li>
+                <li>разработка энергоплана и согласование с ВДНХ</li>
+              </ul>
+            </div>
+            <p class="case__link"><a href="../mebel-oborudovanie/#case-zabeg-vdnh">Весь кейс →</a></p>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 </section>
@@ -474,7 +519,7 @@
   <button type="button" class="btn btn--primary btn--md cookie__ok" id="cookie-accept">Хорошо</button>
 </div>
 
-<script type="application/json" id="page-data">{"base": "../", "clients": ["Сбербанк", "Haval", "Parimatch", "BingX", "ВДНХ", "Парк Горького", "Зарядье", "ТРЦ «Метрополис»", "Музей Москвы", "Loft Hall", "Технопарк Сколково", "ЦВЗ «Манеж»", "Городские парки", "ТРЦ «Меридиан»", "Таврида", "БЦ Парк Победы"], "works": [{"n": "01", "title": "World Atomic Week", "year": "2025", "client": "ATOM EXPO", "tasks": "Аренда оборудования, застройка тематической зоны", "place": "ВДНХ"}, {"n": "04", "title": "Всероссийская неделя охраны труда", "year": "2024, 2025", "client": "Министерство труда, ген. подрядчик", "tasks": "Мебельное обеспечение форумной программы, оборудование стендов, клининг, хэлперы", "place": "Университет «Сириус»"}, {"n": "07", "title": "Турнир по падл-теннису", "year": "2025", "client": "Parimatch, ген. подрядчик", "tasks": "Звук, TV-панели, мебель, техническое сопровождение", "place": "Яхт-клуб «Адмирал»"}]}</script>
+<script type="application/json" id="page-data">{"base": "../", "clients": ["Сбербанк", "Haval", "Parimatch", "BingX", "ВДНХ", "Парк Горького", "Зарядье", "ТРЦ «Метрополис»", "Музей Москвы", "Loft Hall", "Технопарк Сколково", "ЦВЗ «Манеж»", "Городские парки", "ТРЦ «Меридиан»", "Таврида", "БЦ Парк Победы"]}</script>
 <script src="../script.js"></script>
 </body>
 </html>

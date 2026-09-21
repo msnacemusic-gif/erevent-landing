@@ -440,6 +440,46 @@ h1,h2,h3,p,blockquote,figure{margin:0}
   .case__title{min-width:0;overflow-wrap:anywhere}
   .case__year{white-space:normal;text-align:right}
 }
+/* Кейсы на страницах направлений собраны в разметке, а не скриптом:
+   текст виден поисковику и читается, даже если скрипт не загрузился.
+   Раскрытие — штатное <details>, поэтому состояние держит сам браузер. */
+.case > .case__row{list-style:none}
+.case > .case__row::-webkit-details-marker{display:none}
+.case > .case__row::marker{content:""}
+.case[open] > .case__row{background:var(--surface-canvas)}
+.case[open] .case__chevron{transform:rotate(180deg);background:var(--color-primary)}
+.case[open] > .case__panel{display:flex}
+.case__note{
+  font-size:clamp(12px,1vw,14px);font-weight:600;letter-spacing:.04em;
+  color:var(--text-mute);flex:0 0 auto;
+}
+@media (max-width:600px){.case__note{white-space:normal;text-align:right}}
+.case__list{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.case__list li{
+  display:flex;gap:10px;font-size:clamp(15px,1.15vw,18px);line-height:1.5;color:var(--text-body);
+}
+.case__list li::before{
+  content:"";flex:0 0 auto;width:6px;height:6px;margin-top:.62em;
+  border-radius:var(--radius-pill);background:var(--color-primary);
+}
+.case__link{margin:0}
+.case__link a{
+  font-weight:700;color:var(--text-heading);text-decoration:underline;
+  text-underline-offset:3px;transition:color .15s ease;
+}
+.case__link a:hover{color:var(--z-green)}
+/* На телефоне название занимает всю ширину строки. Иначе номер, пометка
+   и стрелка отъедают место, и длинный заголовок сжимается в столбик
+   по одной букве. */
+@media (max-width:600px){
+  details.case > .case__row{flex-wrap:wrap;row-gap:10px}
+  details.case > .case__row .case__n{order:1}
+  details.case > .case__row .case__note{order:2;margin-left:auto;text-align:right}
+  details.case > .case__row .case__chevron{order:3;margin-left:auto}
+  details.case > .case__row .case__note + .case__chevron{margin-left:0}
+  details.case > .case__row .case__title{order:4;flex:1 1 100%;overflow-wrap:break-word}
+}
+
 /* Отступ сверху такой же, как снизу: раскрытая карточка дышит одинаково. */
 .case__panel{display:none;flex-wrap:wrap;gap:clamp(20px,2.4vw,40px);padding:clamp(24px,2.6vw,40px) clamp(8px,1.5vw,20px);animation:fadeUp .4s var(--ease) both}
 .case.is-open .case__panel{display:flex}

@@ -233,15 +233,251 @@
         <p class="section-eyebrow">[кейсы]</p>
         <h2 class="section-title">Кейсы</h2>
       </div>
-      <p class="section-head__note">Каждый проект — свой чертёж, смета и график монтажа. Нажмите на строку — раскроются заказчик, задачи и площадка.</p>
+      <p class="section-head__note">Каждый проект — свой чертёж, смета и график монтажа. Нажмите на строку — раскроются задачи и что мы сделали.</p>
     </div>
 
-    <div class="cases__filters" id="cases-filters" role="group" aria-label="Фильтр кейсов"></div>
 
-    <div class="cases__list" id="cases-list"></div>
-
-    <div class="cases__more" id="cases-more" hidden>
-      <button type="button" class="btn btn--tertiary btn--lg" id="cases-more-btn">Показать ещё</button>
+    <div class="cases__list">
+      <details class="case" id="case-ostrov-mechty" open>
+        <summary class="case__row">
+          <span class="case__n">01</span>
+          <h3 class="case__title">Открытый парк «Остров Мечты»</h3>
+          <span class="case__chevron"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </summary>
+        <div class="case__panel">
+          <div class="case__info">
+            <div class="case__fields">
+              <div class="case__field"><p class="case__field-label">Площадка</p><p class="case__field-value">парк развлечений «Остров Мечты», Москва</p></div>
+            </div>
+            <div class="case__tasks">
+              <p>Задачи</p>
+              <ul class="case__list">
+                <li>Художественно оформить фасады зданий и другие поверхности — более 3000&nbsp;м²</li>
+                <li>Установить баннерные конструкции — 650&nbsp;м²</li>
+              </ul>
+            </div>
+            <div class="case__tasks">
+              <p>Реализация</p>
+              <ul class="case__list">
+                <li>обмеры фасадов и поверхностей</li>
+                <li>подготовка макетов и технического задания для производства</li>
+                <li>художественное оформление по утверждённым эскизам</li>
+                <li>изготовление и монтаж баннерных конструкций</li>
+              </ul>
+            </div>
+            <div class="case__cta"><button type="button" class="btn btn--tertiary btn--md js-case-cta">Хочу похожий проект</button></div>
+          </div>
+        </div>
+      </details>
+      <details class="case" id="case-perm-vdnh">
+        <summary class="case__row">
+          <span class="case__n">02</span>
+          <h3 class="case__title">Стенд Пермского края на международном туристическом форуме</h3>
+          <span class="case__chevron"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </summary>
+        <div class="case__panel">
+          <div class="case__info">
+            <div class="case__fields">
+              <div class="case__field"><p class="case__field-label">Площадка</p><p class="case__field-value">ВДНХ, Москва</p></div>
+            </div>
+            <div class="case__tasks">
+              <p>Задачи</p>
+              <ul class="case__list">
+                <li>Разработать и построить стенд региона</li>
+                <li>Согласовать уникальное техническое решение с техническим контролем ВДНХ и организатором</li>
+              </ul>
+            </div>
+            <div class="case__tasks">
+              <p>Реализация</p>
+              <ul class="case__list">
+                <li>разработка концепции стенда, визуалов и рабочих чертежей</li>
+                <li>подготовка технической документации и согласование конструктива</li>
+                <li>изготовление конструкций на производстве</li>
+                <li>доставка и монтаж в окно заезда</li>
+                <li>техническое сопровождение всех дней форума</li>
+                <li>демонтаж и вывоз конструкций</li>
+              </ul>
+            </div>
+            <div class="case__cta"><button type="button" class="btn btn--tertiary btn--md js-case-cta">Хочу похожий проект</button></div>
+          </div>
+        </div>
+      </details>
+      <details class="case" id="case-novyi-god-2025">
+        <summary class="case__row">
+          <span class="case__n">03</span>
+          <h3 class="case__title">Новогоднее оформление 2025</h3>
+          <span class="case__chevron"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </summary>
+        <div class="case__panel">
+          <div class="case__info">
+            <div class="case__fields">
+              <div class="case__field"><p class="case__field-label">Площадка</p><p class="case__field-value">Москва, Санкт-Петербург, Красная Поляна</p></div>
+            </div>
+            <div class="case__tasks">
+              <p>Задачи</p>
+              <ul class="case__list">
+                <li>Оформить входные группы, интерьеры и ёлки для десятков заказчиков в трёх городах за один сезон</li>
+              </ul>
+            </div>
+            <div class="case__tasks">
+              <p>Реализация</p>
+              <ul class="case__list">
+                <li>разработка эскизов под фирменный стиль каждого заказчика</li>
+                <li>параллельное производство и монтаж по графику, демонтаж после праздников</li>
+                <li>входные группы сети кофеен Drinkit</li>
+                <li>оформление БЦ «Парк Победы»</li>
+                <li>собственная фотозона в аренду для 15 компаний</li>
+                <li>оформление корпоратива в «Москва-Сити»</li>
+                <li>входные группы UpDo by Diana Simonyan, AltoSenso и Lastoria</li>
+                <li>оформление 5 ёлок разных компаний на выставке на Тверской</li>
+                <li>оформление ресторанов на Пятницкой</li>
+                <li>входная группа и уличная территория отеля «Гамма Измайлово»</li>
+              </ul>
+            </div>
+            <div class="case__cta"><button type="button" class="btn btn--tertiary btn--md js-case-cta">Хочу похожий проект</button></div>
+          </div>
+        </div>
+      </details>
+      <details class="case" id="case-karma">
+        <summary class="case__row">
+          <span class="case__n">04</span>
+          <h3 class="case__title">«Карма» — трекер финансового здоровья</h3>
+          <span class="case__chevron"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </summary>
+        <div class="case__panel">
+          <div class="case__info">
+            <div class="case__fields">
+              <div class="case__field"><p class="case__field-label">Площадка</p><p class="case__field-value">отель Stella di Mosca, Москва</p></div>
+            </div>
+            <div class="case__tasks">
+              <p>Задачи</p>
+              <ul class="case__list">
+                <li>Разработать концепцию оформления всего мероприятия</li>
+                <li>Обеспечить площадку мебелью, техникой и онлайн-трансляцией на 200 гостей</li>
+              </ul>
+            </div>
+            <div class="case__tasks">
+              <p>Реализация</p>
+              <ul class="case__list">
+                <li>концепция оформления и визуалы</li>
+                <li>интерактивная фотозона</li>
+                <li>мебель на 200 человек: подбор, доставка, расстановка</li>
+                <li>монтаж видео-, звукового и светового оборудования</li>
+                <li>организация онлайн-трансляции</li>
+                <li>техническое сопровождение мероприятия</li>
+              </ul>
+            </div>
+            <div class="case__cta"><button type="button" class="btn btn--tertiary btn--md js-case-cta">Хочу похожий проект</button></div>
+          </div>
+        </div>
+      </details>
+      <details class="case" id="case-padel-khimki">
+        <summary class="case__row">
+          <span class="case__n">05</span>
+          <h3 class="case__title">Падел-корты</h3>
+          <span class="case__chevron"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </summary>
+        <div class="case__panel">
+          <div class="case__info">
+            <div class="case__fields">
+              <div class="case__field"><p class="case__field-label">Площадка</p><p class="case__field-value">Химки</p></div>
+            </div>
+            <div class="case__tasks">
+              <p>Задачи</p>
+              <ul class="case__list">
+                <li>Разработать дизайн-концепцию пространства</li>
+                <li>Застроить функциональные зоны и навигацию</li>
+              </ul>
+            </div>
+            <div class="case__tasks">
+              <p>Реализация</p>
+              <ul class="case__list">
+                <li>разработка дизайн-концепции</li>
+                <li>застройка лаунж-зоны, фотозоны, ресепшенов и раздевалок</li>
+                <li>оклейка самоклеящейся плёнкой — 440&nbsp;м²</li>
+                <li>разработка и установка навигации</li>
+              </ul>
+            </div>
+            <div class="case__cta"><button type="button" class="btn btn--tertiary btn--md js-case-cta">Хочу похожий проект</button></div>
+          </div>
+        </div>
+      </details>
+      <details class="case" id="case-dinamo-basketball">
+        <summary class="case__row">
+          <span class="case__n">06</span>
+          <h3 class="case__title">Первенство России по баскетболу среди юниоров</h3>
+          <span class="case__chevron"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </summary>
+        <div class="case__panel">
+          <div class="case__info">
+            <div class="case__fields">
+              <div class="case__field"><p class="case__field-label">Площадка</p><p class="case__field-value">Академия «Динамо», Москва</p></div>
+            </div>
+            <div class="case__tasks">
+              <p>Задачи</p>
+              <ul class="case__list">
+                <li>Брендировать арену баннерами — 600&nbsp;м²</li>
+                <li>Оклеить трибуны и пол — 170&nbsp;м²</li>
+              </ul>
+            </div>
+            <div class="case__tasks">
+              <p>Реализация</p>
+              <ul class="case__list">
+                <li>обмеры арены и подготовка макетов к печати</li>
+                <li>печать баннеров и плёнки</li>
+                <li>монтаж баннерных конструкций</li>
+                <li>оклейка трибун и пола</li>
+                <li>демонтаж после соревнований</li>
+              </ul>
+            </div>
+            <div class="case__cta"><button type="button" class="btn btn--tertiary btn--md js-case-cta">Хочу похожий проект</button></div>
+          </div>
+        </div>
+      </details>
+      <details class="case">
+        <summary class="case__row">
+          <span class="case__n">07</span>
+          <h3 class="case__title">Сбер Бизнес Фест</h3>
+          <span class="case__note">кратко</span>
+          <span class="case__chevron"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </summary>
+        <div class="case__panel">
+          <div class="case__info">
+            <div class="case__tasks">
+              <p>Реализация</p>
+              <ul class="case__list">
+                <li>техническая декорация пространства</li>
+                <li>оклейка рабочих поверхностей</li>
+                <li>монтаж декоративных конструкций</li>
+              </ul>
+            </div>
+            <p class="case__link"><a href="../keitering/#case-sber-biznes-fest">Весь кейс →</a></p>
+          </div>
+        </div>
+      </details>
+      <details class="case">
+        <summary class="case__row">
+          <span class="case__n">08</span>
+          <h3 class="case__title">Выездной гардероб на 2500 мест для Catalog</h3>
+          <span class="case__note">кратко</span>
+          <span class="case__chevron"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 5l5 5 5-5"></path></svg></span>
+        </summary>
+        <div class="case__panel">
+          <div class="case__info">
+            <div class="case__fields">
+              <div class="case__field"><p class="case__field-label">Площадка</p><p class="case__field-value">БЦ «Золотой»</p></div>
+            </div>
+            <div class="case__tasks">
+              <p>Реализация</p>
+              <ul class="case__list">
+                <li>проектирование и сборка индивидуальной двухъярусной конструкции</li>
+                <li>брендирование поверхностей — 100&nbsp;м²</li>
+              </ul>
+            </div>
+            <p class="case__link"><a href="../mebel-oborudovanie/#case-catalog-garderob">Весь кейс →</a></p>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 </section>
@@ -600,6 +836,6 @@
   <button type="button" class="btn btn--primary btn--md cookie__ok" id="cookie-accept">Хорошо</button>
 </div>
 
-<script type="application/json" id="page-data">{"base": "../", "clients": ["Сбербанк", "Haval", "Parimatch", "BingX", "ВДНХ", "Парк Горького", "Зарядье", "ТРЦ «Метрополис»", "Музей Москвы", "Loft Hall", "Технопарк Сколково", "ЦВЗ «Манеж»", "Городские парки", "ТРЦ «Меридиан»", "Таврида", "БЦ Парк Победы"], "filters": [{"id": "all", "label": "Все"}, {"id": "art", "label": "Арт-объекты"}, {"id": "events", "label": "Мероприятия"}, {"id": "photo", "label": "Фотозоны"}, {"id": "ny", "label": "Новый год"}, {"id": "city", "label": "Городские проекты"}], "works": [{"n": "01", "cat": "events", "title": "World Atomic Week", "year": "2025", "client": "ATOM EXPO", "tasks": "Аренда оборудования, застройка тематической зоны", "place": "ВДНХ"}, {"n": "02", "cat": "events", "title": "Сбер Бизнес Фест", "year": "2025", "client": "ПАО Сбербанк, ген. подрядчик", "tasks": "Застройка пространства фестиваля, фудкорт и кофестанции, аренда мебели", "place": "Москва, Казань, Волгоград, Омск, Новосибирск"}, {"n": "03", "cat": "art", "title": "МТФ «Путешествуй»", "year": "2024, 2025, 2026", "client": "Фонд Росконгресс", "tasks": "Застройка стендов, шатры, мебель и оборудование на стенды, изготовление арт-объекта, застройка VIP-зоны", "place": "ВДНХ"}, {"n": "04", "cat": "events", "title": "Всероссийская неделя охраны труда", "year": "2024, 2025", "client": "Министерство труда, ген. подрядчик", "tasks": "Мебельное обеспечение форумной программы, оборудование стендов, клининг, хэлперы", "place": "Университет «Сириус»"}, {"n": "05", "cat": "events", "title": "Фестиваль «Таврида»", "year": "2024", "client": "Росмолодёжь, ген. подрядчик", "tasks": "Монтаж палаточного городка и коммуникаций", "place": "Судак"}, {"n": "06", "cat": "events", "title": "VK Fest", "year": "2025", "client": "VK Community", "tasks": "Кальянный кейтеринг VIP-зон, мебель и оборудование лаунж-зон", "place": "Москва, Лужники"}, {"n": "07", "cat": "events", "title": "Турнир по падл-теннису", "year": "2025", "client": "Parimatch, ген. подрядчик", "tasks": "Звук, TV-панели, мебель, техническое сопровождение", "place": "Яхт-клуб «Адмирал»"}, {"n": "08", "cat": "art", "title": "Запуск спорткомплекса Padel Ball", "year": "", "client": "Padel Ball", "tasks": "Дизайн, строительные работы, брендирование, навигация, мебель и оборудование", "place": "Химки, Gopark"}, {"n": "09", "cat": "art", "title": "Оформление входной группы БЦ", "year": "", "client": "БЦ «Парк Победы»", "tasks": "Дизайн, изготовление и монтаж декораций входной группы", "place": "БЦ «Парк Победы»"}, {"n": "10", "cat": "events", "title": "Yandex Data (exclusive event)", "year": "", "client": "Yandex Data", "tasks": "Барное и кальянное обслуживание, лаунж-пространство", "place": "Сочи, Красная Поляна"}]}</script>
+<script type="application/json" id="page-data">{"base": "../", "clients": ["Сбербанк", "Haval", "Parimatch", "BingX", "ВДНХ", "Парк Горького", "Зарядье", "ТРЦ «Метрополис»", "Музей Москвы", "Loft Hall", "Технопарк Сколково", "ЦВЗ «Манеж»", "Городские парки", "ТРЦ «Меридиан»", "Таврида", "БЦ Парк Победы"]}</script>
 <script src="../script.js"></script>
 </body>
