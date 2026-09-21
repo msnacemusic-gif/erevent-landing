@@ -198,18 +198,27 @@ jobs:
             *zayavki*) echo "ВНИМАНИЕ: страница заявок попала в карту сайта" ;;
             *) echo "OK: страницы заявок в карте сайта нет" ;;
           esac
-          curl -sSL --max-time 30 https://sobroom.ru/robots.txt \
-            | grep -q 'Disallow: /zayavki-' \
-            && echo "OK: страница заявок закрыта от поисковиков" \
-            || echo "ВНИМАНИЕ: в robots.txt нет запрета на /zayavki-"
-          curl -sSL --max-time 30 https://sobroom.ru/ \
-            | grep -q 'yandex-verification' \
-            && echo "OK: подтверждение Яндекс.Вебмастера на месте" \
-            || echo "ВНИМАНИЕ: мета-тега Яндекс.Вебмастера нет на главной"
-          curl -sSL --max-time 30 https://sobroom.ru/script.js \
-            | grep -q '112861418' \
-            && echo "OK: счётчик Метрики выложен" \
-            || echo "ВНИМАНИЕ: счётчика Метрики нет в script.js"
+          # Сначала забираем файл целиком, потом ищем в нём: если обрывать
+          # загрузку на первом совпадении, curl ругается на закрытый вывод.
+          rules=$(curl -sSL --max-time 30 https://sobroom.ru/robots.txt)
+          case "$rules" in
+            *"Disallow: /zayavki-"*) echo "OK: страница заявок закрыта от поисковиков" ;;
+            *) echo "ВНИМАНИЕ: в robots.txt нет запрета на /zayavki-" ;;
+          esac
+          home=$(curl -sSL --max-time 30 https://sobroom.ru/)
+          case "$home" in
+            *yandex-verification*) echo "OK: подтверждение Яндекс.Вебмастера на месте" ;;
+            *) echo "ВНИМАНИЕ: мета-тега Яндекс.Вебмастера нет на главной" ;;
+          esac
+          case "$home" in
+            *'"@type": "LocalBusiness"'*) echo "OK: карточка компании на месте" ;;
+            *) echo "ВНИМАНИЕ: на главной нет карточки компании" ;;
+          esac
+          code=$(curl -sSL --max-time 30 https://sobroom.ru/script.js)
+          case "$code" in
+            *112861418*) echo "OK: счётчик Метрики выложен" ;;
+            *) echo "ВНИМАНИЕ: счётчика Метрики нет в script.js" ;;
+          esac
 
           echo
           echo "== закрытые адреса"
