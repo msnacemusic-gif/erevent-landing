@@ -37,6 +37,7 @@ const MAX_AGE_DAYS = 14;
 
 $pdo = db();
 if (!$pdo) {
+    retry_log(['note' => 'база недоступна']);
     exit("База недоступна — пробовать нечего.\n");
 }
 
@@ -50,10 +51,14 @@ $pending = $pdo->query(
 )->fetchAll();
 
 if (!$pending) {
+    retry_log(['pending' => 0]);
     exit("Очередь пуста.\n");
 }
 
 echo 'В очереди: ' . count($pending) . PHP_EOL;
+
+$sentTg = 0;
+$sentMail = 0;
 
 foreach ($pending as $row) {
     // Заявка ждала связи — помечаем это в заголовке, чтобы не путать
@@ -64,9 +69,17 @@ foreach ($pending as $row) {
         : '';
 
     [$tg, $mail] = notify_lead($row, (int) $row['id'], $head);
+    if ($tg) { $sentTg++; }
+    if ($mail) { $sentMail++; }
 
     printf("заявка №%d: telegram %s, почта %s%s", $row['id'],
         $tg ? 'ок' : 'нет', $mail ? 'ок' : 'нет', PHP_EOL);
 }
+
+retry_log([
+    'pending' => count($pending),
+    'tg' => $sentTg,
+    'mail' => $sentMail,
+]);
 
 echo "Готово.\n";

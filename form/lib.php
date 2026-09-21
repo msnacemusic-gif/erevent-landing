@@ -500,3 +500,40 @@ function lead_token(int $id): string
     $secret = $c['bot_token'] . '|' . $c['db_pass'] . '|' . $c['leads_pass'];
     return hash_hmac('sha256', 'lead:' . $id, $secret);
 }
+
+/**
+ * Журнал запусков досылки.
+ *
+ * Планировщик хостинга запускает form/retry.php молча, поэтому каждый
+ * запуск оставляет здесь короткую запись. По ней в диагностике видно,
+ * работает ли расписание и с какой частотой. Храним последние запуски,
+ * файл лежит в закрытой для сети папке.
+ */
+function retry_log(array $entry): void
+{
+    $dir = __DIR__ . '/fallback';
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0700, true);
+    }
+
+    $entry = ['at' => date('c'), 'sapi' => PHP_SAPI] + $entry;
+    $runs = retry_runs();
+    $runs[] = $entry;
+
+    @file_put_contents(
+        $dir . '/retry.json',
+        json_encode(array_slice($runs, -12), JSON_UNESCAPED_UNICODE),
+        LOCK_EX
+    );
+}
+
+/** Последние записи журнала запусков, самая старая первой. */
+function retry_runs(): array
+{
+    $raw = @file_get_contents(__DIR__ . '/fallback/retry.json');
+    if ($raw === false) {
+        return [];
+    }
+    $runs = json_decode($raw, true);
+    return is_array($runs) ? $runs : [];
+}

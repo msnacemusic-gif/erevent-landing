@@ -50,6 +50,45 @@ if ($pdo) {
     line('подключение', 'НЕ УДАЛОСЬ');
 }
 
+echo "\n== очередь уведомлений\n";
+if ($pdo) {
+    $q = $pdo->query(
+        'SELECT COUNT(*) AS n,
+                SUM(tg_sent = 0) AS bez_tg,
+                SUM(mail_sent = 0) AS bez_pochty,
+                MAX(notify_tries) AS popytok,
+                MAX(notify_last) AS posledniy
+           FROM leads
+          WHERE tg_sent = 0 OR mail_sent = 0'
+    )->fetch();
+    line('заявок в очереди', (string) $q['n']);
+    line('из них без telegram', (string) $q['bez_tg']);
+    line('из них без почты', (string) $q['bez_pochty']);
+    line('попыток у самой старой', (string) ($q['popytok'] ?? 0));
+    line('последняя попытка', $q['posledniy'] ?? 'не было');
+}
+
+echo "\n== запуски досылки по расписанию\n";
+$runs = retry_runs();
+if (!$runs) {
+    echo "  записей нет — планировщик ни разу не запускал form/retry.php\n";
+} else {
+    foreach ($runs as $run) {
+        $ago = max(0, time() - strtotime((string) $run['at']));
+        $what = isset($run['note'])
+            ? $run['note']
+            : 'в очереди ' . $run['pending']
+                . (isset($run['tg'])
+                    ? ', ушло в telegram ' . $run['tg'] . ', на почту ' . $run['mail']
+                    : '');
+        printf("  %s (%d мин назад, %s): %s%s",
+            $run['at'], intdiv($ago, 60), $run['sapi'] ?? '?', $what, PHP_EOL);
+    }
+    $last = end($runs);
+    $ago = max(0, time() - strtotime((string) $last['at']));
+    line('последний запуск', intdiv($ago, 60) . ' мин назад');
+}
+
 echo "\n== Telegram\n";
 if ($c['bot_token'] !== '' && extension_loaded('curl')) {
     foreach (['getMe' => [], 'getChat' => ['chat_id' => $c['chat_id']]] as $method => $params) {
