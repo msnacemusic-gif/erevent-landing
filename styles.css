@@ -182,6 +182,18 @@ h1,h2,h3,p,blockquote,figure{margin:0}
 .header__icon-link:hover{background:var(--z-green);color:var(--z-ink);border-color:var(--z-green)}
 .header__icon-link--max span{font-family:var(--font-display);font-weight:900;font-size:12px;letter-spacing:-.02em;line-height:1}
 .header__mobile-actions{display:none;align-items:center;gap:10px}
+/* Звонок и Telegram держим в шапке: закреплённая панель внизу закрывала
+   содержимое на телефоне. Подписи не помещаются рядом с логотипом, поэтому
+   действия сведены к значкам — название каждого читает озвучка экрана. */
+.header__action{
+  width:44px;height:44px;flex:0 0 auto;border-radius:var(--radius-pill);
+  border:1px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;
+  color:var(--z-canvas);transition:background-color .15s ease,border-color .15s ease;
+}
+.header__action:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.6)}
+.header__action--tg{background:var(--color-primary);border-color:var(--color-primary);color:var(--z-ink)}
+.header__action--tg:hover{background:var(--color-primary-hover);border-color:var(--color-primary-hover)}
+
 .header__burger{
   width:44px;height:44px;border-radius:var(--radius-pill);border:1px solid rgba(255,255,255,.28);
   background:transparent;color:var(--z-canvas);display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -199,11 +211,10 @@ h1,h2,h3,p,blockquote,figure{margin:0}
   .header__nav,.header__actions{display:none}
   .header__mobile-actions{display:flex}
 }
-/* На узких телефонах крупный логотип и номер телефона в строку не помещаются —
-   бургер уезжал за правый край. Номер убираем: звонок остаётся в закреплённой
-   нижней панели, в контактах и в футере. */
+/* На узких телефонах логотип и три круглых действия идут вплотную —
+   поджимаем расстояние между ними, чтобы бургер не уехал за край. */
 @media (max-width:419px){
-  .header__mobile-actions .header__phone{display:none}
+  .header__mobile-actions{gap:6px}
 }
 
 /* ==========================================================================
@@ -758,32 +769,13 @@ form#lead-form{display:flex;flex-direction:column;gap:clamp(16px,1.6vw,22px)}
 /* ==========================================================================
    Mobile sticky call bar
    ========================================================================== */
-.mobile-bar{
-  display:none;position:fixed;bottom:0;left:0;right:0;z-index:80;gap:8px;
-  padding:10px 12px calc(10px + env(safe-area-inset-bottom));
-  background:rgba(14,15,12,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-top:1px solid rgba(255,255,255,.14);
-}
-@media (max-width:1199px){.mobile-bar{display:flex}}
-.mobile-bar__call,.mobile-bar__tg{
-  min-width:0;min-height:48px;padding:0 12px;
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  border-radius:var(--radius-xl);font-weight:600;
-  /* Подпись держим в одну строку — «Написать в Telegram» раньше рвалось надвое. */
-  font-size:clamp(14px,3.9vw,16px);white-space:nowrap;
-}
-/* Длинной подписи отдаём столько места, сколько нужно, — короткая ужимается. */
-.mobile-bar__call{flex:0 1 auto;border:1px solid rgba(255,255,255,.3);color:var(--text-on-dark)}
-.mobile-bar__tg{flex:1 1 auto;background:var(--color-primary);color:var(--z-ink)}
-
 /* Поле-ловушка для ботов: убрано с глаз, но остаётся в разметке. */
 .form-hp{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* ==========================================================================
    Cookie notice
    ========================================================================== */
-/* Скрыт по умолчанию; скрипт показывает его, если согласия ещё не было.
-   На мобильных поднимаем над закреплённой панелью «Позвонить / Telegram». */
+/* Скрыт по умолчанию; скрипт показывает его, если согласия ещё не было. */
 .cookie{display:none}
 .cookie.is-visible{
   display:flex;flex-wrap:wrap;align-items:center;gap:clamp(12px,1.6vw,20px);
@@ -792,9 +784,6 @@ form#lead-form{display:flex;flex-direction:column;gap:clamp(16px,1.6vw,22px)}
   max-width:720px;margin:0 auto;padding:clamp(16px,1.8vw,22px) clamp(18px,2vw,26px);
   background:var(--surface-dark);border:1px solid rgba(255,255,255,.22);border-radius:var(--radius-xl);
   animation:fadeUp .35s var(--ease) both;
-}
-@media (max-width:1199px){
-  .cookie.is-visible{bottom:calc(80px + env(safe-area-inset-bottom))}
 }
 @media (prefers-reduced-motion: reduce){
   .cookie.is-visible{animation:none}
