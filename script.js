@@ -284,6 +284,43 @@
   })();
 
   /* ------------------------------------------------------------------ */
+  /* Галерея фото внутри кейса                                            */
+  /* ------------------------------------------------------------------ */
+
+  // Лента фото листается сама (свайп, тачпад); стрелки сдвигают её на
+  // ширину видимой части и гаснут на краях.
+  Array.prototype.forEach.call(document.querySelectorAll('[data-case-gallery]'), function (gallery) {
+    var track = gallery.querySelector('.case__gallery-track');
+    var arrows = gallery.querySelectorAll('.case__gallery-arrow');
+    if (!track || !arrows.length) return;
+
+    function update() {
+      var max = track.scrollWidth - track.clientWidth - 2;
+      Array.prototype.forEach.call(arrows, function (btn) {
+        var dir = Number(btn.getAttribute('data-dir'));
+        btn.disabled = dir < 0 ? track.scrollLeft <= 2 : track.scrollLeft >= max;
+      });
+    }
+
+    Array.prototype.forEach.call(arrows, function (btn) {
+      btn.addEventListener('click', function () {
+        var dir = Number(btn.getAttribute('data-dir'));
+        track.scrollBy({ left: dir * track.clientWidth * 0.85, behavior: reduced() ? 'auto' : 'smooth' });
+      });
+    });
+
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    // Карточка свёрнута — размеров у ленты нет; пересчитываем при раскрытии.
+    var card = gallery.closest('details');
+    if (card) card.addEventListener('toggle', update);
+    Array.prototype.forEach.call(track.querySelectorAll('img'), function (img) {
+      img.addEventListener('load', update);
+    });
+    update();
+  });
+
+  /* ------------------------------------------------------------------ */
   /* Reviews carousel                                                     */
   /* ------------------------------------------------------------------ */
 

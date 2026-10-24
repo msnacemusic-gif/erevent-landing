@@ -516,6 +516,34 @@ h1,h2,h3,p,blockquote,figure{margin:0}
 .case__cta-link:hover{color:var(--z-green)}
 .case__media{flex:1 1 380px;min-width:280px;aspect-ratio:3/2;border-radius:var(--radius-xl);overflow:hidden;background:var(--surface-canvas)}
 .case__media img{width:100%;height:100%;object-fit:cover;display:block}
+/* Галерея кейса: лента фото во всю ширину карточки. Листается свайпом,
+   колесом/тачпадом и стрелками; по клику фото открывается крупно. */
+.case__gallery{flex:1 1 100%;min-width:0;display:flex;flex-direction:column;gap:14px}
+.case__gallery-track{
+  display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;scrollbar-width:none;border-radius:var(--radius-xl);outline:none;
+}
+.case__gallery-track::-webkit-scrollbar{display:none}
+.case__gallery-track:focus-visible{box-shadow:0 0 0 3px var(--color-primary)}
+.case__gallery-item{flex:0 0 auto;max-width:100%;height:clamp(260px,32vw,420px);scroll-snap-align:start;border-radius:var(--radius-xl);overflow:hidden;background:var(--surface-canvas)}
+.case__gallery-item img{height:100%;width:auto;max-width:100%;object-fit:cover;display:block;transition:transform .4s var(--ease)}
+.case__gallery-item:hover img{transform:scale(1.03)}
+.case__gallery-nav{display:flex;align-items:center;gap:10px}
+.case__gallery-arrow{
+  width:44px;height:44px;flex:0 0 auto;border-radius:var(--radius-pill);cursor:pointer;
+  background:transparent;border:1px solid var(--border-default);color:var(--text-heading);
+  display:flex;align-items:center;justify-content:center;
+  transition:background-color .15s ease,border-color .15s ease,opacity .15s ease;
+}
+.case__gallery-arrow:hover:not(:disabled){background:var(--color-primary);border-color:var(--color-primary)}
+.case__gallery-arrow:disabled{opacity:.3;cursor:default}
+.case__gallery-hint{margin:0 0 0 6px;font-size:14px;color:var(--text-mute)}
+@media (max-width:599.98px){.case__gallery-arrow{display:none}.case__gallery-hint{margin:0}}
+@media (prefers-reduced-motion:reduce){
+  .case__gallery-track{scroll-behavior:auto}
+  .case__gallery-item img{transition:none}
+  .case__gallery-item:hover img{transform:none}
+}
 .case__placeholder{
   width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;
   background:var(--surface-dark);color:var(--z-green);font-family:var(--font-display);font-weight:800;font-size:clamp(16px,1.6vw,20px);
