@@ -504,6 +504,7 @@ h1,h2,h3,p,blockquote,figure{margin:0}
 .case__field{flex:1 1 160px}
 .case__field-label{margin:0 0 6px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute)}
 .case__field-value{margin:0;font-size:17px;font-weight:600;line-height:1.35;color:var(--text-heading)}
+.case__lead{margin:0;font-size:clamp(15px,1.15vw,18px);line-height:1.5;color:var(--text-body)}
 .case__tasks p{margin:0 0 6px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute)}
 .case__tasks span{display:block;font-size:clamp(15px,1.15vw,18px);line-height:1.5;color:var(--text-body)}
 /* Кнопка и ссылка на полный кейс стоят в одной строке внизу карточки. */
