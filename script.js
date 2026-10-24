@@ -50,31 +50,8 @@
 
   var CLIENTS = ['Росконгресс', 'Сбербанк', 'Parimatch', 'Haval', 'BingX', 'VK', 'Росатом', 'Минтруд', 'Росмолодёжь'];
 
-  // Каждый кейс ищет фото по номеру: media/case-01.jpg … media/case-10.jpg.
-  // Файла нет — карточка сама показывает плашку с названием кейса.
-  // Чтобы добавить фото, достаточно положить его в media/ под нужным именем.
-  function casePhoto(c, i) {
-    var n = c.n || ((i < 9 ? '0' : '') + (i + 1));
-    return (PAGE.base || '') + 'media/case-' + n + '.jpg';
-  }
-
-  var CASES = [
-    { n: '01', title: 'World Atomic Week', year: '2025', client: 'ATOM EXPO', tasks: 'Аренда оборудования, застройка тематической зоны', place: 'ВДНХ' },
-    { n: '02', title: 'Сбер Бизнес Фест', year: '2025', client: 'ПАО Сбербанк, ген. подрядчик', tasks: 'Застройка пространства фестиваля, фудкорт и кофестанции, аренда мебели', place: 'Москва, Казань, Волгоград, Омск, Новосибирск' },
-    { n: '03', title: 'МТФ «Путешествуй»', year: '2024, 2025, 2026', client: 'Фонд Росконгресс', tasks: 'Застройка стендов, шатры, мебель и оборудование на стенды, изготовление арт-объекта, застройка VIP-зоны', place: 'ВДНХ' },
-    { n: '04', title: 'Всероссийская неделя охраны труда', year: '2024, 2025', client: 'Министерство труда, ген. подрядчик', tasks: 'Мебельное обеспечение форумной программы, оборудование стендов, клининг, хэлперы', place: 'Университет «Сириус»' },
-    { n: '05', title: 'Фестиваль «Таврида»', year: '2024', client: 'Росмолодёжь, ген. подрядчик', tasks: 'Монтаж палаточного городка и коммуникаций', place: 'Судак' },
-    { n: '06', title: 'VK Fest', year: '2025', client: 'VK Community', tasks: 'Кальянный кейтеринг VIP-зон, мебель и оборудование лаунж-зон', place: 'Москва, Лужники' },
-    { n: '07', title: 'Турнир по падл-теннису', year: '2025', client: 'Parimatch, ген. подрядчик', tasks: 'Звук, TV-панели, мебель, техническое сопровождение', place: 'Яхт-клуб «Адмирал»' },
-    { n: '08', title: 'Запуск спорткомплекса Padel Ball', year: '', client: 'Padel Ball', tasks: 'Дизайн, строительные работы, брендирование, навигация, мебель и оборудование', place: 'Химки, Gopark' },
-    { n: '09', title: 'Оформление входной группы БЦ', year: '', client: 'БЦ «Парк Победы»', tasks: 'Дизайн, изготовление и монтаж декораций входной группы', place: 'БЦ «Парк Победы»' },
-    { n: '10', title: 'Yandex Data (exclusive event)', year: '', client: 'Yandex Data', tasks: 'Барное и кальянное обслуживание, лаунж-пространство', place: 'Сочи, Красная Поляна' }
-  ];
-
-  var CASES_INITIAL = 6;
 
   if (PAGE.clients && PAGE.clients.length) CLIENTS = PAGE.clients;
-  if (PAGE.works && PAGE.works.length) CASES = PAGE.works;
 
   /* ------------------------------------------------------------------ */
   /* Helpers                                                              */
@@ -261,132 +238,50 @@
   /* Cases                                                                */
   /* ------------------------------------------------------------------ */
 
-  var casesList = document.getElementById('cases-list');
-  var casesMoreWrap = document.getElementById('cases-more');
-  var casesMoreBtn = document.getElementById('cases-more-btn');
-  var casesFiltersWrap = document.getElementById('cases-filters');
-  var casesAllShown = false;
-  var casesFilter = 'all';
-  var casesShown = [];
-  var hasCases = !!(casesList && casesMoreWrap && casesMoreBtn);
+  // Кейсы лежат в разметке страницы — скрипт только прячет лишние под
+  // кнопку «Показать ещё» и подставляет плашку, если фото ещё не загрузили.
+  var CASES_INITIAL = 6;
 
-  function casePlaceholderHtml(c) {
-    return '<div class="case__placeholder"><span>' + c.title + '<br>Фото добавим по готовности</span></div>';
-  }
+  (function setupCases() {
+    var list = document.querySelector('.cases__list');
+    if (!list) return;
 
-  function caseMediaHtml(c, i) {
-    return '<img src="' + casePhoto(c, i) + '" alt="Фото проекта «' + c.title + '»" loading="lazy" data-case-photo="' + i + '">';
-  }
+    var items = Array.prototype.slice.call(list.querySelectorAll('details.case'));
+    var moreWrap = document.getElementById('cases-more');
+    var moreBtn = document.getElementById('cases-more-btn');
 
-  // Фильтры есть только там, где страница их отдала в page-data.
-  function currentCases() {
-    if (casesFilter === 'all') return CASES;
-    return CASES.filter(function (c) { return c.cat === casesFilter; });
-  }
+    if (moreWrap && moreBtn && items.length > CASES_INITIAL) {
+      var shown = CASES_INITIAL;
 
-  function renderFilters() {
-    if (!casesFiltersWrap || !PAGE.filters || !PAGE.filters.length) return;
-    casesFiltersWrap.innerHTML = PAGE.filters.map(function (f) {
-      var on = f.id === casesFilter;
-      return '<button type="button" class="chip' + (on ? ' is-active' : '') + '" data-filter="' +
-        esc(f.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + esc(f.label) + '</button>';
-    }).join('');
-    Array.prototype.forEach.call(casesFiltersWrap.querySelectorAll('[data-filter]'), function (btn) {
-      btn.addEventListener('click', function () {
-        casesFilter = btn.getAttribute('data-filter');
-        casesAllShown = false;
-        renderFilters();
-        renderCases();
+      function apply() {
+        items.forEach(function (el, i) { el.style.display = i < shown ? '' : 'none'; });
+        var left = items.length - shown;
+        moreWrap.hidden = left <= 0;
+        if (left > 0) moreBtn.textContent = 'Показать ещё ' + left;
+      }
+
+      moreBtn.addEventListener('click', function () {
+        shown = items.length;
+        apply();
       });
-    });
-  }
-
-  function renderCases() {
-    casesShown = currentCases();
-    casesList.innerHTML = casesShown.map(function (c, i) {
-      // Один кейс на странице всегда раскрыт — первый в списке.
-      var open = i === 0;
-      return (
-        '<div class="case' + (open ? ' is-open' : '') + '" data-case="' + i + '">' +
-          '<button type="button" class="case__row" data-case-toggle="' + i + '" aria-expanded="' + (open ? 'true' : 'false') + '">' +
-            '<span class="case__n">' + c.n + '</span>' +
-            '<h3 class="case__title">' + c.title + '</h3>' +
-            '<span class="case__year">' + c.year + '</span>' +
-            '<span class="case__chevron"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 5l5 5 5-5"></path></svg></span>' +
-          '</button>' +
-          '<div class="case__panel">' +
-            '<div class="case__info">' +
-              '<div class="case__fields">' +
-                '<div class="case__field"><p class="case__field-label">Заказчик</p><p class="case__field-value">' + c.client + '</p></div>' +
-                '<div class="case__field"><p class="case__field-label">Площадка</p><p class="case__field-value">' + c.place + '</p></div>' +
-              '</div>' +
-              '<div class="case__tasks"><p>Задачи</p><span>' + c.tasks + '</span></div>' +
-              '<div class="case__cta"><button type="button" class="btn btn--tertiary btn--md js-case-cta">Хочу похожий проект</button></div>' +
-            '</div>' +
-            '<div class="case__media">' + caseMediaHtml(c, i) + '</div>' +
-          '</div>' +
-        '</div>'
-      );
-    }).join('');
-
-    if (!casesShown.length) {
-      casesList.innerHTML = '<p class="cases__empty">В этом разделе кейсы ещё не выложены.</p>';
+      apply();
     }
 
-    applyCasesVisibility();
-    bindCaseEvents();
-  }
-
-  function applyCasesVisibility() {
-    var items = Array.prototype.slice.call(casesList.querySelectorAll('.case'));
-    items.forEach(function (el, i) {
-      el.style.display = (casesAllShown || i < CASES_INITIAL) ? '' : 'none';
-    });
-    var remaining = casesShown.length - CASES_INITIAL;
-    if (!casesAllShown && remaining > 0) {
-      casesMoreWrap.hidden = false;
-      casesMoreBtn.textContent = 'Показать ещё ' + remaining;
-    } else {
-      casesMoreWrap.hidden = true;
-    }
-  }
-
-  function bindCaseEvents() {
-    Array.prototype.forEach.call(casesList.querySelectorAll('[data-case-toggle]'), function (btn) {
-      btn.addEventListener('click', function () {
-        var card = btn.closest('.case');
-        if (card.classList.contains('is-open')) return;
-        Array.prototype.forEach.call(casesList.querySelectorAll('.case.is-open'), function (open) {
-          open.classList.remove('is-open');
-          open.querySelector('.case__row').setAttribute('aria-expanded', 'false');
-        });
-        card.classList.add('is-open');
-        btn.setAttribute('aria-expanded', 'true');
-      });
-    });
-    Array.prototype.forEach.call(casesList.querySelectorAll('.js-case-cta'), function (btn) {
-      btn.addEventListener('click', function () { scrollToEl('form'); });
-    });
-    // Фото ещё не загружено в media/ — карточка возвращается к плашке.
-    Array.prototype.forEach.call(casesList.querySelectorAll('[data-case-photo]'), function (img) {
-      img.addEventListener('error', function () {
-        var i = parseInt(img.getAttribute('data-case-photo'), 10);
+    // Фото кейса ещё не выложили — вместо битой картинки показываем плашку
+    // с названием, чтобы карточка выглядела законченной.
+    Array.prototype.forEach.call(list.querySelectorAll('[data-case-photo]'), function (img) {
+      function fallback() {
+        var card = img.closest('details.case');
+        var title = card ? card.querySelector('.case__title') : null;
         var holder = img.parentElement;
-        if (holder) holder.innerHTML = casePlaceholderHtml(casesShown[i]);
-      });
+        if (!holder) return;
+        holder.innerHTML = '<div class="case__placeholder"><span>' +
+          esc(title ? title.textContent : '') + '<br>Фото добавим по готовности</span></div>';
+      }
+      img.addEventListener('error', fallback);
+      if (img.complete && !img.naturalWidth) fallback();
     });
-  }
-
-  // Страница без блока кейсов — пропускаем, скрипт общий для всего сайта.
-  if (hasCases) {
-    casesMoreBtn.addEventListener('click', function () {
-      casesAllShown = true;
-      applyCasesVisibility();
-    });
-
-    renderFilters();
-    renderCases();
-  }
+  })();
 
   /* ------------------------------------------------------------------ */
   /* Reviews carousel                                                     */
@@ -590,9 +485,9 @@
       var card = document.getElementById(id);
       if (!card || card.tagName !== 'DETAILS') return;
       card.open = true;
-      // Браузер сам прыгает к якорю сразу после загрузки — и ставит карточку
-      // впритык к верху, под шапку. Подводим её чуть позже и с отступом.
-      setTimeout(function () { scrollToEl(id); }, 80);
+      // Отступ под шапку задан карточке в стилях (scroll-margin-top), поэтому
+      // и наша прокрутка, и собственный прыжок браузера приходят в одно место.
+      card.scrollIntoView({ block: 'start', behavior: reduced() ? 'auto' : 'smooth' });
     }
 
     openFromHash();
