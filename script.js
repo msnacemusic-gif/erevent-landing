@@ -65,7 +65,6 @@
     'Drinkit',
     'Catalog',
     'Padel Ball',
-    'AltoSenso',
     'Lastoria',
     'UpDo by Diana Simonyan',
     'Карма',
