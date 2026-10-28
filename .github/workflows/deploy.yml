@@ -156,7 +156,8 @@ jobs:
           for path in / /art-obekty/ /mebel-oborudovanie/ /keitering/ \
                       /ekrany-svet-zvuk/ /privacy/ /styles.css /script.js \
                       /favicon.ico /media/favicon-32.png /media/favicon-16.png \
-                      /media/apple-touch-icon.png /robots.txt /sitemap.xml; do
+                      /media/apple-touch-icon.png /robots.txt /sitemap.xml \
+                      /media/novogodnee-oformlenie-vhodov-2026-27.pdf; do
             out=$(curl -sSL --max-time 30 -o /dev/null \
                     -w '%{http_code} %{content_type}' "https://sobroom.ru$path")
             echo "$path -> $out"
