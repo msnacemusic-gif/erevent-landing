@@ -896,16 +896,11 @@ body.is-photo-open .cookie{visibility:hidden}
 }
 
 /* Коммерческое предложение внутри кейса: открывается в новой вкладке,
-   оттуда же его скачивают. Оформлено как карточка, чтобы не потерялось
-   среди списков. */
-.case__doc{
-  display:flex;align-items:flex-start;gap:14px;padding:16px 18px;
-  border-radius:var(--radius-md);border:1px solid var(--border-default);
-  background:var(--surface-canvas);color:var(--text-heading);
-  transition:background-color .15s ease,border-color .15s ease;
-}
-.case__doc:hover{background:var(--color-primary-pale);border-color:var(--color-primary)}
-.case__doc-icon{flex:0 0 auto;margin-top:2px;color:var(--text-heading)}
-.case__doc-text{display:flex;flex-direction:column;gap:4px;min-width:0}
-.case__doc-title{font-weight:700;font-size:clamp(15px,1.2vw,17px);line-height:1.3}
-.case__doc-note{font-size:13px;line-height:1.45;color:var(--text-mute)}
+   оттуда его и скачивают. Оформлено главной кнопкой сайта — это самое
+   ценное, что есть в кейсе для того, кто выбирает подрядчика. */
+.case__doc{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.case__doc-btn{gap:10px;padding-right:22px}
+.case__doc-arrow{transition:transform .2s var(--ease)}
+.case__doc-btn:hover .case__doc-arrow{transform:translateX(4px)}
+.case__doc-note{margin:0;max-width:46em;font-size:13px;line-height:1.45;color:var(--text-mute)}
+@media (prefers-reduced-motion:reduce){.case__doc-arrow{transition:none}}
