@@ -48,7 +48,42 @@
     LEAD_ENDPOINT = (PAGE.base || '') + LEAD_ENDPOINT;
   }
 
-  var CLIENTS = ['Росконгресс', 'Сбербанк', 'Parimatch', 'Haval', 'BingX', 'VK', 'Росатом', 'Минтруд', 'Росмолодёжь'];
+  var CLIENTS = [
+    'Сбербанк',
+    'VK',
+    'Parimatch',
+    'Haval',
+    'BingX',
+    'Росатом',
+    'Росконгресс',
+    'Минтруд',
+    'Росмолодёжь',
+    'ATOM EXPO',
+    'Yandex Data',
+    'Пермский край',
+    'Остров Мечты',
+    'Drinkit',
+    'Catalog',
+    'Padel Ball',
+    'AltoSenso',
+    'Lastoria',
+    'UpDo by Diana Simonyan',
+    'Карма',
+    'Академия «Динамо»',
+    'Гамма Измайлово',
+    'ВДНХ',
+    'Парк Горького',
+    'Зарядье',
+    'Музей Москвы',
+    'ЦВЗ «Манеж»',
+    'Технопарк Сколково',
+    'Loft Hall',
+    'ТРЦ «Метрополис»',
+    'ТРЦ «Меридиан»',
+    'Городские парки',
+    'Таврида',
+    'БЦ «Парк Победы»'
+  ];
 
 
   if (PAGE.clients && PAGE.clients.length) CLIENTS = PAGE.clients;
