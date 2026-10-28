@@ -321,6 +321,26 @@
   });
 
   /* ------------------------------------------------------------------ */
+  /* Фотографии: убираем простые пути к сохранению                        */
+  /* ------------------------------------------------------------------ */
+
+  // Правый клик по снимку и перетаскивание в соседнее окно — два самых
+  // простых способа забрать фото. Закрываем их. Файл всё равно доступен
+  // тому, кто откроет инструменты разработчика: это защита от случайного
+  // копирования, а не от целенаправленного.
+  (function protectPhotos() {
+    var selector = '.case__gallery-item, .case__media, .photo-view, .service-card__photo';
+
+    document.addEventListener('contextmenu', function (e) {
+      if (e.target.closest && e.target.closest(selector)) e.preventDefault();
+    });
+
+    document.addEventListener('dragstart', function (e) {
+      if (e.target.tagName === 'IMG') e.preventDefault();
+    });
+  })();
+
+  /* ------------------------------------------------------------------ */
   /* Просмотр фото во весь экран                                          */
   /* ------------------------------------------------------------------ */
 
@@ -367,7 +387,7 @@
       nextBtn.addEventListener('click', function () { step(1); });
       // Клик мимо снимка закрывает просмотр.
       box.addEventListener('click', function (e) {
-        if (e.target === box || e.target.classList.contains('photo-view__figure')) close();
+        if (e.target === box) close();
       });
     }
 
