@@ -321,6 +321,109 @@
   });
 
   /* ------------------------------------------------------------------ */
+  /* Просмотр фото во весь экран                                          */
+  /* ------------------------------------------------------------------ */
+
+  // Снимок открывается поверх страницы, а не в новой вкладке: человек
+  // остаётся на месте и закрывает просмотр одним движением. Ссылка у фото
+  // остаётся рабочей — для открытия в новой вкладке средней кнопкой мыши
+  // и на случай, если скрипт не загрузился.
+  (function setupPhotoView() {
+    var links = document.querySelectorAll('.case__gallery-item');
+    if (!links.length) return;
+
+    var box, img, caption, prevBtn, nextBtn, group = [], index = 0, opener = null;
+
+    function build() {
+      box = document.createElement('div');
+      box.className = 'photo-view';
+      box.setAttribute('role', 'dialog');
+      box.setAttribute('aria-modal', 'true');
+      box.setAttribute('aria-label', 'Просмотр фото');
+      box.hidden = true;
+      box.innerHTML =
+        '<button type="button" class="photo-view__close" aria-label="Закрыть просмотр">' +
+          '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"></path></svg>' +
+        '</button>' +
+        '<button type="button" class="photo-view__arrow photo-view__arrow--prev" aria-label="Предыдущее фото">' +
+          '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg>' +
+        '</button>' +
+        '<figure class="photo-view__figure">' +
+          '<img class="photo-view__img" alt="">' +
+          '<figcaption class="photo-view__caption"></figcaption>' +
+        '</figure>' +
+        '<button type="button" class="photo-view__arrow photo-view__arrow--next" aria-label="Следующее фото">' +
+          '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"></path></svg>' +
+        '</button>';
+      document.body.appendChild(box);
+
+      img = box.querySelector('.photo-view__img');
+      caption = box.querySelector('.photo-view__caption');
+      prevBtn = box.querySelector('.photo-view__arrow--prev');
+      nextBtn = box.querySelector('.photo-view__arrow--next');
+
+      box.querySelector('.photo-view__close').addEventListener('click', close);
+      prevBtn.addEventListener('click', function () { step(-1); });
+      nextBtn.addEventListener('click', function () { step(1); });
+      // Клик мимо снимка закрывает просмотр.
+      box.addEventListener('click', function (e) {
+        if (e.target === box || e.target.classList.contains('photo-view__figure')) close();
+      });
+    }
+
+    function show(i) {
+      index = (i + group.length) % group.length;
+      var link = group[index];
+      img.src = link.getAttribute('href');
+      var photo = link.querySelector('img');
+      img.alt = photo ? photo.getAttribute('alt') || '' : '';
+      caption.textContent = group.length > 1
+        ? img.alt + ' — ' + (index + 1) + ' из ' + group.length
+        : img.alt;
+      var many = group.length > 1;
+      prevBtn.hidden = !many;
+      nextBtn.hidden = !many;
+    }
+
+    function step(dir) { show(index + dir); }
+
+    function open(link) {
+      if (!box) build();
+      var gallery = link.closest('[data-case-gallery]') || document;
+      group = Array.prototype.slice.call(gallery.querySelectorAll('.case__gallery-item'));
+      opener = link;
+      show(group.indexOf(link));
+      box.hidden = false;
+      document.body.classList.add('is-photo-open');
+      box.querySelector('.photo-view__close').focus();
+    }
+
+    function close() {
+      if (!box || box.hidden) return;
+      box.hidden = true;
+      img.removeAttribute('src');
+      document.body.classList.remove('is-photo-open');
+      if (opener) opener.focus();
+    }
+
+    Array.prototype.forEach.call(links, function (link) {
+      link.addEventListener('click', function (e) {
+        // Средняя кнопка и Ctrl/Cmd+клик пусть работают как обычная ссылка.
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        open(link);
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (!box || box.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') step(-1);
+      if (e.key === 'ArrowRight') step(1);
+    });
+  })();
+
+  /* ------------------------------------------------------------------ */
   /* Reviews carousel                                                     */
   /* ------------------------------------------------------------------ */
 
