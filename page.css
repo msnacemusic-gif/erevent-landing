@@ -1,9 +1,23 @@
 /* ==========================================================================
    Страницы направлений (декорации, мебель, кейтеринг, техника).
    Стиль полностью общий с главной: блоки, шрифты, отступы и кнопки берутся
-   из styles.css. Здесь остаётся только то, чего на главной нет, — раскладка
-   плитки услуг на шесть карточек и её вид, пока фото не загружены.
+   из styles.css. Здесь собраны стили кнопки презентации и плиток услуг.
    ========================================================================== */
+
+/* Презентация под двумя основными действиями на странице декораций. */
+.hero__row--with-presentation{align-items:flex-start}
+.hero__cta--with-presentation{display:grid;grid-template-columns:auto auto;max-width:100%}
+.hero__presentation{
+  grid-column:1/-1;min-height:44px;padding:10px 14px;
+  border-color:rgba(159,232,112,.45);font-size:clamp(14px,1.25vw,16px);line-height:22px;
+  text-align:center;
+}
+.hero__presentation:hover{border-color:var(--color-primary)}
+.hero__presentation-label{text-wrap:balance}
+.hero__presentation-format{flex:0 0 auto;color:var(--color-primary);font-size:11px;letter-spacing:.08em}
+@media (max-width:600px){
+  .hero__cta--with-presentation{grid-template-columns:minmax(0,1fr);width:100%}
+}
 
 /* Карточки здесь описывают услугу, а не ведут на другую страницу. */
 .page-dir .bento{grid-auto-rows:minmax(170px,auto)}
